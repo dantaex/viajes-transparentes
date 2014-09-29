@@ -1,12 +1,12 @@
 var db = require('./dbconfig');
 
 var User = new db.Schema({
+	id : String,
 	email : String,
 	password : String,
 	name : String,
 	created : {type: Date, default : Date.now }
 });
-
 
 var Ciudad = new db.Schema({
 	ciudad : { type: String, required: true},
@@ -22,8 +22,9 @@ var Institucion = new db.Schema({
 
 var Servidor = new db.Schema({
 	nombre : { type: String, required: true},
-	_insititucion : { 
-		type: db.Schema.ObjectId, 
+	//                                          !!!!!!!!!!!!!!!!!!!!!!!!!!! FIGURE THIS OUT!
+	_institucion : { 
+		type: db.Schema.ObjectId,
 		ref: 'Institucion' 
 	},
 	email : { 
@@ -42,10 +43,6 @@ var Viaje = new db.Schema({
 		type: db.Schema.ObjectId, 
 		ref: 'Servidor'
 	},
-	_institucion_generadora : {
-		type: db.Schema.ObjectId, 
-		ref: 'Institucion'
-	},
 	_institucion_hospedaje : {
 		type: db.Schema.ObjectId, 
 		ref: 'Institucion'
@@ -60,10 +57,7 @@ var Viaje = new db.Schema({
 		ref: 'Ciudad'
 	},
 
-	_destino : {
-		type: db.Schema.ObjectId,
-		ref: 'Ciudad'
-	},
+	_destinos : [{ type: db.Schema.ObjectId, ref: 'Ciudad'}],
 	
 	motivo : { type: String, required: true },
 	oficio : { type: String, required: true },
@@ -74,10 +68,11 @@ var Viaje = new db.Schema({
 	observaciones : String,
 	antecedente : String,
 	url_comunicado : String,
-	mec_origen : {type: String, enum: ['Invitación', 'Requerimiento UR']},
+	mec_origen : {type: String, enum: ['Invitación', 'Requerimiento de UR']},
 	tipo_rep : {type: String, enum: ['Técnico', 'Alto Nivel']},
 	tipo_viaje : {type: String, enum: ['Nacional', 'Internacional']},
-	ur : {type: String},
+	ur : String,
+	institucion_generadora : String,
 	//	grupo_jerarquico : {type: String, enum: ['HB1','KA02','KA2','KB1','KB2','KB3','MB2','MC03','MC1','MC2','MC3','NA1','NB3','NC1','NC2','NC3','OB02','OB2','OC002','OC02','OC1','OC2','OC3','PA1','PA3','PC1','PC2','PC3']},
 	
 	pasaje : {
@@ -122,9 +117,9 @@ var Viaje = new db.Schema({
 
 });
 
-
 exports.instituciones = db.mongoose.model('Institucion',Institucion);
 exports.servidores = db.mongoose.model('Servidor',Servidor);
 exports.viajes = db.mongoose.model('Viaje',Viaje);
 exports.ciudades = db.mongoose.model('Ciudad',Ciudad);
 exports.users = db.mongoose.model('User',User);
+exports.mongoose = db.mongoose;

@@ -1,0 +1,137 @@
+db.ciudads.insert([
+{
+	ciudad:"Tijuana",
+	estado:"Baja California",
+	pais:"México"
+},
+{
+	ciudad:"Ciudad de México",
+	estado:"México DF",
+	pais:"México"
+},
+{
+	ciudad:"Durango",
+	estado:"Durango",
+	pais:"México"
+},
+{
+	ciudad:"Puebla",
+	estado:"Puebla",
+	pais:"México"
+},
+{
+	ciudad:"Morelia",
+	estado:"Michoacán",
+	pais:"México"
+},
+{
+	ciudad:"Pachuca",
+	estado:"Hidalgo",
+	pais:"México"
+},
+{
+	ciudad:"Guadalajara",
+	estado:"Jalisco",
+	pais:"México"	
+},
+{
+	ciudad:"Tlaxcala",
+	estado:"Tlaxcala",
+	pais:"México"	
+},
+{
+	ciudad:"Torreón",
+	estado:"Coahuila",
+	pais:"México"	
+},
+{
+	ciudad:"Saltillo",
+	estado:"Coahuila",
+	pais:"México"	
+},
+{
+	ciudad:"Toluca",
+	estado:"Mexico",
+	pais:"México"	
+},
+{
+	ciudad:"Cancún",
+	estado:"Quintana ROO",
+	pais:"México"	
+},
+{
+	ciudad:"Playa del Carmen",
+	estado:"Quintana ROO",
+	pais:"México"	
+},
+{
+	ciudad:"León",
+	estado:"Guanajuato",
+	pais:"México"
+},
+{
+	ciudad:"San Miguel de Allende",
+	estado:"Guanajuato",
+	pais:"México"	
+},
+{
+	ciudad:"Celaya",
+	estado:"Guanajuato",
+	pais:"México"	
+},
+{
+	ciudad:"Irapuato",
+	estado:"Guanajuato",
+	pais:"México"	
+},
+{
+	ciudad:"Córdoba",
+	estado:"Veracruz",
+	pais:"México"	
+},
+{
+	ciudad:"Querétaro",
+	estado:"Querétaro",
+	pais:"México"	
+},
+{
+	ciudad:"Tepic",
+	estado:"Nayarit",
+	pais:"México"	
+},
+{
+	ciudad:"Merida",
+	estado:"Yucatan",
+	pais:"México"	
+},
+{
+	ciudad:"Ensenada",
+	estado:"Baja California",
+	pais:"México"
+},
+{
+	ciudad:"Cuernavaca",
+	estado:"Morelos",
+	pais:"México"	
+},
+{
+	ciudad:"Punta del Este",
+	estado:"Maldonado",
+	pais:"Uruguay"	
+},
+{
+	ciudad:"Santiago",
+	estado:"Santiago",
+	pais:"Chile"
+},
+{
+	ciudad:"Cundinamarca",
+	estado:"Bogotá",
+	pais:"Colombia"
+},
+{
+	ciudad:"Miami",
+	estado:"Florida",
+	pais:"Estados Unidos de America"
+},
+]);

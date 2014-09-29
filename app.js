@@ -26,7 +26,7 @@ if ('development' == app.get('env')) {
 
 controller.listen(app);
 app.get('/', function( req, res ){
-	res.send('hello');
+	res.render('index');
 });
 
 

@@ -1,0 +1,222 @@
+db.servidors.insert([
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFA DE DEPARTAMENTO DE REDACCION A",
+"nombre": "PALOMA ALCANTARA RODRIGUEZ",
+"clave_salarial": "OC2",
+"cargo_superior" : "",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "TITULAR DEL ORGANO INTERNO DE CONTROL",
+"cargo_superior" : "",
+"nombre": "ELEAZAR PABLO MORENO MORENO",
+"clave_salarial": "KA2",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTOR DE ATENCION REGIONAL SUR",
+"cargo_superior" : "",
+"nombre": "ALEJANDRO IVAN HERRERA ROSAS",
+"clave_salarial": "NC1",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},    
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFA DE DEPARTAMENTO DE PROGRAMACION DE CAPACITACION DE ACCESO ",
+"nombre": "SARAI CRUZ GARCIA",
+"clave_salarial": "OC1",
+"cargo_superior" : "",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTOR DE OTROS SUJETOS OBLIGADOS",
+"cargo_superior" : "",
+"nombre": "MARIO ERNESTO MEJIA PACHON",
+"clave_salarial": "NC3",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTORA DE LO CONTENCIOSO DE ACCESO",
+"nombre": "MARIANA VAZQUEZ BRACHO GARCIA",
+"clave_salarial": "NC2",
+"cargo_superior" : "",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "COMISIONADO",
+"nombre": "ANGEL JOSE TRINIDAD ZALDIVAR",
+"clave_salarial": "HB1",
+"cargo_superior" : "",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SECRETARIO DE PROTECCIÓN DE DATOS PERSONALES",
+"cargo_superior" : "",
+"nombre": "ALFONSO OÑATE LABORDE",
+"clave_salarial": "IA1",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},      
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "COMISIONADA ",
+"cargo_superior" : "",
+"nombre": "JACQUELINE PESCHARD MARISCAL",
+"clave_salarial": "HB1",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "COMISIONADA",
+"cargo_superior" : "",
+"nombre": "MARIA ELENA PEREZ-JAEN ZERMEÑO",
+"clave_salarial": "HB1",
+"unidad_administrativa" :"",
+"departamento" : "",
+"email" : ""
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "DIRECTOR DE RELACIONES INTERINSTITUCIONALES Y PÚBLICAS",
+"cargo_superior" : "Dirección General de Capacitación Promoción y Relaciones Institucionales",
+"nombre": "Christian Laris Cutiño",
+"clave_salarial": "MC2",
+"unidad_administrativa" :"Dirección General de Capacitación Promoción y Relaciones Institucionales",
+"departamento" : "Dirección de Relaciones Interinstitucionales y Públicas",
+"email" : "christian.laris@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "DIRECTOR GENERAL DE TECNOLOGÍAS DE INFORMACIÓN",
+"nombre": "ALFREDO MENDEZ CALATAYUD",
+"clave_salarial": "KB2",
+"cargo_superior" : "Secretaría General  Coordinación Ejecutiva",
+"unidad_administrativa" :"Dirección General de Tecnologías de la Información",
+"departamento" : "Dirección General de Tecnologías de la Información",
+"email" : "alfredo.mendez@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTOR DE LO CONTENCIOSO DE DATOS",
+"nombre": "ULISES ANGELES BOJORQUEZ",
+"clave_salarial": "NC1",
+"cargo_superior" : "Dirección de lo Contencioso de Acceso",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE ASUNTOS JURÁDICOS",
+"departamento" : "Subdirección de lo Contencioso de Acceso",
+"email" : "ulises.angeles@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTOR DE ESTADOS Y MUNICIPIOS",
+"nombre": "Antolín Sotelo Sánchez",
+"clave_salarial": "NC3",
+"cargo_superior" : "Dirección de Relaciones Interinstitucionales y Públicas",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE CAPACITACIÓN  PROMOCIÓN Y RELACIONES INSTITUCIONALES",
+"departamento" : "Subdirección de Estados y Municipios",
+"email" : "antolin.sotelo@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTORA DE ENLACE CON LA SOCIEDAD ORGANIZADA",
+"nombre": "Ixchel Cruz Cisneros",
+"clave_salarial": "NC2",
+"cargo_superior" : "Dirección de Vinculación con la Sociedad",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE CAPACITACIÓN PROMOCIÓN Y RELACIONES INSTITUCIONALES",
+"departamento" : "Subdirección de Enlace con la Sociedad Organizada",
+"email" : "ixchel.cruz@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFE DE DEPARTAMENTO DE VERIFICACIÓN DE MATERIA DE DATOS PERSONALES D",
+"nombre": "Sergio Martínez Mendoza",
+"clave_salarial": "OC1",
+"cargo_superior" : "Subdirección de Verificación en Materia de Datos Personales B",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE VERIFICACIÓN",
+"departamento" : "Departamento de Verificación en Materia de Datos Personales D",
+"email" : "sergio.martinez@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "DIRECTORA DE GESTIÓN DOCUMENTAL",
+"nombre": "Alma Zulema Tovar Figueroa",
+"clave_salarial": "MC2",
+"cargo_superior" : "Dirección General de Gestión de Información y Estudios",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE GESTION DE LA INFORMACIÓN Y ESTUDIOS",
+"departamento" : "Dirección de Gestión Documental",
+"email" : "zulema.tovar@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFE DE DEPARTAMENTO DE ASESORIA PERSONALIZADA",
+"nombre": "Miguel Ángel Guzmán Sánchez",
+"clave_salarial": "OC3",
+"cargo_superior" : "Subdirección de Atención a los Particulares",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE CAPACITACIÓN  PROMOCIÓN Y RELACIONES INSTITUCIONALES",
+"departamento" : "Departamento de Asesoría Personalizada",
+"email" : "miguel.guzman@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "SUBDIRECTOR DE VERIFICACION VOLUNTARIA A",
+"nombre": "Juan Rafael Reyes Murillo",
+"clave_salarial": "NC1",
+"cargo_superior" : "Dirección de Inspección",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE VERIFICACIÓN",
+"departamento" : "Subdirección de Verificación Voluntaria A",
+"email" : "juan.reyes@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "DIRECTOR DE VERIFICACION",
+"nombre": "Roberto Orozco Martínez",
+"clave_salarial": "MC1",
+"cargo_superior" : "Dirección General de Verificación",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE VERIFICACIÓN",
+"departamento" : "Dirección de Verificación",
+"email" : "roberto.orozco@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFE DE DEPARTAMENTO DE CONSULTIVO A",
+"nombre": "Omar Cruz Ibinarriaga",
+"clave_salarial": "OC3",
+"cargo_superior" : "Subdirección de lo Consultivo",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE ASUNTOS JURÁDICOS",
+"departamento" : "Departamento de lo Consultivo A",
+"email" : "omar.cruz@ifai.org.mx"
+},
+{
+"_institucion" : ObjectId("542700d8df6fec2c037d773b"),
+"puesto": "JEFE DE DEPARTAMENTO DE APOYO A ESTADOS Y MUNICIPIOS",
+"nombre": "Jesús Santiago Matheus Peña",
+"clave_salarial": "OC1",
+"cargo_superior" : "Subdirección de Estados y Municipios",
+"unidad_administrativa" :"DIRECCIÓN GENERAL DE CAPACITACIÓN  PROMOCIÓN Y RELACIONES INSTITUCIONALES",
+"departamento" : "Departamento de Apoyo a Estados y Municipios",
+"email" : "jesus.matheus@ifai.org.mx"
+}
+]);
