@@ -1,0 +1,70 @@
+doctype html
+html(ng-app='viajes')
+head
+	title= 'Viajes Transparentes'
+	link(rel='stylesheet', href='/css/bootstrap.min.css')
+	link(rel='stylesheet', href='/css/flat-ui.min.css')
+	link(rel='stylesheet', href='/css/style.css')
+body(ng-controller="NavigationController as nav")
+	#map
+	#panel		
+		#travel_panel.ar-panel
+			div(class="ar-travel-type {{transClass}}")
+			div(class="ar-name") {{totalCost}}
+		#welcome_panel(class="ar-panel {{welcome_panel}}")
+			.ar-wrapper
+				h1 Te damos la bienvenida a Viajes Transparentes
+				p El IFAI pone a tus disposición toda la información sobre viajes de funcionarios públicos
+				p
+					a(href="#") Cuanto gasta en promedio un servidor público en un viaje
+					| , los 
+					a(href="#") viajes más costosos del año
+					| , o los 
+					a(href="#") hoteles mas frecuentados
+					|  así como los resultados de los acuerdos obtenidos, puedes:
+				.ar-welcome-options
+					button(type="button" class="ar-explore btn btn-block btn-lg btn-primary") Explorar 
+						span(class="glyphicon glyphicon-plane")
+					button(type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
+						span(class="glyphicon glyphicon-search")
+				p Últimos viajes realizados
+				ul.ar-travels
+					each travel in data
+						li(id="#{travel._id}" ng-click="view('#{travel._id}')")
+							div(class="ar-view")
+							if travel.pasaje.tipo=='Aéreo'
+								div(class="ar-travel-type ar-transport-air")
+							else if travel.pasaje.tipo=='Terrestre'
+								div(class="ar-travel-type ar-transport-land")
+							else if travel.pasaje.tipo=='Marítimo'
+								div(class="ar-travel-type ar-transport-sea")
+							else
+								div(class="ar-travel-type ar-transport-unk")
+							div.ar-travel-cost #{_.str.numberFormat(travel.gastos.viaticos+travel.gastos.pasaje+travel.gastos.hospedaje,2)}
+							div.ar-star-err
+								if travel.gastos.hospedaje==null || travel.gastos.pasaje==null || travel.gastos.viaticos==null
+									a(href="#nota")  *
+							div.ar-currency=travel.gastos.moneda
+							- var day = 24*60*60*1000;							
+							- var days = Math.round(Math.abs((travel.comision.fin - travel.comision.inicio)/(day))) + "";
+							if days != "NaN" && days != "0"
+								.ar-time #{days} Días
+							else
+								.ar-time **
+							div.ar-name	#{travel._servidor.nombre.toLowerCase()}
+							//- div #{travel._destinos[0].ciudad}
+							- var destinos = []; for(var i=travel._destinos.length-1;i>=0;i--) destinos.push( travel._destinos[i].ciudad+','+travel._destinos[i].pais );
+							div.ar-from-to #{travel._origen.ciudad},#{travel._origen.pais} <span></span> #{destinos.join('; ')}
+
+				p#nota * Los datos para los gastos de los viajes marcados están incompletos
+				p#nota ** Los datos para las fechas marcadas son incoherentes
+
+	script(src='js/angular.min.js')
+	script(src='js/underscore.js')
+	script(src='js/app.js')
+	if initialData
+		script.
+			initialData = !{JSON.stringify(initialData)};
+	else
+		script.
+			initialData = null;

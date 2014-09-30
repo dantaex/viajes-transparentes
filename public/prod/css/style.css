@@ -1,12 +1,168 @@
-body {
-	padding: 50px;
-	font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
+body,
+html {
+  height: 100%;
 }
-
-a {
-	color: #00B7FF;
+h1 {
+  text-align: center;
 }
-
-h1{
-	color:green;
+#map {
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 100%;
+  height: 100%;
+  z-index: 0;
+}
+#panel {
+  position: relative;
+  height: 100%;
+  z-index: 1;
+  background-color: rgba(200,200,250,0.7);
+  overflow-x: hidden;
+}
+#welcome_panel {
+  padding-top: 1px;
+  margin-top: -1px;
+  background-color: rgba(250,200,200,0.7);
+}
+.ar-panel {
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  overflow-y: scroll;
+  -webkit-transition: margin 0.25s ease;
+  -moz-transition: margin 0.25s ease;
+  -ms-transition: margin 0.25s ease;
+  -o-transition: margin 0.25s ease;
+  transition: margin 0.25s ease;
+}
+.ar-wrapper {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 17px;
+}
+.ar-welcome-options {
+  text-align: center;
+}
+.ar-welcome-options button {
+  display: inline-block;
+  max-width: 150px;
+}
+.ar-welcome-options button.ar-explore {
+  margin-right: 40px;
+}
+ul.ar-travels {
+  list-style: none;
+}
+ul.ar-travels li {
+  display: block;
+  min-height: 100px;
+  text-align: justify;
+  cursor: pointer;
+}
+ul.ar-travels li div {
+  display: inline-block;
+}
+.ar-travel-type {
+  width: 40px;
+  height: 30px;
+  margin-right: 10px;
+  font-family: 'Glyphicons Halflings';
+  font-style: normal;
+  font-weight: 400;
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center center;
+  opacity: 0.5;
+}
+.ar-transport-air {
+  background-image: url("../img/plane.svg");
+}
+.ar-transport-land {
+  background-image: url("../img/bus.svg");
+}
+.ar-transport-sea {
+  background-image: url("../img/boat.svg");
+}
+.ar-travel-cost {
+  font-size: 1.45em;
+}
+.ar-currency {
+  font-size: 12px;
+  color: #999;
+  margin-left: 7px;
+}
+.ar-travel-cost {
+  min-width: 150px;
+  text-align: right;
+}
+.ar-time {
+  margin-left: 10px;
+  width: 80px;
+}
+.ar-star-err {
+  font-size: 27px;
+  width: 15px;
+}
+.ar-name {
+  font-style: italic;
+  font-size: 1.2em;
+  color: #777;
+  text-transform: capitalize;
+}
+.ar-from-to {
+  display: block;
+  width: 100%;
+  text-align: center;
+  color: #999;
+  font-size: 0.7em;
+}
+.ar-from-to span {
+  border-bottom: 2px solid #999;
+  width: 50px;
+  height: 7px;
+  vertical-align: top;
+  display: inline-block;
+}
+.ar-view {
+  background-color: #1abc9c;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  text-align: center;
+  margin-right: 10px;
+  margin-top: 10px;
+  background-image: url("../img/inspect.svg");
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: 65%;
+  display: block;
+  float: right;
+  opacity: 0;
+  -webkit-transition: all 0.1s ease-in-out;
+  -moz-transition: all 0.1s ease-in-out;
+  -ms-transition: all 0.1s ease-in-out;
+  -o-transition: all 0.1s ease-in-out;
+  transition: all 0.1s ease-in-out;
+}
+ul.ar-travels li:hover .ar-view {
+  opacity: 1;
+}
+.btn-primary {
+  background-color: transparent;
+  border: 1px solid #1abc9c;
+  color: #1abc9c;
+}
+#welcome_panel.out {
+  margin-left: 100%;
+}
+#travel_panel {
+  background-color: #f00;
+}
+#debug.wtf {
+  position: absolute;
+  z-index: 9;
+  background: #f00;
+  height: 50px;
+  width: 100%;
 }

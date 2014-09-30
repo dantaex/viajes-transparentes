@@ -30,7 +30,7 @@ function listen(app){
 			}
 		});		
 	});
-	app.post('/ciudades', restrictedAccess , function(req,res){
+	app.post('/ciudades', restrictedAccess, function(req,res){
 		upsert(
 			db.ciudades,
 			{ ciudad : req.body.ciudad },
