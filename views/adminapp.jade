@@ -1,0 +1,19 @@
+doctype html
+html(ng-app='admin')
+head
+	title= 'Viajes Transparentes'
+	link(rel='stylesheet', href='/css/bootstrap.min.css')
+	link(rel='stylesheet', href='/css/flat-ui.min.css')
+	link(rel='stylesheet', href='/css/style.css')
+body(ng-controller="AdminController")
+	#login_panel.login-block(ng-show="cpanel=='login_panel'")
+		h4 Iniciar Sesión
+		form.login-form(name="login_form" action="/login" method="POST")
+			.form-group
+				input#login-name.form-control.login-field(type="text" value=""  name="email" placeholder= "Correo Electrónico" required autofocus)
+				label.login-field-icon.fui-user(for="login-name")
+			.form-group
+				input#login-pass.form-control.login-field(type="password" value="" placeholder="Contraseña" name="password")
+				label.login-field-icon.fui-lock(for="login-pass")
+			input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
+			a.login-link(href="#") Recuperar contraseña

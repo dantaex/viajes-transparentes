@@ -2,6 +2,9 @@ main-color = #1abc9c
 
 body,html
 	height 100%
+body
+	padding-top 1px
+	margin-top -1px
 h1
 	text-align center
 #map
@@ -37,6 +40,9 @@ h1
 	max-width 800px
 	margin 0 auto
 	padding 17px
+.ar-wrapper.w8
+	max-width 650px
+	
 .ar-welcome-options
 	text-align center
 .ar-welcome-options button
@@ -104,7 +110,7 @@ ul.ar-travels li div
 .ar-from-to span
 	border-bottom 2px solid #999
 	width 50px
-	height 7px
+	height 12px
 	vertical-align top
 	display inline-block
 
@@ -132,7 +138,13 @@ ul.ar-travels li div
 ul.ar-travels li:hover .ar-view
 	opacity 1
 
-//pinturita
+.ar-text-right
+	text-align right
+
+.ar-max500
+	max-width 500px
+	margin 0 auto
+
 .btn-primary
 	background-color transparent
 	border 1px solid main-color
@@ -142,8 +154,152 @@ ul.ar-travels li:hover .ar-view
 	margin-left 100%
 
 #travel_panel
-	background-color red
+	background-color #FFFFFF
+	width 70%
+	right 0px
+#travel_panel .ar-travel-type
+	width 70px
+	height 70px
+	margin-left 20px
+#travel_panel .ar-travel-cost
+	font-size 2.5em
+	display inline-block
+#travel_panel .ar-currency
+	display inline-block
+	font-size 1.5em 
+	height 100%
+	text-align left
+	vertical-align 0px
+#travel_panel .ar-from-to
+	font-size 1em
+#travel_panel .ar-from-to span
+	height 18px
+	width 35%
+#travel_panel .ar-date
+	font-size 1.1em
+	text-align right
+#travel_panel .ar-date span
+	color #777
+	font-size 0.8em
+#travel_panel .ar-date span.ar-frmto
+	border-bottom 1px solid #999
+	width 100px
+	display inline-block
+#travel_panel .ar-person
+	font-size 1.8em
+	text-align center
+	width 100%
+	margin-top 20px
+#travel_panel .ar-person span
+	width 100%
+	display block
+	font-size 0.4em
+	text-transform capitalize
+#travel_panel h6, #travel_panel h7
+	text-indent 50px
+#travel_panel h7
+	width 100%
+	display block
+	font-weight bold
+	
 
+#travel_panel .ar-name
+	display inline-block
+	vertical-align top
+.ar-person-photo
+	height 60px
+	width 60px
+	background-color #eee
+	display inline-block
+	border-radius 50%
+	margin-right 20px
+	background-image url(../img/user2.svg)
+	background-repeat no-repeat
+	background-position-x 49%
+	background-position-y 13px
+	background-size 105%
+
+.ar-hotel,.ar-airline
+	background-repeat no-repeat
+	background-position left center
+	background-size contain
+	display block
+	text-indent 40px
+
+.ar-gdetails
+	height 70px
+	max-width 600px
+	height 40px
+	margin 0 auto
+	margin-top 60px
+
+.ar-hotel
+	background-image url(../img/hotel.svg)
+	width 250px
+	float left
+.ar-airline
+	background-image url(../img/ticket.svg)
+	width 200px
+	float right
+.ar-stuff-nobody-gives-a-fuck-about p
+	max-width 650px
+	margin 0 auto
+	display block
+	font-size 0.75em
+.ar-stuff-nobody-gives-a-fuck-about p.ar-pbigger
+	font-size 0.9em
+
+#travel_panel .ar-stuff-maybe-someone-will-ever-read h6
+	text-indent 0px
+#travel_panel .ar-stuff-maybe-someone-will-ever-read
+	margin-top 40px
+
+#pdf
+	background-image url(../img/pdf.svg)
+#pdf:hover .ar-borderer
+	border 1px solid #E41D24
+#twitter
+	background-image url(../img/twitter.svg)
+#twitter:hover .ar-borderer
+	border 1px solid #96CBE4
+#facebook
+	background-image url(../img/facebook.svg)
+#facebook:hover .ar-borderer
+	border 1px solid #3C5A98
+#email
+	background-image url(../img/email.svg)
+#email:hover .ar-borderer
+	border 1px solid #999999
+.ar-clear
+	clear both
+a.ar-actions, a.ar-actions:hover
+	color inherit
+.ar-actions
+	background-position center 10px
+	background-repeat no-repeat
+	background-size 20%
+	display block
+	margin-top 80px	
+	text-align center
+	cursor pointer
+	font-size 0.9em
+
+.ar-actions .ar-borderer
+	padding-top 60px
+	border 1px solid #fff
+	border-radius 5px
+	max-width 150px
+	margin 0 auto
+	height 100%
+
+.ar-institution
+	max-width 600px
+	margin 0 auto
+
+.ar-spacer
+	height 35px
+	width 100%
+	clear both
 
 #debug.wtf
 	position absolute
@@ -151,3 +307,11 @@ ul.ar-travels li:hover .ar-view
 	background #FF0000
 	height 50px
 	width 100%
+
+//login
+.login-block
+	max-width 400px	
+	margin 5% auto 0px auto
+.cui-login:before
+	font-family 'Flat-UI-Icons'
+	content "\e009   "

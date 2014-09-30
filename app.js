@@ -64,6 +64,7 @@ function home( req, res ){
 		});	
 }
 app.get('/', home);
+app.get('/adm', function(req,res){ res.render('adminapp') });
 app.get('/:travelid', home);
 
 

@@ -7,10 +7,64 @@ head
 	link(rel='stylesheet', href='/css/style.css')
 body(ng-controller="NavigationController as nav")
 	#map
-	#panel		
+	#panel
 		#travel_panel.ar-panel
-			div(class="ar-travel-type {{transClass}}")
-			div(class="ar-name") {{totalCost}}
+			.ar-wrapper.w7
+				.col-xs-12
+					.col-xs-3
+						div(class="ar-travel-type {{currentTravel.transportClass}}")
+					.col-xs-8.ar-text-right
+						div(class="ar-travel-cost") {{currentTravel.totalCost}}
+						div(class="ar-currency") {{currentTravel.gastos.moneda}}
+				div.ar-from-to {{currentTravel.origen}} <span></span> {{currentTravel.destinos}}
+				.col-xs-11
+					div.ar-date {{currentTravel.inicio.dia}}° <span>de</span> {{currentTravel.inicio.mes}} <span class="ar-frmto"></span> {{currentTravel.fin.dia}}° <span>de</span> {{currentTravel.fin.mes}}, {{currentTravel.inicio.anio}} <span>({{currentTravel.dias}})</span>
+				div.ar-gdetails
+					div(class="ar-hotel") {{currentTravel.hotel.nombre}}
+					div(class="ar-airline") {{currentTravel.pasaje.linea_origen}}
+
+				div.ar-person
+					div(class="ar-person-photo {{currentTravel._servidor.tipo_rep.charAt(0).toLowerCase()}}")
+					a(href="{{document.URL+'servidor/'+currentTravel._servidor._id}}").ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
+					span {{currentTravel._servidor.puesto.toLowerCase()}} - {{institutions[currentTravel._servidor._institucion].nombre}}
+				
+				div.ar-stuff-nobody-gives-a-fuck-about
+					h6 Motivo
+					p {{currentTravel.motivo}}
+					h6 Resultado
+					p.ar-pbigger {{currentTravel.resultado}}
+					br
+					h6 Evento
+					p {{currentTravel.evento.nombre}}
+
+				.ar-clear
+				div.ar-stuff-maybe-someone-will-ever-read
+					h7 Instituciones que patrocinan el viaje
+					.ar-clear
+					.ar-institution
+						h6 {{currentTravel._institucion_hospedaje.nombre}}
+						p {{currentTravel._institucion_hospedaje.descripcion}}
+							br
+							a(href="http://{{currentTravel._institucion_hospedaje.sitio}}") {{currentTravel._institucion_hospedaje.sitio}}
+					.ar-institution(ng-show="currentTravel._institucion_hospedaje.nombre != currentTravel._institucion_pasaje.nombre")
+						h6 {{currentTravel._institucion_pasaje.nombre}}
+						p {{currentTravel._institucion_pasaje.descripcion}}
+							br
+							a(href="http://{{currentTravel._institucion_pasaje.sitio}}") {{currentTravel._institucion_pasaje.sitio}}
+
+				.ar-clear
+
+				#pdf.ar-actions.col-xs-3(ng-click="pdf()")
+					.ar-borderer Descargar en formato PDF
+				a#twitter.ar-actions.col-xs-3(target="_blank" href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+					.ar-borderer Compartir en Twitter
+				a#facebook.ar-actions.col-xs-3(target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}") 
+					.ar-borderer Mostrar en Facebook
+				#email.ar-actions.col-xs-3(ng-click="email()")
+					.ar-borderer Eviarme esto por correo
+
+				.ar-spacer
+
 		#welcome_panel(class="ar-panel {{welcome_panel}}")
 			.ar-wrapper
 				h1 Te damos la bienvenida a Viajes Transparentes
@@ -61,6 +115,7 @@ body(ng-controller="NavigationController as nav")
 
 	script(src='js/angular.min.js')
 	script(src='js/underscore.js')
+	script(src='js/jspdf.js')
 	script(src='js/app.js')
 	if initialData
 		script.
