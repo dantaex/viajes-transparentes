@@ -13,8 +13,8 @@
 			instituciones : function(){
 				return $http.get( '/instituciones' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
 			},
-			autocomplete : function(searchinput){
-				return $http.get( '/autocomplete/'+searchinput ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+			autocomplete : function(searchinput,searchMode){
+				return $http.get( '/search/?term='+searchinput+'&by='+searchMode ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
 			}
 		};
 	});
@@ -32,6 +32,7 @@
 		$scope.institutions = DataService.instituciones().then(function(data){
 			$scope.institutions = idsAsIndexes(data);
 		});
+		
 
 		//History dude
 		$scope.history = history || window.history;

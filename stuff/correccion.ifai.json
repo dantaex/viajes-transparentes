@@ -1,0 +1,433 @@
+{
+  "help": "Search a DataStore resource.\n\n    The datastore_search action allows you to search data in a resource.\n    DataStore resources that belong to private CKAN resource can only be\n    read by you if you have access to the CKAN resource and send the appropriate\n    authorization.\n\n    :param resource_id: id or alias of the resource to be searched against\n    :type resource_id: string\n    :param filters: matching conditions to select, e.g {\"key1\": \"a\", \"key2\": \"b\"} (optional)\n    :type filters: dictionary\n    :param q: full text query (optional)\n    :type q: string\n    :param plain: treat as plain text query (optional, default: true)\n    :type plain: bool\n    :param language: language of the full text query (optional, default: english)\n    :type language: string\n    :param limit: maximum number of rows to return (optional, default: 100)\n    :type limit: int\n    :param offset: offset this number of rows (optional)\n    :type offset: int\n    :param fields: fields to return (optional, default: all fields in original order)\n    :type fields: list or comma separated string\n    :param sort: comma separated field names with ordering\n                 e.g.: \"fieldname1, fieldname2 desc\"\n    :type sort: string\n\n    Setting the ``plain`` flag to false enables the entire PostgreSQL `full text search query language`_.\n\n    A listing of all available resources can be found at the alias ``_table_metadata``.\n\n    .. _full text search query language: http://www.postgresql.org/docs/9.1/static/datatype-textsearch.html#DATATYPE-TSQUERY\n\n    If you need to download the full resource, read :ref:`dump`.\n\n    **Results:**\n\n    The result of this action is a dictionary with the following keys:\n\n    :rtype: A dictionary with the following keys\n    :param fields: fields/columns and their extra metadata\n    :type fields: list of dictionaries\n    :param offset: query offset value\n    :type offset: int\n    :param limit: query limit value\n    :type limit: int\n    :param filters: query filters\n    :type filters: list of dictionaries\n    :param total: number of total matching records\n    :type total: int\n    :param records: list of matching results\n    :type records: list of dictionaries\n\n    ",
+  "success": true,
+  "result": {
+    "resource_id": "27557a5b-adf3-4422-adf8-afd472e5bb38",
+    "records": [
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/045/2013",
+        "Ciudad de destino": "Tijuana",
+        "Fecha de inicio de la comision": "31/01/2013",
+        "Numero de comision": "2013.N.0006",
+        "Fecha de termino de la comision": "02/02/2013",
+        "Fecha de entrada": "31/01/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "31/01/2013",
+        "Servidor publico comisionado": "MARIO ERNESTO MEJIA PACHON",
+        "_id": 1
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/043/2013",
+        "Ciudad de destino": "Durango",
+        "Fecha de inicio de la comision": "28/02/2013",
+        "Numero de comision": "2013.N.0013",
+        "Fecha de termino de la comision": "28/02/2013",
+        "Fecha de entrada": "28/02/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "28/02/2013",
+        "Servidor publico comisionado": "CHRISTIAN LARIS CUTIÑO",
+        "_id": 2
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/075/2013",
+        "Ciudad de destino": "Puebla",
+        "Fecha de inicio de la comision": "21/02/2013",
+        "Numero de comision": "2013.N.0011",
+        "Fecha de termino de la comision": "21/02/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "21/02/2013",
+        "Servidor publico comisionado": "CHRISTIAN LARIS CUTIÑO",
+        "_id": 3
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG-008/13",
+        "Ciudad de destino": "Tijuana",
+        "Fecha de inicio de la comision": "31/01/2013",
+        "Numero de comision": "2013.N.0007",
+        "Fecha de termino de la comision": "02/02/2013",
+        "Fecha de entrada": "31/01/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "31/01/2013",
+        "Servidor publico comisionado": "ALFREDO MENDEZ CALATAYUD",
+        "_id": 4
+      },
+      {
+        "No de oficio de comisión": "IFAI/DGAJ/055/13",
+        "Ciudad de destino": "Morelia",
+        "Fecha de inicio de la comision": "07/02/2013",
+        "Numero de comision": "2013.N.0009",
+        "Fecha de termino de la comision": "08/02/2013",
+        "Fecha de entrada": "07/02/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "07/02/2013",
+        "Servidor publico comisionado": "ULISES ANGELES BOJORQUEZ",
+        "_id": 5
+      },
+      {
+        "No de oficio de comisión": "IFAI/ATZ/001/2013",
+        "Ciudad de destino": "Pachuca",
+        "Fecha de inicio de la comision": "28/01/2013",
+        "Numero de comision": "2013.N.0001",
+        "Fecha de termino de la comision": "28/01/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "28/01/2013",
+        "Servidor publico comisionado": "ANGEL JOSE TRINIDAD ZALDIVAR",
+        "_id": 6
+      },
+      {
+        "No de oficio de comisión": "IFAI/DTP/GLR/009/2013",
+        "Ciudad de destino": "Guadalajara",
+        "Fecha de inicio de la comision": "14/02/2013",
+        "Numero de comision": "2013.N.0010",
+        "Fecha de termino de la comision": "15/02/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "14/02/2013",
+        "Servidor publico comisionado": "ALFONSO OÑATE LABORDE",
+        "_id": 7
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/079/2013",
+        "Ciudad de destino": "Pachuca",
+        "Fecha de inicio de la comision": "26/02/2013",
+        "Numero de comision": "2013.N.0012",
+        "Fecha de termino de la comision": "26/02/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "26/02/2013",
+        "Servidor publico comisionado": "ANTOLIN SOTELO SANCHEZ",
+        "_id": 8
+      },
+      {
+        "No de oficio de comisión": "No disponible",
+        "Ciudad de destino": "Torreón",
+        "Fecha de inicio de la comision": "07/02/2013",
+        "Numero de comision": "2013.N.0008",
+        "Fecha de termino de la comision": "07/02/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "07/02/2013",
+        "Servidor publico comisionado": "MARIANA VAZQUEZ BRACHO GARCIA",
+        "_id": 9
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/037/2013",
+        "Ciudad de destino": "Saltillo",
+        "Fecha de inicio de la comision": "28/01/2013",
+        "Numero de comision": "2013.N.0003",
+        "Fecha de termino de la comision": "29/01/2013",
+        "Fecha de entrada": "28/01/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "28/01/2013",
+        "Servidor publico comisionado": "IXCHEL CRUZ CISNEROS",
+        "_id": 10
+      },
+      {
+        "No de oficio de comisión": "IFAI/SPDP/DGV/063/2013",
+        "Ciudad de destino": "Cancún y Playa del Carmen",
+        "Fecha de inicio de la comision": "29/01/2013",
+        "Numero de comision": "2013.N.0004",
+        "Fecha de termino de la comision": "30/01/2013",
+        "Fecha de entrada": "29/01/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "29/01/2013",
+        "Servidor publico comisionado": "SERGIO MARTINEZ MENDOZA",
+        "_id": 11
+      },
+      {
+        "No de oficio de comisión": "IFAI/JPM/0130/2012",
+        "Ciudad de destino": "Punta del Este",
+        "Fecha de inicio de la comision": "No aplica",
+        "Numero de comision": "2012.I.0001",
+        "Fecha de termino de la comision": "No aplica",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "No aplica",
+        "Servidor publico comisionado": "JACQUELINE PESCHARD MARISCAL",
+        "_id": 12
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/039/2013",
+        "Ciudad de destino": "Pachuca",
+        "Fecha de inicio de la comision": "28/01/2013",
+        "Numero de comision": "2013.N.0002",
+        "Fecha de termino de la comision": "28/01/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "28/01/2013",
+        "Servidor publico comisionado": "ANTOLIN SOTELO SANCHEZ",
+        "_id": 13
+      },
+      {
+        "No de oficio de comisión": "IFAI/Comisionados/Ponencias/087/13\n",
+        "Ciudad de destino": "Santiago de Chile",
+        "Fecha de inicio de la comision": "21/04/2013",
+        "Numero de comision": "2013.I.0013",
+        "Fecha de termino de la comision": "26/04/2013",
+        "Fecha de entrada": "22/04/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "23/04/2013",
+        "Servidor publico comisionado": "MARIA ELENA PEREZ-JAEN ZERMEÑO",
+        "_id": 14
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/044/2013",
+        "Ciudad de destino": "Cundinamarca",
+        "Fecha de inicio de la comision": "03/03/2013",
+        "Numero de comision": "2013.I.0006",
+        "Fecha de termino de la comision": "16/03/2013",
+        "Fecha de entrada": "03/03/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "03/03/2013",
+        "Servidor publico comisionado": "ALMA ZULEMA TOVAR FIGUEROA",
+        "_id": 15
+      },
+      {
+        "No de oficio de comisión": "IFAI/DTP/GLR/008/2013",
+        "Ciudad de destino": "Puebla",
+        "Fecha de inicio de la comision": "11/02/2013",
+        "Numero de comision": "2013.N.0016",
+        "Fecha de termino de la comision": "11/02/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "11/02/2013",
+        "Servidor publico comisionado": "ALFONSO OÑATE LABORDE",
+        "_id": 16
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/239/2013",
+        "Ciudad de destino": "Puebla",
+        "Fecha de inicio de la comision": "29/04/2013",
+        "Numero de comision": "2013.N.0033",
+        "Fecha de termino de la comision": "29/04/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "29/04/2013",
+        "Servidor publico comisionado": "SARAI CRUZ GARCIA",
+        "_id": 17
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/216/2013",
+        "Ciudad de destino": "León",
+        "Fecha de inicio de la comision": "25/04/2013",
+        "Numero de comision": "2013.N.0032",
+        "Fecha de termino de la comision": "30/04/2013",
+        "Fecha de entrada": "25/04/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "25/04/2013",
+        "Servidor publico comisionado": "MIGUEL ANGEL GUZMAN SANCHEZ",
+        "_id": 18
+      },
+      {
+        "No de oficio de comisión": "IFAI/SPDP/DGV/320/2013",
+        "Ciudad de destino": "Cordoba",
+        "Fecha de inicio de la comision": "22/04/2013",
+        "Numero de comision": "2013.N.0031",
+        "Fecha de termino de la comision": "24/04/2013",
+        "Fecha de entrada": "22/04/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "22/04/2013",
+        "Servidor publico comisionado": "JUAN RAFAEL REYES MURILLO",
+        "_id": 19
+      },
+      {
+        "No de oficio de comisión": "IFAI/SPDP/DGV/319/2013",
+        "Ciudad de destino": "Cordoba",
+        "Fecha de inicio de la comision": "22/04/2013",
+        "Numero de comision": "2013.N.0030",
+        "Fecha de termino de la comision": "24/04/2013",
+        "Fecha de entrada": "22/04/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "22/04/2013",
+        "Servidor publico comisionado": "ROBERTO OROZCO MARTINEZ",
+        "_id": 20
+      },
+      {
+        "No de oficio de comisión": "IFAI/DGAJ/0210/2013",
+        "Ciudad de destino": "Querétaro",
+        "Fecha de inicio de la comision": "08/05/2013",
+        "Numero de comision": "2013.N.0034",
+        "Fecha de termino de la comision": "09/05/2013",
+        "Fecha de entrada": "08/05/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "08/05/2013",
+        "Servidor publico comisionado": "OMAR CRUZ IBINARRIAGA",
+        "_id": 21
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/274/2013",
+        "Ciudad de destino": "Tepic",
+        "Fecha de inicio de la comision": "13/05/2013",
+        "Numero de comision": "2013.N.0035",
+        "Fecha de termino de la comision": "13/05/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "13/05/2013",
+        "Servidor publico comisionado": "MARIO ERNESTO MEJIA PACHON",
+        "_id": 22
+      },
+      {
+        "No de oficio de comisión": "IFAI/SPDP/DGNCAR/136/13",
+        "Ciudad de destino": "León\nSan Miguel de Allende\nCelaya\nIrapuato",
+        "Fecha de inicio de la comision": "08/05/2013",
+        "Numero de comision": "2013.N.0036",
+        "Fecha de termino de la comision": "09/05/2013",
+        "Fecha de entrada": "No disponible",
+        "Fecha de inicio de participacion en el evento o actividad": "08/05/2013",
+        "Servidor publico comisionado": "ALEJANDRO IVAN HERRERA ROSAS",
+        "_id": 23
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/306/2013",
+        "Ciudad de destino": "Mérida",
+        "Fecha de inicio de la comision": "24/05/2013",
+        "Numero de comision": "2013.N.0037",
+        "Fecha de termino de la comision": "24/05/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "24/05/2013",
+        "Servidor publico comisionado": "MARIO ERNESTO MEJIA PACHON",
+        "_id": 24
+      },
+      {
+        "No de oficio de comisión": "IFAI/DTP/GLR/074/2013",
+        "Ciudad de destino": "Miami",
+        "Fecha de inicio de la comision": "15/05/2013",
+        "Numero de comision": "2013.I.0018",
+        "Fecha de termino de la comision": "18/05/2013",
+        "Fecha de entrada": "15/05/2014",
+        "Fecha de inicio de participacion en el evento o actividad": "15/05/2013",
+        "Servidor publico comisionado": "ALFONSO OÑATE LABORDE",
+        "_id": 25
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/323/2013",
+        "Ciudad de destino": "Ensenada",
+        "Fecha de inicio de la comision": "30/05/2013",
+        "Numero de comision": "2013.N.0038",
+        "Fecha de termino de la comision": "31/05/2013",
+        "Fecha de entrada": "30/05/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "30/05/2013",
+        "Servidor publico comisionado": "SARAI CRUZ GARCIA",
+        "_id": 26
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/364/2013",
+        "Ciudad de destino": "Toluca",
+        "Fecha de inicio de la comision": "12/06/2013",
+        "Numero de comision": "2013.N.0039",
+        "Fecha de termino de la comision": "12/06/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "12/06/2013",
+        "Servidor publico comisionado": "MARIO ERNESTO MEJIA PACHON",
+        "_id": 27
+      },
+      {
+        "No de oficio de comisión": "IFAI/OIC/068/2013",
+        "Ciudad de destino": "Cuernavaca",
+        "Fecha de inicio de la comision": "05/06/2013",
+        "Numero de comision": "2013.N.0040",
+        "Fecha de termino de la comision": "07/06/2013",
+        "Fecha de entrada": "05/06/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "05/06/2013",
+        "Servidor publico comisionado": "ELEAZAR PABLO MORENO MORENO",
+        "_id": 28
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/363/2013",
+        "Ciudad de destino": "Toluca",
+        "Fecha de inicio de la comision": "12/06/2013",
+        "Numero de comision": "2013.N.0041",
+        "Fecha de termino de la comision": "12/06/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "12/06/2013",
+        "Servidor publico comisionado": "ANTOLIN SOTELO SANCHEZ",
+        "_id": 29
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/263/2013",
+        "Ciudad de destino": "Guadalajara",
+        "Fecha de inicio de la comision": "03/05/2013",
+        "Numero de comision": "2013.N.0042",
+        "Fecha de termino de la comision": "03/05/2013",
+        "Fecha de entrada": "No disponible",
+        "Fecha de inicio de participacion en el evento o actividad": "03/05/2013",
+        "Servidor publico comisionado": "JESUS SANTIAGO MATHEUS PEÑA",
+        "_id": 30
+      },
+      {
+        "No de oficio de comisión": "IFAI/DGCSD/076/13",
+        "Ciudad de destino": "Tlaxcala",
+        "Fecha de inicio de la comision": "16/05/2013",
+        "Numero de comision": "2013.N.0043",
+        "Fecha de termino de la comision": "16/05/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "16/05/2013",
+        "Servidor publico comisionado": "PALOMA ALCANTARA RODRIGUEZ",
+        "_id": 31
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/381/2013",
+        "Ciudad de destino": "Tlaxcala",
+        "Fecha de inicio de la comision": "14/06/2013",
+        "Numero de comision": "2013.N.0044",
+        "Fecha de termino de la comision": "14/06/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "14/06/2013",
+        "Servidor publico comisionado": "JORGE SAUL LIMAS CASTRO",
+        "_id": 32
+      },
+      {
+        "No de oficio de comisión": "IFAI/SPDP/DGV/431/2013",
+        "Ciudad de destino": "Monterrey",
+        "Fecha de inicio de la comision": "27/05/2013",
+        "Numero de comision": "2013.N.0045",
+        "Fecha de termino de la comision": "28/05/2013",
+        "Fecha de entrada": "No disponible",
+        "Fecha de inicio de participacion en el evento o actividad": "27/05/2013",
+        "Servidor publico comisionado": "SERGIO RUBEN IBARRA CASAS",
+        "_id": 33
+      },
+      {
+        "No de oficio de comisión": "IFAI/JPM/024/2013",
+        "Ciudad de destino": "Lima",
+        "Fecha de inicio de la comision": "08/05/2013",
+        "Numero de comision": "2013.I.0019",
+        "Fecha de termino de la comision": "11/05/2013",
+        "Fecha de entrada": "No disponible",
+        "Fecha de inicio de participacion en el evento o actividad": "09/05/2013",
+        "Servidor publico comisionado": "JACQUELINE PESCHARD MARISCAL",
+        "_id": 34
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/217/2013",
+        "Ciudad de destino": "Leon",
+        "Fecha de inicio de la comision": "01/05/2013",
+        "Numero de comision": "2013.N.0046",
+        "Fecha de termino de la comision": "05/05/2013",
+        "Fecha de entrada": "01/05/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "01/05/2013",
+        "Servidor publico comisionado": "JAIME QUINTERO GARCIA",
+        "_id": 35
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/DGCPRI/126/2013",
+        "Ciudad de destino": "Cuernavaca",
+        "Fecha de inicio de la comision": "22/03/2013",
+        "Numero de comision": "2013.N.0047",
+        "Fecha de termino de la comision": "22/03/2013",
+        "Fecha de entrada": "No aplica",
+        "Fecha de inicio de participacion en el evento o actividad": "22/03/2013",
+        "Servidor publico comisionado": "MANUEL MARTINEZ MORENO",
+        "_id": 36
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/067/2013",
+        "Ciudad de destino": "Queretaro",
+        "Fecha de inicio de la comision": "08/04/2013",
+        "Numero de comision": "2013.N.0024",
+        "Fecha de termino de la comision": "08/04/2013",
+        "Fecha de entrada": "08/04/2013",
+        "Fecha de inicio de participacion en el evento o actividad": "08/04/2013",
+        "Servidor publico comisionado": "CHRISTIAN LARIS CUTIÑO",
+        "_id": 37
+      },
+      {
+        "No de oficio de comisión": "IFAI/SG/048/2013",
+        "Ciudad de destino": "Washington D. C.",
+        "Fecha de inicio de la comision": "06/03/2013",
+        "Numero de comision": "2013.I.0007",
+        "Fecha de termino de la comision": "10/03/2013",
+        "Fecha de entrada": "No disponible",
+        "Fecha de inicio de participacion en el evento o actividad": "06/03/2013",
+        "Servidor publico comisionado": "ALFONSO OÑATE LABORDE",
+        "_id": 38
+      }
+    ],
+    "_links": {
+      "start": "/api/action/datastore_search?limit=38&resource_id=27557a5b-adf3-4422-adf8-afd472e5bb38",
+      "next": "/api/action/datastore_search?offset=38&limit=38&resource_id=27557a5b-adf3-4422-adf8-afd472e5bb38"
+    },
+    "limit": 38,
+    "total": 38
+  }
+}

@@ -1,7 +1,6 @@
 /**
 * Viajes transparentes rest API
 */
-//Yes I'm lazy
 
 var db = require('./models');
 var sh = require('./sha256');
@@ -112,27 +111,21 @@ function listen(app){
 					findViajes({'evento.nombre':term},res);
 				break;
 				//between
-				// case 'inicio':
-				// 	query = db.viajes.find({:term});
-				// break;
+				case 'inicio':
+					if( (new Date(req.query.beg)).getDay() != NaN && (new Date(req.query.end)).getDay() != NaN ){
+						findViajes({
+							'comision.inicio' : {
+								$gte: new Date(req.query.beg),
+								$lt: new Date(req.query.end)
+							}},res);
+					}
+					else res.send({status:'error', msg : 'Invalid date' });
+				break;
 				case 'destinos':
 					db.ciudades.findOne({ciudad:term},function(err,doc){
-						console.log('ciudad encontrada');
-						console.log(doc);
 						if(err)	res.send({status:'error', msg: err});
 						else if(!doc) res.send({status:'success', data: [] });
-						// else findViajes({_destinos:db.mongoose.Types.ObjectId(doc._id)},res);
-						// else findViajes({_destinos:{'$in':[doc._id]} },res);
-						else{
-							var shit1 = '5428dafdb7f7f849f6286bdd';
-							var shit2 = doc._id;
-							console.log('what:');
-							console.log(shit1);
-							console.log(shit2);
-							db.viajes.find({_destinos:shit2},function(err,docs){
-								res.send({message:'WHATEVA!',docs:docs});
-							});
-						}
+						else findViajes({_destinos:doc._id},res);
 					});
 				break;
 				case 'servidores':
@@ -153,8 +146,6 @@ function listen(app){
 
 // Utils :::
 function findViajes(query,res){
-	console.log('FILTROOO');
-	console.log(query);
 	db.viajes.find(query)
 		.select({
 			'tipo_viaje':true,
@@ -213,12 +204,8 @@ function restrictedAccess(req,res,next){
 		if(err || !user) res.send({status:'error', message : 'User not found'});
 		else{
 			var hash = sh.hash( user.password + JSON.stringify(req.body) );
-			// console.log( JSON.stringify(req.body) );
-			if(hash == req.query.accesstoken){
-				next();
-			}
-			else 
-				res.send({status:'error',message:'access denied; invalid access token'});
+			if(hash == req.query.accesstoken) next();
+			else res.send({status:'error',message:'access denied; invalid access token'});
 		}
 	});
 }
