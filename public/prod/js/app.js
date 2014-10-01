@@ -12,6 +12,9 @@
 			},
 			instituciones : function(){
 				return $http.get( '/instituciones' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+			},
+			autocomplete : function(searchinput){
+				return $http.get( '/autocomplete/'+searchinput ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
 			}
 		};
 	});
@@ -19,8 +22,9 @@
 	app.controller('NavigationController', function($http, $scope, $q, $timeout, DataService){
 
 		$scope.currentURL = document.URL;
-		$scope.fullTravels = {};
+		$scope.domain = document.URL.match(/http:\/\/[^\/]+\//)[0];
 
+		$scope.fullTravels = {};
 		$scope.travels = DataService.viajes();
 		$scope.travels.then(function(data){
 			$scope.travels = data;
@@ -29,10 +33,12 @@
 			$scope.institutions = idsAsIndexes(data);
 		});
 
+		//History dude
 		$scope.history = history || window.history;
 		if(initialData){
 			initialData = format(initialData);
-			$scope.history.replaceState({status:null,travelData:initialData},'Viajes Transparentes');
+			$scope.history.pushState({ status: 'welcome', travelData : {} },'Viajes Transparentes',$scope.domain);
+			$scope.history.pushState({ status: 'travel', travelData : initialData },'Viajes Transparentes',document.URL+initialData._id);
 			$scope.currentTravel = initialData;
 			$scope.welcome_panel = 'out';
 		} else{
@@ -80,6 +86,16 @@
 					});
 			}
 		};
+		$scope.cancelView = function(){
+			$scope.currentTravel = null;
+			$scope.welcome_panel='in';
+			$scope.history.back();
+		};
+
+		$scope.hideIfAlmost = function(){
+			if($scope.welcome_panel=='almost')
+				$scope.welcome_panel = 'out';
+		};
 
 		$scope.pdf = function(id){
 			alert('Próximamente');
@@ -89,6 +105,48 @@
 			alert('Próximamente');
 		};
 		
+		//scaffold
+		$scope.suggestions = [
+			{id:'1', title: 'Lana del Rey'},
+			{id:'2', title: 'Vladmir Putin'},
+			{id:'3', title: 'Enrique Peña Nieto'},
+			{id:'4', title: 'Whateva'},
+			{id:'5', title: 'Mariano Matamoros Lara'}
+		];
+		$scope.searchMode = 'servidores';
+		$scope.options = [
+			{_id:'12313256465', transportClass: 'ar-transport-air', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
+			{_id:'12313256465', transportClass: 'ar-transport-land', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
+			{_id:'12313256465', transportClass: 'ar-transport-sea', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
+			{_id:'12313256465', transportClass: 'ar-transport-unk', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} }
+		];
+
+		$scope.activeSuggestion = 0;
+
+		//private bicth
+		var lastAutocompCall = Date.now();
+		$scope.autocomplete = function(e){
+			var call = Date.now();			
+			if(call-lastAutocompCall > 300){
+
+				$scope.searchinput 
+			}
+			lastAutocompCall = call;
+		};
+		$scope.moveAlongList = function(e){
+			var sug = $scope.activeSuggestion;
+			var len = $scope.suggestions.length;
+			//movement
+			if(e.keyCode == 38){
+				$scope.activeSuggestion = (--sug < 0)? len : sug;
+			} else if(e.keyCode == 40){
+				$scope.activeSuggestion = ++sug % (len+1);
+			} 
+		};
+		$scope.setSuggestion = function(id){
+			$scope.activeSuggestion = id;
+		};
+
 		//utils
 
 		//side effects FTW

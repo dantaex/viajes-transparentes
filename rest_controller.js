@@ -84,25 +84,7 @@ function listen(app){
 	// Viajes ----------------------------------
 	//Send compact list 
 	app.get('/viajes', function(req,res){ 
-		db.viajes.find({})
-			.select({
-				'tipo_viaje':true,
-				'_origen':true,
-				'_destinos':true,
-				'_servidor':true,
-				'gastos':true,
-				'pasaje':true,
-				'comision':true
-			})
-			.populate([
-				{path:'_servidor',select:'nombre'},
-				{path:'_destinos',select:'ciudad pais -_id'},
-				{path:'_origen',select:'ciudad pais -_id'}
-			])
-			.exec(function(err,docs){
-				if(err) res.send({status:'error', msg: err});
-				else res.send({ status:'success', data : docs});
-			});		
+		findViajes({},res);
 	});
 	app.get('/viajes/:id', function(req,res){ 
 		db.viajes.findOne({_id:req.params.id})
@@ -120,10 +102,80 @@ function listen(app){
 			else res.send({status:'success', lastid: newborn.id });
 		});
 	});
+
+
+	app.get('/search', function(req,res){
+		db.viajes.find(req.query,function(err,docs){
+			var term = new RegExp(req.query.term,'i');
+			switch(req.query.by){
+				case 'eventos':
+					findViajes({'evento.nombre':term},res);
+				break;
+				//between
+				// case 'inicio':
+				// 	query = db.viajes.find({:term});
+				// break;
+				case 'destinos':
+					db.ciudades.findOne({ciudad:term},function(err,doc){
+						console.log('ciudad encontrada');
+						console.log(doc);
+						if(err)	res.send({status:'error', msg: err});
+						else if(!doc) res.send({status:'success', data: [] });
+						// else findViajes({_destinos:db.mongoose.Types.ObjectId(doc._id)},res);
+						// else findViajes({_destinos:{'$in':[doc._id]} },res);
+						else{
+							var shit1 = '5428dafdb7f7f849f6286bdd';
+							var shit2 = doc._id;
+							console.log('what:');
+							console.log(shit1);
+							console.log(shit2);
+							db.viajes.find({_destinos:shit2},function(err,docs){
+								res.send({message:'WHATEVA!',docs:docs});
+							});
+						}
+					});
+				break;
+				case 'servidores':
+					db.servidores.findOne({nombre:term},function(err,doc){
+						if(err)	res.send({status:'error', msg: err});
+						else if(!doc) res.send({status:'success', data: [] });
+						else findViajes({_servidor:doc._id},res);
+					});
+				break;
+				default:
+					res.send({status:'success', data: [] });
+				break;
+			}
+		});
+	});	
 }
 
 
 // Utils :::
+function findViajes(query,res){
+	console.log('FILTROOO');
+	console.log(query);
+	db.viajes.find(query)
+		.select({
+			'tipo_viaje':true,
+			'_origen':true,
+			'_destinos':true,
+			'_servidor':true,
+			'gastos':true,
+			'pasaje':true,
+			'comision':true
+		})
+		.populate([
+			{path:'_servidor',select:'nombre'},
+			{path:'_destinos',select:'ciudad pais _id'},
+			{path:'_origen',select:'ciudad pais -_id'}
+		])
+		.exec(function(err,docs){
+			if(err) res.send({status:'error', msg: err});
+			else res.send({ status:'success', items: docs.length, data : docs});
+		});		
+}
+
 function sendAll(model,res){
 	model.find({},{__v:false},function(err,docs){
 		if(err) res.send({status:'error', msg: err});

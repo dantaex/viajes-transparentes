@@ -8,7 +8,39 @@ head
 body(ng-controller="NavigationController as nav")
 	#map
 	#panel
+		#search_panel.ar-panel
+			h3 Buscar viajes
+
+			.ar-btn-wrapper
+				.btn-group.ar-search-nav
+					button.btn.btn-primary(ng-click="searchMode='destinos';searchinput=''" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span></a> Destino
+					button.btn.btn-primary(ng-click="searchMode='servidores';searchinput=''" ng-class="{active:searchMode=='servidores'}") <span class="fui-user"></span></a> Persona
+					button.btn.btn-primary(ng-click="searchMode='inicio';searchinput=''" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
+					button.btn.btn-primary(ng-click="searchMode='eventos';searchinput=''" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
+	
+			.ar-search-bar
+				input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keypress="autocomplete($event)" ng-keydown="moveAlongList($event)")
+				ul.ar-autocomplete-list
+					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
+
+			.loader
+				| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path transform="translate(2)" d="M0 12 V20 H4 V12z"> <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(8)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.2" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(14)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.4" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(20)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(26)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.8" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path></svg>
+	
+			ul.ar-options-list
+				li(ng-repeat="option in options")
+					div.ar-option-upper
+						div.ar-money {{option.totalCost}} <span>{{option.gastos.moneda}}</span>
+						div.ar-transport(class="{{option.transportClass}}") {{option.pasaje.linea_origen}}
+					div.ar-option-middler
+						div(class="ar-person-photo {{option._servidor.tipo_rep.charAt(0).toLowerCase()}}")
+						a.ar-name(href="{{document.URL+'servidor/'+option._servidor._id}}") {{option._servidor.nombre.toLowerCase()}}
+						.ar-date {{option.inicio.dia}} de {{option.inicio.mes}}, {{option.inicio.anio}}
+					div(class="ar-view")
+
+		#explore_panel.ar-panel
+			h1 Im explore panel
 		#travel_panel.ar-panel
+			#backToWelcome(ng-click="cancelView()" ng-mouseover="welcome_panel='almost'" ng-mouseleave="hideIfAlmost()")
 			.ar-wrapper.w7
 				.col-xs-12
 					.col-xs-3
