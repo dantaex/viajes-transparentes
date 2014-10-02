@@ -8,10 +8,10 @@
 	app.factory('DataService', function($http, $q, $timeout){
 		return {
 			viajes : function() {
-				return $http.get( '/viajes' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+				return $http.get( '/travel' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
 			},
-			instituciones : function(){
-				return $http.get( '/instituciones' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+			institutions : function(){
+				return $http.get( '/institutions' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
 			},
 			autocomplete : function(searchinput,searchMode){
 				return $http.get( '/search/?term='+searchinput+'&by='+searchMode ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
@@ -21,7 +21,6 @@
 
 	app.controller('NavigationController', function($http, $scope, $q, $timeout, DataService){
 
-		$scope.currentURL = document.URL;
 		$scope.domain = document.URL.match(/http:\/\/[^\/]+\//)[0];
 
 		$scope.fullTravels = {};
@@ -29,74 +28,114 @@
 		$scope.travels.then(function(data){
 			$scope.travels = data;
 		});
-		$scope.institutions = DataService.instituciones().then(function(data){
+		$scope.institutions = DataService.institutions().then(function(data){
 			$scope.institutions = idsAsIndexes(data);
 		});
-		
 
-		//History dude
-		$scope.history = history || window.history;
-		if(initialData){
-			initialData = format(initialData);
-			$scope.history.pushState({ status: 'welcome', travelData : {} },'Viajes Transparentes',$scope.domain);
-			$scope.history.pushState({ status: 'travel', travelData : initialData },'Viajes Transparentes',document.URL+initialData._id);
-			$scope.currentTravel = initialData;
-			$scope.welcome_panel = 'out';
-		} else{
-			$scope.history.replaceState({status:'welcome',travelData:{}},null,document.URL);
-			$scope.welcome_panel = 'in';
-			$scope.currentTravel = null;
-		}	
-		window.onpopstate = function(event){
-			switch(event.state.status){
-				case 'welcome':
-					$scope.$apply(function () {
-						$scope.currentTravel = null;
-						$scope.welcome_panel = 'in';
-						$scope.currentURL = document.URL;
-					});
-				break;
-				case 'travel':
-					$scope.$apply(function () {
-						$scope.currentTravel = event.state.travelData;
-						$scope.welcome_panel = 'out';
-						$scope.currentURL = document.URL;
-					});
-				break;
+		//UX TRANSITIONS ::: --------------------------------------------------			
+		$scope.welcome_panel_class = 'in';
+		$scope.travel_panel_class  = 'out';
+		$scope.search_panel_class  = 'out';
+		$scope.explore_panel_class = 'out';
+
+		$scope.navigateTo = function(panel,then){
+
+			$scope.welcome_panel_class = 'out';
+			$scope.travel_panel_class  = 'out';
+			$scope.search_panel_class  = 'out';
+			$scope.explore_panel_class = 'out';
+			
+			switch(panel){
+				case 'welcome_panel': $scope.welcome_panel_class = 'in'; break;
+				case 'search_panel' : $scope.search_panel_class = 'in'; break;
+				case 'explore_panel': $scope.explore_panel_class = 'in'; break;
+				case 'travel_panel' : $scope.travel_panel_class = 'in'; break;
 			}
+			if(typeof then == 'function') then();
+			else if(then == 'backward')   $scope.history.back();
 		};
 
+		$scope.searchPanel = function(){
+			$scope.navigateTo('search_panel',function(){
+				$scope.history.pushState({ status: 'search_panel', travelData : {} },'Viajes Transparentes',$scope.domain+'buscar/');
+			});
+		};
 
 		$scope.view = function(id){
 			//if and only if this shit ins't here yet
 			if( $scope.fullTravels[id] ){
 				$scope.welcome_panel = 'out';
-				$scope.history.pushState({ status: 'travel', travelData : travel },'Viajes Transparentes',document.URL+travel._id);
-				$scope.currentTravel = travel;				
+				$scope.currentTravel = travel;
+				$scope.navigateTo('travel_panel',function(){
+					$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+travel._id);
+				});
 			} else {
 				cc.log('server request');
-				$http.get("/viajes/"+id)
+				$http.get("/travel/"+id)
 					.error(function(data, status, headers, config) {})
 					.success(function(data, status, headers, config) {
 						travel = format(data.data);
 						$scope.fullTravels[travel._id] = travel;
-						$scope.welcome_panel = 'out';
-						$scope.history.pushState({ status: 'travel', travelData : travel },'Viajes Transparentes',document.URL+travel._id);
 						$scope.currentTravel = travel;
-						$scope.currentURL = document.URL;
+						$scope.navigateTo('travel_panel',function(){
+							$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+travel._id);
+						});
 					});
 			}
 		};
-		$scope.cancelView = function(){
-			$scope.currentTravel = null;
-			$scope.welcome_panel='in';
-			$scope.history.back();
+
+		$scope.peep = function(panel){
+			switch(panel){
+				case 'welcome_panel' :
+					$scope.welcome_panel_class = 'almost';
+				break;
+				// case 'search_panel' :
+				
+				// break;
+				// case 'explore_panel' :
+				
+				// break;
+				case 'travel_panel' :
+					$scope.welcome_panel_class = 'out';
+				break;
+			}
 		};
 
-		$scope.hideIfAlmost = function(){
-			if($scope.welcome_panel=='almost')
-				$scope.welcome_panel = 'out';
+
+		//HISTORY HANDLING ::: -----------------------------------------------
+
+		$scope.history = history || window.history;
+
+		switch(section){
+			case 'welcome_panel' :
+				$scope.history.replaceState({status:'welcome_panel',travelData:{}},null,document.URL);
+				$scope.navigateTo('welcome_panel');
+			break;
+			case 'travel_panel' :
+				if(initialData){
+					initialData = format(initialData);
+					$scope.history.pushState({ status: 'welcome_panel', travelData : {} },'Viajes Transparentes',$scope.domain);
+					$scope.history.pushState({ status: 'travel_panel', travelData : initialData },'Viajes Transparentes',$scope.domain+initialData._id);
+					$scope.currentTravel = initialData;
+					$scope.navigateTo('travel_panel');
+				}
+			break;
+			case 'search_panel' :
+				$scope.history.pushState({ status: 'welcome_panel', travelData : {} },'Viajes Transparentes',$scope.domain);
+				$scope.history.pushState({ status: 'search_panel',  travelData : {} },'Viajes Transparentes',$scope.domain+'buscar/');
+				$scope.navigateTo('search_panel');
+			break;
+		}
+
+		window.onpopstate = function(event){
+			console.log(event.state.status);
+
+			$scope.$apply(function(){
+				$scope.navigateTo(event.state.status);
+				$scope.currentTravel = event.state.travelData;
+			});
 		};
+
 
 		$scope.pdf = function(id){
 			alert('Próximamente');
@@ -148,7 +187,7 @@
 			$scope.activeSuggestion = id;
 		};
 
-		//utils
+		//UTILITIES ::: --------------------------------------------------
 
 		//side effects FTW
 		function format(travel){

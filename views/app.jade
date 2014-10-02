@@ -8,7 +8,8 @@ head
 body(ng-controller="NavigationController as nav")
 	#map
 	#panel
-		#search_panel.ar-panel
+		#search_panel(class="ar-panel {{search_panel_class}}")
+			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="" ng-mouseleave="")
 			h3 Buscar viajes
 
 			.ar-btn-wrapper
@@ -40,7 +41,7 @@ body(ng-controller="NavigationController as nav")
 		#explore_panel.ar-panel
 			h1 Im explore panel
 		#travel_panel.ar-panel
-			#backToWelcome(ng-click="cancelView()" ng-mouseover="welcome_panel='almost'" ng-mouseleave="hideIfAlmost()")
+			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="peep('welcome_panel')" ng-mouseleave="unpeep('welcome_panel')")
 			.ar-wrapper.w7
 				.col-xs-12
 					.col-xs-3
@@ -97,7 +98,7 @@ body(ng-controller="NavigationController as nav")
 
 				.ar-spacer
 
-		#welcome_panel(class="ar-panel {{welcome_panel}}")
+		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
 			.ar-wrapper
 				h1 Te damos la bienvenida a Viajes Transparentes
 				p El IFAI pone a tus disposición toda la información sobre viajes de funcionarios públicos
@@ -111,7 +112,7 @@ body(ng-controller="NavigationController as nav")
 				.ar-welcome-options
 					button(type="button" class="ar-explore btn btn-block btn-lg btn-primary") Explorar 
 						span(class="glyphicon glyphicon-plane")
-					button(type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
+					button(ng-click="searchPanel()" type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
 						span(class="glyphicon glyphicon-search")
 				p Últimos viajes realizados
 				ul.ar-travels
@@ -137,7 +138,8 @@ body(ng-controller="NavigationController as nav")
 								.ar-time #{days} Días
 							else
 								.ar-time **
-							div.ar-name	#{travel._servidor.nombre.toLowerCase()}
+
+							div.ar-name #{travel._servidor.nombre.toLowerCase()}
 							//- div #{travel._destinos[0].ciudad}
 							- var destinos = []; for(var i=travel._destinos.length-1;i>=0;i--) destinos.push( travel._destinos[i].ciudad+','+travel._destinos[i].pais );
 							div.ar-from-to #{travel._origen.ciudad},#{travel._origen.pais} <span></span> #{destinos.join('; ')}
@@ -145,13 +147,15 @@ body(ng-controller="NavigationController as nav")
 				p#nota * Los datos para los gastos de los viajes marcados están incompletos
 				p#nota ** Los datos para las fechas marcadas son incoherentes
 
-	script(src='js/angular.min.js')
-	script(src='js/underscore.js')
-	script(src='js/jspdf.js')
-	script(src='js/app.js')
+	script(src='/js/angular.min.js')
+	script(src='/js/underscore.js')
+	script(src='/js/jspdf.js')
+	script(src='/js/app.js')
 	if initialData
 		script.
 			initialData = !{JSON.stringify(initialData)};
+			section = '#{section}';
 	else
 		script.
 			initialData = null;
+			section = '#{section}';

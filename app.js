@@ -34,7 +34,7 @@ var db = require('./models');
 
 controller.listen(app);
 
-function home( req, res ){	
+function home( req, res, section ){	
 	db.viajes.find({})
 		.select({
 			'tipo_viaje':true,
@@ -56,16 +56,21 @@ function home( req, res ){
 				db.viajes.findOne({_id:req.params.travelid})
 					.populate('_servidor _destinos _origen _institucion_hospedaje _institucion_pasaje')
 					.exec(function(err,doc){
-						if(err) res.render('app',{data:docs});
-						else res.render('app',{data:docs,initialData:doc});
+						if(err) res.render('app',{data:docs,section:section});
+						else res.render('app',{data:docs,initialData:doc,section:section});
 					});
 			}
-			else res.render('app',{data:docs});
+			else res.render('app',{data:docs,section:section});
 		});	
 }
-app.get('/', home);
+
+app.get('/', function(req,res){ home(req,res,'welcome_panel') } );
+app.get('/buscar', function(req,res){ home(req,res,'search_panel'); });
+app.get('/viajes', function(req,res){ home(req,res,'travel_panel'); });
+app.get('/viajes/:travelid', function(req,res){ home(req,res,'travel_panel'); });
+app.get('/explorar', function(req,res){ home(req,res,'explore_panel'); });
+app.get('/servidores', function(req,res){ home(req,res,'traveller_panel'); });
 app.get('/adm', function(req,res){ res.render('adminapp') });
-app.get('/:travelid', home);
 
 
 http.createServer(app).listen(app.get('port'), function(){

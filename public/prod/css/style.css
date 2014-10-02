@@ -1,3 +1,26 @@
+*::-webkit-scrollbar {
+  width: 1px;
+  background-color: #fff;
+}
+*::-webkit-scrollbar-track-piece {
+  background-color: #ededed;
+  border: 0px;
+}
+*::-webkit-scrollbar-thumb {
+  background-color: #777;
+}
+*::-webkit-input-placeholder {
+  font-weight: 300;
+}
+*:-moz-placeholder {
+  font-weight: 300;
+}
+*::-moz-placeholder {
+  font-weight: 300;
+}
+*:-ms-input-placeholder {
+  font-weight: 300;
+}
 body,
 html {
   height: 100%;
@@ -180,6 +203,12 @@ ul.ar-travels li:hover .ar-view {
 }
 #welcome_panel.almost {
   margin-left: 95%;
+}
+#search_panel.out {
+  margin-left: -100%;
+}
+#search_panel.in {
+  margin-left: 0px;
 }
 #travel_panel {
   background-color: #fff;
@@ -379,7 +408,7 @@ input.ar-search:focus {
   border: 1px solid #1abc9c;
   background-image: url("../img/search2.svg");
 }
-#backToWelcome {
+.backbtn {
   width: 65px;
   height: 65px;
   border: 1px solid #999;

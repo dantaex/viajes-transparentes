@@ -2,14 +2,15 @@
 * Viajes transparentes rest API
 */
 
-var db = require('./models');
-var sh = require('./sha256');
+var db = require('./models'),
+	sh = require('./lib/sha256'),
+	fc = require('./lib/flowcontrol');
 
 function listen(app){
 	
 	// Ciudades --------------------------------
-	app.get('/ciudades', function(req,res){ sendAll(db.ciudades,res) });
-	app.get('/ciudades/:id', function(req,res){ 
+	app.get('/cities', function(req,res){ sendAll(db.ciudades,res) });
+	app.get('/cities/:id', function(req,res){ 
 		db.ciudades.findOne({_id:req.params.id},function(err,doc){
 			if(err) res.send({status:'error',msg:err});
 			else if(!doc) res.send({status:'success',data:doc});
@@ -29,7 +30,7 @@ function listen(app){
 			}
 		});		
 	});
-	app.post('/ciudades', restrictedAccess, function(req,res){
+	app.post('/cities', restrictedAccess, function(req,res){
 		upsert(
 			db.ciudades,
 			{ ciudad : req.body.ciudad },
@@ -39,8 +40,8 @@ function listen(app){
 	});
 
 	// Instituciones ---------------------------
-	app.get('/instituciones', function(req,res){ sendAll(db.instituciones,res) });
-	app.post('/instituciones', restrictedAccess , function(req,res){
+	app.get('/institutions', function(req,res){ sendAll(db.instituciones,res) });
+	app.post('/institutions', restrictedAccess , function(req,res){
 		upsert(
 			db.instituciones,
 			{ nombre : req.body.nombre },
@@ -50,8 +51,8 @@ function listen(app){
 	});	
 
 	// Servidores ------------------------------
-	app.get('/servidores', function(req,res){ sendAll(db.servidores,res) });
-	app.get('/servidores/:id', function(req,res){ 
+	app.get('/travellers', function(req,res){ sendAll(db.servidores,res) });
+	app.get('/travellers/:id', function(req,res){ 
 		db.servidores.findOne({_id:req.params.id},function(err,doc){
 			if(err) res.send({status:'error',msg:err});
 			else if(!doc) res.send({status:'success',data:doc});
@@ -71,7 +72,7 @@ function listen(app){
 			}
 		});
 	});
-	app.post('/servidores', restrictedAccess , function(req,res){
+	app.post('/travellers', restrictedAccess , function(req,res){
 		upsert(
 			db.servidores,
 			{ nombre : req.body.nombre },
@@ -81,11 +82,44 @@ function listen(app){
 	});	
 
 	// Viajes ----------------------------------
-	//Send compact list 
-	app.get('/viajes', function(req,res){ 
-		findViajes({},res);
+	app.get('/travel', function(req,res){ 
+		
+		var limit = (req.query.limit)? req.query.limit : 10;
+
+		if(!req.query.by) findViajes({},res,null,limit);
+		else
+			db.viajes.find(req.query,function(err,docs){
+				
+				var term = new RegExp(req.query.term,'i');
+
+				switch(req.query.by){
+					case 'eventos':
+						findViajes({'evento.nombre':term},res,null,limit);
+					break;
+					//between
+					case 'inicio':
+						if( (new Date(req.query.beg)).getDay() != NaN && (new Date(req.query.end)).getDay() != NaN ){
+							findViajes({
+								'comision.inicio' : {
+									$gte: new Date(req.query.beg),
+									$lt: new Date(req.query.end)
+								}},res,null,limit);
+						}
+						else res.send({status:'error', msg : 'Invalid date' });
+					break;
+					case 'destinos':
+						findRelated( db.ciudades.find({ciudad:term}) , '_destinos' , res, null, limit);
+					break;
+					case 'servidores':
+						findRelated( db.servidores.find({nombre:term}) , '_servidor' , res, null, limit);
+					break;
+					default:
+						res.send({status:'success', data: [] });
+					break;
+				}
+			});
 	});
-	app.get('/viajes/:id', function(req,res){ 
+	app.get('/travel/:id', function(req,res){ 
 		db.viajes.findOne({_id:req.params.id})
 			.populate('_servidor _destinos _origen _institucion_hospedaje _institucion_pasaje')
 			.exec(function(err,docs){
@@ -93,8 +127,7 @@ function listen(app){
 				else res.send({ status:'success', data : docs});
 			});
 	});
-
-	app.post('/viajes', restrictedAccess , function(req,res){
+	app.post('/travel', restrictedAccess , function(req,res){
 		var doc = new db.viajes(req.body);
 		doc.save(function(err,newborn){
 			if(err)	res.send({status:'error', msg: err});
@@ -102,51 +135,49 @@ function listen(app){
 		});
 	});
 
-
-	app.get('/search', function(req,res){
-		db.viajes.find(req.query,function(err,docs){
-			var term = new RegExp(req.query.term,'i');
-			switch(req.query.by){
-				case 'eventos':
-					findViajes({'evento.nombre':term},res);
-				break;
-				//between
-				case 'inicio':
-					if( (new Date(req.query.beg)).getDay() != NaN && (new Date(req.query.end)).getDay() != NaN ){
-						findViajes({
-							'comision.inicio' : {
-								$gte: new Date(req.query.beg),
-								$lt: new Date(req.query.end)
-							}},res);
-					}
-					else res.send({status:'error', msg : 'Invalid date' });
-				break;
-				case 'destinos':
-					db.ciudades.findOne({ciudad:term},function(err,doc){
-						if(err)	res.send({status:'error', msg: err});
-						else if(!doc) res.send({status:'success', data: [] });
-						else findViajes({_destinos:doc._id},res);
-					});
-				break;
-				case 'servidores':
-					db.servidores.findOne({nombre:term},function(err,doc){
-						if(err)	res.send({status:'error', msg: err});
-						else if(!doc) res.send({status:'success', data: [] });
-						else findViajes({_servidor:doc._id},res);
-					});
-				break;
-				default:
-					res.send({status:'success', data: [] });
-				break;
-			}
-		});
-	});	
+	
 }
 
 
 // Utils :::
-function findViajes(query,res){
-	db.viajes.find(query)
+
+/*
+* In order To make autocomplete super fast
+* we only send the first 10 results
+*/
+function findRelated(query,filter,res,limit){
+	query.limit(limit)
+		.exec(function(err,docs){
+			if(err)	res.send({status:'error', msg: err});
+			else if(!docs) res.send({status:'success', data: [] });
+			else{
+				//for each matching guy, get all of their travels
+				fc.taskChain(
+					docs,
+					function(docc,callback,ndocs){
+						if(ndocs >= limit)
+							callback(null,null);
+						else{
+							var ff = {};
+							ff[filter] = docc._id
+							findViajes(ff,null,function(err,ress){
+								callback(err,ress);
+							},limit);
+						}
+					},
+					function(err,allResults){
+						if(err) res.send({status:'error', msg: err});
+						else res.send({status:'success', items: allResults.length, data : allResults});
+					},
+					false,
+					true//merge them!
+				);
+			}
+		});	
+}
+
+function findViajes(filter,res,callback,limit){
+	db.viajes.find(filter)
 		.select({
 			'tipo_viaje':true,
 			'_origen':true,
@@ -161,9 +192,14 @@ function findViajes(query,res){
 			{path:'_destinos',select:'ciudad pais _id'},
 			{path:'_origen',select:'ciudad pais -_id'}
 		])
+		.limit(limit)
 		.exec(function(err,docs){
-			if(err) res.send({status:'error', msg: err});
-			else res.send({ status:'success', items: docs.length, data : docs});
+			if(callback && typeof callback == 'function')
+				callback(err,docs);
+			else{
+				if(err) res.send({status:'error', msg: err});
+				else res.send({ status:'success', items: docs.length, data : docs});
+			}				
 		});		
 }
 
