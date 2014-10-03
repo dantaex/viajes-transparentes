@@ -552,6 +552,34 @@ ul.ar-options-list li .ar-date {
   background-position: left center;
   background-image: url("../img/calendar.svg");
 }
+ul.ar-options-list .ar-from-to {
+  min-height: 40px;
+  position: relative;
+}
+ul.ar-options-list .ar-from-to div {
+  display: block;
+  min-height: 40px;
+  min-width: 200px;
+}
+ul.ar-options-list .ar-from-to div.ar-to {
+  float: right;
+  background-color: #fff;
+  z-index: 1;
+}
+ul.ar-options-list .ar-from-to div.ar-from {
+  float: left;
+  background-color: #fff;
+  z-index: 1;
+}
+ul.ar-options-list .ar-from-to .ar-wider {
+  z-index: 0;
+  position: absolute;
+  display: block;
+  left: 0px;
+  bottom: 20px;
+  width: 100%;
+  border-bottom: 2px solid #999;
+}
 .login-block {
   max-width: 400px;
   margin: 5% auto 0px auto;

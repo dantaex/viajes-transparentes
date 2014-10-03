@@ -84,14 +84,13 @@ function listen(app){
 	// Viajes ----------------------------------
 	app.get('/travel', function(req,res){ 
 		
-		var limit = (req.query.limit)? req.query.limit : 10;
+		var limit = req.query.limit || 10;
 
 		if(!req.query.by) findViajes({},res,null,limit);
 		else
 			db.viajes.find(req.query,function(err,docs){
-				
-				var term = new RegExp(req.query.term,'i');
 
+				var term = new RegExp(req.query.term,'i');
 				switch(req.query.by){
 					case 'eventos':
 						findViajes({'evento.nombre':term},res,null,limit);
@@ -108,10 +107,10 @@ function listen(app){
 						else res.send({status:'error', msg : 'Invalid date' });
 					break;
 					case 'destinos':
-						findRelated( db.ciudades.find({ciudad:term}) , '_destinos' , res, null, limit);
+						findRelated( db.ciudades.find({ciudad:term}) , '_destinos' , res, limit);
 					break;
 					case 'servidores':
-						findRelated( db.servidores.find({nombre:term}) , '_servidor' , res, null, limit);
+						findRelated( db.servidores.find({nombre:term}) , '_servidor' , res, limit);
 					break;
 					default:
 						res.send({status:'success', data: [] });
@@ -134,7 +133,6 @@ function listen(app){
 			else res.send({status:'success', lastid: newborn.id });
 		});
 	});
-
 	
 }
 
@@ -154,23 +152,28 @@ function findRelated(query,filter,res,limit){
 				//for each matching guy, get all of their travels
 				fc.taskChain(
 					docs,
-					function(docc,callback,ndocs){
-						if(ndocs >= limit)
+					function(docc,callback,ndocs,vars){
+						if(ndocs >= vars.limit)
 							callback(null,null);
 						else{
 							var ff = {};
-							ff[filter] = docc._id
+							ff[filter] = docc._id;
 							findViajes(ff,null,function(err,ress){
 								callback(err,ress);
-							},limit);
+							},vars.limit);
 						}
 					},
 					function(err,allResults){
 						if(err) res.send({status:'error', msg: err});
 						else res.send({status:'success', items: allResults.length, data : allResults});
 					},
-					false,
-					true//merge them!
+					{
+						acceptnull: false,
+						mergeArrayResults : true,//merge them!
+						transport : {
+							limit : limit
+						}
+					}
 				);
 			}
 		});	

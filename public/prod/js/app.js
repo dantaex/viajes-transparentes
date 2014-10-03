@@ -7,14 +7,26 @@
 
 	app.factory('DataService', function($http, $q, $timeout){
 		return {
-			viajes : function() {
-				return $http.get( '/travel' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+			suggestions : function(){
+				return $http.get( '/suggestions' )
+					.then(function(result) { 
+							return result.data.data; 
+						}, 
+						function(){ 
+							console.log('Could not load suggestions');
+						});				
 			},
-			institutions : function(){
-				return $http.get( '/institutions' ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
-			},
-			autocomplete : function(searchinput,searchMode){
-				return $http.get( '/search/?term='+searchinput+'&by='+searchMode ).then(function(result) { return result.data.data; }, function(){ alert('Ups! Hubo un problema, por favor reinicia la página'); });
+			travel : function(searchinput,searchMode){
+				searchinput = searchinput || '';
+				searchMode  = searchMode  || '';
+				return $http.get( '/travel/?term='+searchinput+'&by='+searchMode+'&limit=4' )
+					.then(function(result) { 
+							console.log('!! server request');
+							return result.data.data;
+						}, 
+						function(){ 
+							console.log('Could not load options');
+						});
 			}
 		};
 	});
@@ -23,16 +35,123 @@
 
 		$scope.domain = document.URL.match(/http:\/\/[^\/]+\//)[0];
 
+		/*
+		*	This is the indexed collection of full Travel data
+		*	So server requests ocurr only once per _id
+		*/
 		$scope.fullTravels = {};
-		$scope.travels = DataService.viajes();
-		$scope.travels.then(function(data){
-			$scope.travels = data;
-		});
-		$scope.institutions = DataService.institutions().then(function(data){
-			$scope.institutions = idsAsIndexes(data);
-		});
 
-		//UX TRANSITIONS ::: --------------------------------------------------			
+		$scope.searchMode = 'servidores';
+		$scope.activeSuggestion = 0;
+
+		/*
+		*	Search options
+		*/
+		// $scope.options = DataService.travel();
+		// $scope.options.then(function(data){			
+		// 	$scope.options = formatOptions(data);
+		// });
+		$scope.options = [];
+
+		/*
+		*	Autocomplete suggestions
+		*/		
+		$scope.suggestions = [];
+		// $scope.allSuggestions = DataService.suggestions();
+		// $scope.allSuggestions.then(function(data){			
+		// 	$scope.allSuggestions = data;
+		// });		
+		//scaffolding
+		$scope.allSuggestions = {
+			servidores : [
+				{id:'1', title: 'Lana del Rey'},
+				{id:'2', title: 'Vladmir Putin'},
+				{id:'3', title: 'Enrique Peña Nieto'},
+				{id:'4', title: 'Whateva'},
+				{id:'4', title: 'Lana Lang'},
+				{id:'4', title: 'Laura M'},
+				{id:'4', title: 'Ernesto Larrea'},
+				{id:'5', title: 'Mariano Matamoros Lara'}
+			],
+			destinos : [
+				{id:'1', title: 'Puebla'},
+				{id:'2', title: 'México DF'},
+				{id:'3', title: 'Tijuana'},
+				{id:'4', title: 'Whateva'},
+				{id:'5', title: 'Puente'},
+				{id:'5', title: 'Pues'},
+				{id:'5', title: 'Putla'}
+			],
+			eventos : [
+				{id:'1', title: 'Reunion de trabajadores de'},
+				{id:'2', title: 'Ministerio de magia'},
+				{id:'3', title: 'Simposium de empresarios textileros'},
+				{id:'4', title: 'Bienal de Transparencia'},
+				{id:'5', title: 'Reunion de Amantes de Motocicletas'},
+				{id:'5', title: 'Whateva'},
+				{id:'5', title: 'Simp dasd dsa da ds'}
+			],			
+		};
+
+		//Autocomplete ::: --------------------------------------------------
+
+		//private bicth
+		var lastKeyPress = Date.now();
+		$scope.autocomplete = function(e){
+			if( e.keyCode == 38 || e.keyCode == 40 ){
+				var sug = $scope.activeSuggestion;
+				var len = $scope.suggestions.length;
+				//movement
+				if(e.keyCode == 38){
+					$scope.activeSuggestion = (--sug < 0)? len : sug;
+				} else if(e.keyCode == 40){
+					$scope.activeSuggestion = ++sug % (len+1);
+				} 
+			} else {
+				var call = Date.now();
+				if(call-lastKeyPress > 200){
+
+					var sugs = $scope.allSuggestions[$scope.searchMode];
+
+					var filtered = [];
+					for (var i = sugs.length - 1; i >= 0; i--) {
+						if( sugs[i].title.toLowerCase().indexOf($scope.searchinput) != -1 )
+							filtered.push(sugs[i]);
+					};
+					$scope.suggestions = filtered;
+
+					console.log('Filtered suggestions');
+					console.log(filtered);
+
+				}
+				if(call-lastKeyPress > 700){
+					
+					console.log('options suposed to arrive now');
+
+					$scope.options = DataService.travel($scope.searchinput,$scope.searchMode);
+					$scope.options.then(function(data){
+						$scope.options = formatOptions(data);
+					});
+				}
+				lastKeyPress = call;
+			}
+		};
+		// $scope.moveAlongList = function(e){
+		// 	var sug = $scope.activeSuggestion;
+		// 	var len = $scope.suggestions.length;
+		// 	//movement
+		// 	if(e.keyCode == 38){
+		// 		$scope.activeSuggestion = (--sug < 0)? len : sug;
+		// 	} else if(e.keyCode == 40){
+		// 		$scope.activeSuggestion = ++sug % (len+1);
+		// 	} 
+		// };
+		$scope.setSuggestion = function(id){
+			$scope.activeSuggestion = id;
+		};		
+
+		//UX TRANSITIONS ::: --------------------------------------------------		
+
 		$scope.welcome_panel_class = 'in';
 		$scope.travel_panel_class  = 'out';
 		$scope.search_panel_class  = 'out';
@@ -102,6 +221,9 @@
 		};
 
 
+
+
+
 		//HISTORY HANDLING ::: -----------------------------------------------
 
 		$scope.history = history || window.history;
@@ -145,51 +267,40 @@
 			alert('Próximamente');
 		};
 		
-		//scaffold
-		$scope.suggestions = [
-			{id:'1', title: 'Lana del Rey'},
-			{id:'2', title: 'Vladmir Putin'},
-			{id:'3', title: 'Enrique Peña Nieto'},
-			{id:'4', title: 'Whateva'},
-			{id:'5', title: 'Mariano Matamoros Lara'}
-		];
-		$scope.searchMode = 'servidores';
-		$scope.options = [
-			{_id:'12313256465', transportClass: 'ar-transport-air', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
-			{_id:'12313256465', transportClass: 'ar-transport-land', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
-			{_id:'12313256465', transportClass: 'ar-transport-sea', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} },
-			{_id:'12313256465', transportClass: 'ar-transport-unk', totalCost: '14,752.00', gastos: {moneda:'MXN'}, pasaje : {linea_origen:'Aeroméxico'}, _servidor : {_id : '54654654', tipo_rep:'Técnica', nombre: 'Lana Del Rey'}, inicio : {dia:'23',mes:'Abril',anio: '2013'} }
-		];
-
-		$scope.activeSuggestion = 0;
-
-		//private bicth
-		var lastAutocompCall = Date.now();
-		$scope.autocomplete = function(e){
-			var call = Date.now();			
-			if(call-lastAutocompCall > 300){
-
-				$scope.searchinput 
-			}
-			lastAutocompCall = call;
-		};
-		$scope.moveAlongList = function(e){
-			var sug = $scope.activeSuggestion;
-			var len = $scope.suggestions.length;
-			//movement
-			if(e.keyCode == 38){
-				$scope.activeSuggestion = (--sug < 0)? len : sug;
-			} else if(e.keyCode == 40){
-				$scope.activeSuggestion = ++sug % (len+1);
-			} 
-		};
-		$scope.setSuggestion = function(id){
-			$scope.activeSuggestion = id;
-		};
-
 		//UTILITIES ::: --------------------------------------------------
 
-		//side effects FTW
+		function formatOptions(opts){
+			// origen - destino
+			for (var i = opts.length - 1; i >= 0; i--) {
+				var date = new Date(opts[i].comision.inicio);
+				opts[i].inicio = {
+					dia : date.getDay(),
+					mes : date.getMonth(),
+					anio : date.getYear()
+				};
+
+				var viaticos  = opts[i].gastos.viaticos || 0,
+					pasaje 	  = opts[i].gastos.pasaje || 0,
+					hospedaje = opts[i].gastos.hospedaje || 0;
+				opts[i].totalCost = _.str.numberFormat( viaticos + pasaje + hospedaje, 2 );
+
+				var destinos = [];
+				for(var j=opts[i]._destinos.length-1;j>=0;j--)
+					destinos.push( opts[i]._destinos[j].ciudad+','+opts[i]._destinos[j].pais );
+
+				opts[i].destinos = destinos.join('; ');
+				opts[i].origen = opts[i]._origen.ciudad+','+opts[i]._origen.pais;
+
+				switch(opts[i].pasaje.tipo){
+					case 'Aéreo': opts[i].transportClass = 'ar-transport-air'; break;
+					case 'Terrestre': opts[i].transportClass = 'ar-transport-land'; break;
+					case 'Marítimo': opts[i].transportClass = 'ar-transport-sea'; break;
+					default : opts[i].transportClass = 'ar-transport-unk'; break;
+				}				
+			};
+			return opts;
+		}
+
 		function format(travel){
 
 			switch(travel.pasaje.tipo){
@@ -199,9 +310,9 @@
 				default : travel.transportClass = 'ar-transport-unk'; break;
 			}
 
-			var viaticos = (travel.gastos.viaticos)? travel.gastos.viaticos : 0,
-				pasaje = (travel.gastos.pasaje)? travel.gastos.pasaje : 0,
-				hospedaje = (travel.gastos.hospedaje)? travel.gastos.hospedaje : 0;
+			var viaticos  = travel.gastos.viaticos || 0,
+				pasaje 	  = travel.gastos.pasaje || 0,
+				hospedaje = travel.gastos.hospedaje || 0;
 			travel.totalCost = _.str.numberFormat(  viaticos + pasaje + hospedaje, 2 );
 
 			var destinos = [];
