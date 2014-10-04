@@ -14,19 +14,20 @@ body(ng-controller="NavigationController as nav")
 
 			.ar-btn-wrapper
 				.btn-group.ar-search-nav
-					button.btn.btn-primary(ng-click="searchMode='destinos';searchinput=''" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span></a> Destino
-					button.btn.btn-primary(ng-click="searchMode='servidores';searchinput=''" ng-class="{active:searchMode=='servidores'}") <span class="fui-user"></span></a> Persona
-					button.btn.btn-primary(ng-click="searchMode='inicio';searchinput=''" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
-					button.btn.btn-primary(ng-click="searchMode='eventos';searchinput=''" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
+					button.btn.btn-primary(ng-click="searchMode='destinos';searchinput='';suggestions=[]" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span></a> Destino
+					button.btn.btn-primary(ng-click="searchMode='servidores';searchinput='';suggestions=[]" ng-class="{active:searchMode=='servidores'}") <span class="fui-user"></span></a> Persona
+					button.btn.btn-primary(ng-click="searchMode='inicio';searchinput='';suggestions=[]" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
+					button.btn.btn-primary(ng-click="searchMode='eventos';searchinput='';suggestions=[]" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
 	
 			.ar-search-bar
 				//- input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keypress="autocomplete($event)" ng-keydown="moveAlongList($event)")
-				input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)")
-				ul.ar-autocomplete-list
+				input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="list_out='ar-out'" ng-focus="list_out='ar-in'")
+				ul(class="ar-autocomplete-list {{list_out}}")
 					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
 
-			.loader
-				| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path transform="translate(2)" d="M0 12 V20 H4 V12z"> <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(8)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.2" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(14)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.4" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(20)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(26)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.8" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path></svg>
+			//-
+				div(class="loader {{loading}}")
+					| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path transform="translate(2)" d="M0 12 V20 H4 V12z"> <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(8)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.2" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(14)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.4" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(20)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(26)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.8" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path></svg>
 	
 			ul.ar-options-list
 				li(ng-repeat="option in options")
@@ -40,8 +41,8 @@ body(ng-controller="NavigationController as nav")
 						.ar-clear
 					div.ar-option-bottom
 						.ar-from-to
-							.ar-wider
 							.ar-from {{option.origen}} 
+							| .....
 							.ar-to {{option.destinos}}
 					div(class="ar-view")
 

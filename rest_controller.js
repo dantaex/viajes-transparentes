@@ -134,6 +134,27 @@ function listen(app){
 		});
 	});
 	
+
+	app.get('/suggestions', function(req,res){ 
+		fc.taskMap(
+			[
+				db.servidores.find({}).select('_id nombre'),
+				db.ciudades.find({}).select('_id ciudad'),
+				db.viajes.find({}).select('_id evento.nombre')
+			],
+			function(query,next){
+				query				
+				.limit(100)
+				.exec(function(err,docs){
+					next(err,docs);
+				});
+			}, 
+			function(err,results){
+				if(err)	res.send({status:'error', msg: err});
+				else res.send({status:'success', data: results });
+			}
+		);
+	});
 }
 
 

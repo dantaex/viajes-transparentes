@@ -430,9 +430,18 @@ input.ar-search:focus {
   width: 100%;
 }
 .loader {
-  width: 250px;
-  height: 60px;
+  width: 200px;
+  height: 40px;
   margin: 0 auto;
+  opacity: 0;
+  -webkit-transition: opacity 0.25s ease-out;
+  -moz-transition: opacity 0.25s ease-out;
+  -ms-transition: opacity 0.25s ease-out;
+  -o-transition: opacity 0.25s ease-out;
+  transition: opacity 0.25s ease-out;
+}
+.loader.loading {
+  opacity: 1;
 }
 .loader svg {
   fill: #1abc9c;
@@ -440,12 +449,16 @@ input.ar-search:focus {
   height: 100%;
 }
 ul.ar-autocomplete-list {
-  background-color: rgba(250,250,250,0.7);
+  background-color: rgba(250,250,250,0.92);
+  box-shadow: 0px 0px 3px #ddd;
   display: block;
   max-width: 350px;
-  margin: 0 auto;
+  margin-left: 25px;
   list-style: none;
   padding: 0px;
+  position: absolute;
+  width: 100%;
+  z-index: 2;
 }
 ul.ar-autocomplete-list li {
   border-bottom: 1px solid #ddd;
@@ -453,6 +466,10 @@ ul.ar-autocomplete-list li {
   padding-bottom: 10px;
   display: block;
   text-indent: 20px;
+  text-transform: capitalize;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
 }
 ul.ar-autocomplete-list li.active {
   background-color: #1abc9c;
@@ -481,6 +498,9 @@ ul.ar-options-list {
   list-style: none;
   padding: 0px;
 }
+ul.ar-autocomplete-list.ar-out {
+  display: none;
+}
 ul.ar-options-list .ar-money {
   max-width: 300px;
 }
@@ -507,6 +527,8 @@ ul.ar-options-list li .ar-option-upper {
 }
 ul.ar-options-list li .ar-option-middler {
   width: 100%;
+}
+ul.ar-options-list li .ar-option-bottom {
   margin-bottom: 20px;
 }
 ul.ar-options-list li .ar-money {
@@ -516,6 +538,7 @@ ul.ar-options-list li .ar-money {
 }
 ul.ar-options-list li .ar-transport {
   max-width: 150px;
+  font-size: 14px;
   float: right;
 }
 ul.ar-options-list li .ar-person-photo {
@@ -559,26 +582,17 @@ ul.ar-options-list .ar-from-to {
 ul.ar-options-list .ar-from-to div {
   display: block;
   min-height: 40px;
-  min-width: 200px;
+  min-width: 160px;
 }
 ul.ar-options-list .ar-from-to div.ar-to {
   float: right;
-  background-color: #fff;
-  z-index: 1;
+  background-color: transparent;
+  text-align: right;
 }
 ul.ar-options-list .ar-from-to div.ar-from {
   float: left;
-  background-color: #fff;
-  z-index: 1;
-}
-ul.ar-options-list .ar-from-to .ar-wider {
-  z-index: 0;
-  position: absolute;
-  display: block;
-  left: 0px;
-  bottom: 20px;
-  width: 100%;
-  border-bottom: 2px solid #999;
+  background-color: transparent;
+  text-align: left;
 }
 .login-block {
   max-width: 400px;

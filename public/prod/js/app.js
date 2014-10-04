@@ -21,10 +21,9 @@
 				searchMode  = searchMode  || '';
 				return $http.get( '/travel/?term='+searchinput+'&by='+searchMode+'&limit=4' )
 					.then(function(result) { 
-							console.log('!! server request');
 							return result.data.data;
-						}, 
-						function(){ 
+						},
+						function(){
 							console.log('Could not load options');
 						});
 			}
@@ -43,109 +42,93 @@
 
 		$scope.searchMode = 'servidores';
 		$scope.activeSuggestion = 0;
+		$scope.suggestionIndex = -1;
 
 		/*
 		*	Search options
 		*/
-		// $scope.options = DataService.travel();
-		// $scope.options.then(function(data){			
-		// 	$scope.options = formatOptions(data);
-		// });
 		$scope.options = [];
+		$scope.loading = '';
 
 		/*
 		*	Autocomplete suggestions
 		*/		
 		$scope.suggestions = [];
-		// $scope.allSuggestions = DataService.suggestions();
-		// $scope.allSuggestions.then(function(data){			
-		// 	$scope.allSuggestions = data;
-		// });		
-		//scaffolding
-		$scope.allSuggestions = {
-			servidores : [
-				{id:'1', title: 'Lana del Rey'},
-				{id:'2', title: 'Vladmir Putin'},
-				{id:'3', title: 'Enrique Peña Nieto'},
-				{id:'4', title: 'Whateva'},
-				{id:'4', title: 'Lana Lang'},
-				{id:'4', title: 'Laura M'},
-				{id:'4', title: 'Ernesto Larrea'},
-				{id:'5', title: 'Mariano Matamoros Lara'}
-			],
-			destinos : [
-				{id:'1', title: 'Puebla'},
-				{id:'2', title: 'México DF'},
-				{id:'3', title: 'Tijuana'},
-				{id:'4', title: 'Whateva'},
-				{id:'5', title: 'Puente'},
-				{id:'5', title: 'Pues'},
-				{id:'5', title: 'Putla'}
-			],
-			eventos : [
-				{id:'1', title: 'Reunion de trabajadores de'},
-				{id:'2', title: 'Ministerio de magia'},
-				{id:'3', title: 'Simposium de empresarios textileros'},
-				{id:'4', title: 'Bienal de Transparencia'},
-				{id:'5', title: 'Reunion de Amantes de Motocicletas'},
-				{id:'5', title: 'Whateva'},
-				{id:'5', title: 'Simp dasd dsa da ds'}
-			],			
-		};
+		$scope.allSuggestions = DataService.suggestions();
+		$scope.allSuggestions.then(function(data){
+			for (var i = data.length - 1; i >= 0; i--) {
+				for (var j = data[i].length - 1; j >= 0; j--) {
+					data[i][j].title = data[i][j].nombre || data[i][j].ciudad || data[i][j].evento.nombre;
+					
+					if(data[i][j].title == null)
+						data[i].splice(j, 1);
+					else {
+						data[i][j].title = data[i][j].title.toLowerCase();
+						data[i][j].id 	 = data[i][j]._id;
+					}
+				};
+			};
+			$scope.allSuggestions = {
+				'servidores': data[0],
+				'destinos'  : data[1],
+				'eventos'   : data[2],
+			};
+		});		
 
+		$scope.some=function(){
+			alert('ooooo');
+		};
 		//Autocomplete ::: --------------------------------------------------
 
 		//private bicth
 		var lastKeyPress = Date.now();
 		$scope.autocomplete = function(e){
-			if( e.keyCode == 38 || e.keyCode == 40 ){
-				var sug = $scope.activeSuggestion;
-				var len = $scope.suggestions.length;
-				//movement
-				if(e.keyCode == 38){
-					$scope.activeSuggestion = (--sug < 0)? len : sug;
-				} else if(e.keyCode == 40){
-					$scope.activeSuggestion = ++sug % (len+1);
-				} 
-			} else {
+			if( e.keyCode == 8 || e.keyCode == 46 || e.keyCode > 47 ){
 				var call = Date.now();
 				if(call-lastKeyPress > 200){
 
 					var sugs = $scope.allSuggestions[$scope.searchMode];
 
 					var filtered = [];
-					for (var i = sugs.length - 1; i >= 0; i--) {
-						if( sugs[i].title.toLowerCase().indexOf($scope.searchinput) != -1 )
+
+					var ll = sugs.length;
+					for (var i = 0; i < 10 && i < ll; i++) {
+						if( sugs[i].title.indexOf($scope.searchinput) != -1 )
 							filtered.push(sugs[i]);
 					};
 					$scope.suggestions = filtered;
-
-					console.log('Filtered suggestions');
-					console.log(filtered);
-
 				}
 				if(call-lastKeyPress > 700){
-					
-					console.log('options suposed to arrive now');
-
-					$scope.options = DataService.travel($scope.searchinput,$scope.searchMode);
-					$scope.options.then(function(data){
-						$scope.options = formatOptions(data);
-					});
+					updateOptions();
 				}
 				lastKeyPress = call;
+			} else if (e.keyCode == 13 && $scope.suggestionIndex > -1){
+				//update model
+				$scope.searchinput = $scope.suggestions[$scope.suggestionIndex].title;
+				//and empty suggestions
+				$scope.suggestions = [];
+				//and update options
+				updateOptions();
 			}
 		};
-		// $scope.moveAlongList = function(e){
-		// 	var sug = $scope.activeSuggestion;
-		// 	var len = $scope.suggestions.length;
-		// 	//movement
-		// 	if(e.keyCode == 38){
-		// 		$scope.activeSuggestion = (--sug < 0)? len : sug;
-		// 	} else if(e.keyCode == 40){
-		// 		$scope.activeSuggestion = ++sug % (len+1);
-		// 	} 
-		// };
+		/*
+		* Up and down movement
+		*
+		*/
+		$scope.moveUpOrDown = function(e){
+			if( e.keyCode == 38 || e.keyCode == 40 ){
+				var sug = $scope.suggestionIndex;
+				var len = $scope.suggestions.length;
+
+				if(len > 0){
+					if(e.keyCode == 38) $scope.suggestionIndex = (--sug < 0)? len -1 : sug;
+					else if(e.keyCode == 40) $scope.suggestionIndex = ++sug % (len);
+
+					$scope.activeSuggestion = $scope.suggestions[$scope.suggestionIndex].id;
+				}
+			}
+		};
+
 		$scope.setSuggestion = function(id){
 			$scope.activeSuggestion = id;
 		};		
@@ -177,6 +160,12 @@
 		$scope.searchPanel = function(){
 			$scope.navigateTo('search_panel',function(){
 				$scope.history.pushState({ status: 'search_panel', travelData : {} },'Viajes Transparentes',$scope.domain+'buscar/');
+				/**
+				* Yes yes bad practice... bullshit!
+				* just take a look at this http://stackoverflow.com/questions/14833326/how-to-set-focus-on-input-field
+				* this is the fastest and simplest way
+				*/
+				document.getElementById('search-input').focus();
 			});
 		};
 
@@ -220,10 +209,6 @@
 			}
 		};
 
-
-
-
-
 		//HISTORY HANDLING ::: -----------------------------------------------
 
 		$scope.history = history || window.history;
@@ -250,14 +235,11 @@
 		}
 
 		window.onpopstate = function(event){
-			console.log(event.state.status);
-
 			$scope.$apply(function(){
 				$scope.navigateTo(event.state.status);
 				$scope.currentTravel = event.state.travelData;
 			});
 		};
-
 
 		$scope.pdf = function(id){
 			alert('Próximamente');
@@ -268,14 +250,22 @@
 		};
 		
 		//UTILITIES ::: --------------------------------------------------
+		var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
+
+		function updateOptions(){
+			$scope.options = DataService.travel($scope.searchinput,$scope.searchMode);
+			$scope.options.then(function(data){
+				$scope.options = formatOptions(data);
+				$scope.loading = '';
+			});			
+		}
 
 		function formatOptions(opts){
-			// origen - destino
 			for (var i = opts.length - 1; i >= 0; i--) {
 				var date = new Date(opts[i].comision.inicio);
 				opts[i].inicio = {
 					dia : date.getDay(),
-					mes : date.getMonth(),
+					mes : months[date.getMonth()],
 					anio : date.getYear()
 				};
 
@@ -286,9 +276,12 @@
 
 				var destinos = [];
 				for(var j=opts[i]._destinos.length-1;j>=0;j--)
-					destinos.push( opts[i]._destinos[j].ciudad+','+opts[i]._destinos[j].pais );
+					destinos.push( opts[i]._destinos[j].ciudad );
 
 				opts[i].destinos = destinos.join('; ');
+				if(opts[i]._destinos[0].pais)
+					opts[i].destinos += ', '+opts[i]._destinos[0].pais;
+
 				opts[i].origen = opts[i]._origen.ciudad+','+opts[i]._origen.pais;
 
 				switch(opts[i].pasaje.tipo){
@@ -323,8 +316,6 @@
 
 			travel.dias = Math.round(Math.abs(( (new Date(travel.comision.fin)) - (new Date(travel.comision.inicio)) )/(24*60*60*1000))) + "";
 			travel.dias = (travel.dias == 'NaN')? '' : (travel.dias=='0' || travel.dias=='1')? '1 día' : travel.dias +'días' ;
-
-			var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 			travel.comision.inicio = new Date(travel.comision.inicio);
 			travel.comision.fin = new Date(travel.comision.fin);
