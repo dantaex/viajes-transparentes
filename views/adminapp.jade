@@ -6,7 +6,12 @@ head
 	link(rel='stylesheet', href='/css/flat-ui.min.css')
 	link(rel='stylesheet', href='/css/style.css')
 body.ar-adm(ng-controller="AdminController")
+	#user_panel.ar-panel(ng-class="{aractive:currentPanel=='user_panel'}")
+		.ar-advice Por ahora, el panel no cuenta con la opción "recordarme", por lo que si esta pestaña se cierra, deberá volver proporcionar su contraseña, próximamente esto cambiará
+		h2 Nuevo viaje
+		form.login-form(ng-submit="login()")
 	#login_panel.ar-panel(ng-class="{aractive:currentPanel=='login_panel'}")
+		.ar-advice(class="{{ui_adv}}") Datos incorrectos
 		.login-block
 			h4 Iniciar Sesión
 			form.login-form(name="login_form" ng-submit="login()" method="POST")
@@ -18,10 +23,6 @@ body.ar-adm(ng-controller="AdminController")
 					label.login-field-icon.fui-lock(for="login-pass")
 				input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
 				a.login-link(href="#") Recuperar contraseña
-	#user_panel.ar-panel(ng-class="{aractive:currentPanel=='user_panel'}")
-		.ar-advice Por ahora, el panel no cuenta con la opción "recordarme", por lo que si esta pestaña se cierra, deberá volver proporcionar su contraseña, próximamente esto cambiará
-		h2 Nuevo viaje
-		form.login-form(ng-submit="login()")
 		
 
 
@@ -33,6 +34,21 @@ body.ar-adm(ng-controller="AdminController")
 			.controller('AdminController', function($http, $scope, $q, $timeout){
 
 				$scope.currentPanel = 'login_panel';
+				$scope.ui_adv = '';
+
+				$scope.navigateTo = function(panel){
+					$scope.currentPanel = panel;
+				};
+
+				//check if logged
+				console.log(document.cookie);
+				try{
+					var ss = JSON.parse(document.cookie);
+					$scope.navigateTo('user_panel');
+				} catch(e){
+					//not logged
+					console.log('not logged in');
+				}
 				
 				$scope.login = function(){
 					var email = Sha256.hash($scope.email),
@@ -47,16 +63,23 @@ body.ar-adm(ng-controller="AdminController")
 								console.log(res);
 								if(res.status== "success"){
 									$scope.navigateTo('user_panel');
-								}					
+									var d = new Date();
+									d.setTime(d.getTime() + (6*24*60*60*1000));
+									var expires = d.toUTCString();
+									document.cookie='{"publickey":"'+email+'","expires":"'+expires+'"}';
+								} else if (res.status == 'error'){
+									$scope.ui_adv = 'ar-in';
+									setTimeout(function(){ 
+										$scope.$apply(function(){
+											$scope.ui_adv = 'ar-out';											
+										});
+									 },1500);
+								}
 							}, 
-							function(){ alert('Ocurrió un problema, intente de nuevo'); }
+								function(what){ alert('Ocurrió un problema, intente de nuevo'); }
 							);
 				};
 				
-				$scope.navigateTo = function(panel){
-					$scope.currentPanel == panel;
-				};
-
 				function credentials(publickey,accesstoken,data){
 					if(data) return '?publickey='+publickey+'&accesstoken='+accesstoken+'&data='+data;
 					else	 return '?publickey='+publickey+'&accesstoken='+accesstoken;

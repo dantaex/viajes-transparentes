@@ -604,7 +604,8 @@ ul.ar-options-list .ar-from-to div.ar-from {
   font-family: 'Flat-UI-Icons';
   content: "\e009   ";
 }
-#login_panel {
+#login_panel,
+#user_panel {
   background-color: #fff;
 }
 .ar-adm .ar-panel {
@@ -612,4 +613,23 @@ ul.ar-options-list .ar-from-to div.ar-from {
 }
 .ar-panel.aractive {
   z-index: 3;
+}
+.ar-advice {
+  width: auto;
+  max-width: 90%;
+  background-color: #f39c12;
+  color: #fff;
+  padding: 10px;
+  text-align: center;
+  margin: 0 auto;
+  border-radius: 0px 0px 4px 4px;
+  -webkit-transition: margin 0.45s ease-out;
+  -moz-transition: margin 0.45s ease-out;
+  -ms-transition: margin 0.45s ease-out;
+  -o-transition: margin 0.45s ease-out;
+  transition: margin 0.45s ease-out;
+  margin-top: -60px;
+}
+.ar-advice.ar-in {
+  margin-top: 0px;
 }
