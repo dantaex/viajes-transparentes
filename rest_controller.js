@@ -155,6 +155,21 @@ function listen(app){
 			}
 		);
 	});
+
+	//used for "login"
+	app.get('/users/:id', restrictedAccess, function(req,res){ 
+		db.users.findOne({id:req.params.id})
+			.select('name permissions -_id')
+			.populate([
+				{path:'permissions.auth_servidores', select:'nombre'},
+				{path:'permissions.auth_instituciones', select:'nombre'},
+				{path:'permissions.auth_viajes',select:'tipo_viaje _origen _destinos comision'}
+			])
+			.exec(function(err,doc){
+				if(err)	res.send({status:'error', msg: err});
+				res.send({status:'success', data: doc});
+			})
+	});
 }
 
 
@@ -263,7 +278,8 @@ function restrictedAccess(req,res,next){
 	db.users.findOne({ id : req.query.publickey },function(err,user){
 		if(err || !user) res.send({status:'error', message : 'User not found'});
 		else{
-			var hash = sh.hash( user.password + JSON.stringify(req.body) );
+			var data = req.query.data || JSON.stringify(req.body);
+			var hash = sh.hash( user.password + data);
 			if(hash == req.query.accesstoken) next();
 			else res.send({status:'error',message:'access denied; invalid access token'});
 		}

@@ -1,10 +1,24 @@
 var db = require('./dbconfig');
 
+/**
+* level: 'root' is intended to have authority over everything
+* auth_institutions : a collection of which institutions this user can modify
+* auth_users : a collection of which institutions this user can modify
+*/
 var User = new db.Schema({
 	id : String,
 	email : String,
 	password : String,
 	name : String,
+	level : {type: String, enum: ['root','admin']},
+	permissions: {
+		auth_instituciones : [{ type: db.Schema.ObjectId, ref: 'Institucion'}],
+		auth_servidores    : [{ type: db.Schema.ObjectId, ref: 'Servidor'}],
+		auth_viajes        : [{ type: db.Schema.ObjectId, ref: 'Viaje'}],
+		can_create_instituciones : { type: Boolean, default : false},
+		can_create_servidores : { type: Boolean, default : false},
+		can_create_viajes : { type: Boolean, default : false}
+	},
 	created : {type: Date, default : Date.now }
 });
 

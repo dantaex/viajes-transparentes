@@ -221,7 +221,7 @@ ul.ar-travels li:hover .ar-view {
   margin-left: 20px;
 }
 #travel_panel .ar-travel-cost {
-  font-size: 2.5em;
+  font-size: 2.1em;
   display: inline-block;
 }
 #travel_panel .ar-currency {
@@ -321,7 +321,8 @@ ul.ar-travels li:hover .ar-view {
   font-size: 0.75em;
 }
 .ar-stuff-nobody-gives-a-fuck-about p.ar-pbigger {
-  font-size: 0.9em;
+  font-size: 1em;
+  font-weight: bold;
 }
 #travel_panel .ar-stuff-maybe-someone-will-ever-read h6 {
   text-indent: 0px;
@@ -421,6 +422,7 @@ input.ar-search:focus {
   top: 20px;
   right: 50px;
   cursor: pointer;
+  z-index: 2;
 }
 #debug.wtf {
   position: absolute;
@@ -601,4 +603,13 @@ ul.ar-options-list .ar-from-to div.ar-from {
 .cui-login:before {
   font-family: 'Flat-UI-Icons';
   content: "\e009   ";
+}
+#login_panel {
+  background-color: #fff;
+}
+.ar-adm .ar-panel {
+  z-index: 0;
+}
+.ar-panel.aractive {
+  z-index: 3;
 }

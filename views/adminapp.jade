@@ -1,19 +1,66 @@
 doctype html
-html(ng-app='admin')
+html(ng-app="admin")
 head
 	title= 'Viajes Transparentes'
 	link(rel='stylesheet', href='/css/bootstrap.min.css')
 	link(rel='stylesheet', href='/css/flat-ui.min.css')
 	link(rel='stylesheet', href='/css/style.css')
-body(ng-controller="AdminController")
-	#login_panel.login-block(ng-show="cpanel=='login_panel'")
-		h4 Iniciar Sesión
-		form.login-form(name="login_form" action="/login" method="POST")
-			.form-group
-				input#login-name.form-control.login-field(type="text" value=""  name="email" placeholder= "Correo Electrónico" required autofocus)
-				label.login-field-icon.fui-user(for="login-name")
-			.form-group
-				input#login-pass.form-control.login-field(type="password" value="" placeholder="Contraseña" name="password")
-				label.login-field-icon.fui-lock(for="login-pass")
-			input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
-			a.login-link(href="#") Recuperar contraseña
+body.ar-adm(ng-controller="AdminController")
+	#login_panel.ar-panel(ng-class="{aractive:currentPanel=='login_panel'}")
+		.login-block
+			h4 Iniciar Sesión
+			form.login-form(name="login_form" ng-submit="login()" method="POST")
+				.form-group
+					input.form-control.login-field(type="text" value="" ng-model="email" name="email" placeholder= "Correo Electrónico" required autofocus)
+					label.login-field-icon.fui-user(for="login-name")
+				.form-group
+					input.form-control.login-field(type="password" value="" ng-model="password" placeholder="Contraseña" name="password")
+					label.login-field-icon.fui-lock(for="login-pass")
+				input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
+				a.login-link(href="#") Recuperar contraseña
+	#user_panel.ar-panel(ng-class="{aractive:currentPanel=='user_panel'}")
+		.ar-advice Por ahora, el panel no cuenta con la opción "recordarme", por lo que si esta pestaña se cierra, deberá volver proporcionar su contraseña, próximamente esto cambiará
+		h2 Nuevo viaje
+		form.login-form(ng-submit="login()")
+		
+
+
+	script(src='/js/angular.min.js')
+	script(src='/js/sha256.js')
+	script.
+		(function(){
+			var app = angular.module('admin',[])
+			.controller('AdminController', function($http, $scope, $q, $timeout){
+
+				$scope.currentPanel = 'login_panel';
+				
+				$scope.login = function(){
+					var email = Sha256.hash($scope.email),
+						pass  = Sha256.hash($scope.password),
+						start = Date.now(),
+						accesstoken = Sha256.hash(pass+start);
+
+					$http.get( '/users/'+email+credentials(email,accesstoken,start) )
+						.then(
+							function(response) { 
+								var res = response.data;
+								console.log(res);
+								if(res.status== "success"){
+									$scope.navigateTo('user_panel');
+								}					
+							}, 
+							function(){ alert('Ocurrió un problema, intente de nuevo'); }
+							);
+				};
+				
+				$scope.navigateTo = function(panel){
+					$scope.currentPanel == panel;
+				};
+
+				function credentials(publickey,accesstoken,data){
+					if(data) return '?publickey='+publickey+'&accesstoken='+accesstoken+'&data='+data;
+					else	 return '?publickey='+publickey+'&accesstoken='+accesstoken;
+				}				
+
+			});
+		})()

@@ -7,6 +7,12 @@
 	"password" : "e6a399b202a88830bb7c4cf6ef60a3be8ea680c34e87f5941ea14be3499fe322",
 	"name" : "Jesús Israel Cruz"
 }
+db.users.insert({
+"id" : "bc04770593424d6d02efa8e572c40d0f863552ec7d9d8b81be64cc2df72bda10",
+"email" : "jesuslink00@gmail.com",
+"password" : "9ac1780324a3a0d79c485aa60062f0fc86b30914133caed52ae68edc68a63877",
+"name" : "Jesus Cruz"
+});
 
 
 REQUEST: POST

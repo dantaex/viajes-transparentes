@@ -1,6 +1,6 @@
 /**
 * Viajes transparentes 
-* Made in 3 hours by @dantaex
+* Made by @dantaex
 */
 (function(cc){
 	var app = angular.module('viajes',[]);
@@ -32,7 +32,9 @@
 
 	app.controller('NavigationController', function($http, $scope, $q, $timeout, DataService){
 
+		var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 		$scope.domain = document.URL.match(/http:\/\/[^\/]+\//)[0];
+
 
 		/*
 		*	This is the indexed collection of full Travel data
@@ -102,7 +104,7 @@
 					updateOptions();
 				}
 				lastKeyPress = call;
-			} else if (e.keyCode == 13 && $scope.suggestionIndex > -1){
+			} else if (e.keyCode == 13 && $scope.suggestionIndex > -1 && $scope.suggestions.length > 0){
 				//update model
 				$scope.searchinput = $scope.suggestions[$scope.suggestionIndex].title;
 				//and empty suggestions
@@ -175,7 +177,7 @@
 				$scope.welcome_panel = 'out';
 				$scope.currentTravel = travel;
 				$scope.navigateTo('travel_panel',function(){
-					$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+travel._id);
+					$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+'viajes/'+travel._id);
 				});
 			} else {
 				cc.log('server request');
@@ -186,7 +188,7 @@
 						$scope.fullTravels[travel._id] = travel;
 						$scope.currentTravel = travel;
 						$scope.navigateTo('travel_panel',function(){
-							$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+travel._id);
+							$scope.history.pushState({ status: 'travel_panel', travelData : travel },'Viajes Transparentes',$scope.domain+'viajes/'+travel._id);
 						});
 					});
 			}
@@ -209,6 +211,23 @@
 			}
 		};
 
+		$scope.switchMode = function(mode){
+ 			$scope.searchMode='destinos';
+ 			$scope.searchinput='';
+ 			$scope.suggestions=[];
+ 			$scope.options = [];
+ 			document.getElementById('search-input').focus();	
+		};
+
+		$scope.pdf = function(id){
+			alert('Próximamente');
+		};
+
+		$scope.email = function(id){
+			alert('Próximamente');
+		};
+		
+
 		//HISTORY HANDLING ::: -----------------------------------------------
 
 		$scope.history = history || window.history;
@@ -222,7 +241,7 @@
 				if(initialData){
 					initialData = format(initialData);
 					$scope.history.pushState({ status: 'welcome_panel', travelData : {} },'Viajes Transparentes',$scope.domain);
-					$scope.history.pushState({ status: 'travel_panel', travelData : initialData },'Viajes Transparentes',$scope.domain+initialData._id);
+					$scope.history.pushState({ status: 'travel_panel', travelData : initialData },'Viajes Transparentes',$scope.domain+'viajes/'+initialData._id);
 					$scope.currentTravel = initialData;
 					$scope.navigateTo('travel_panel');
 				}
@@ -241,16 +260,7 @@
 			});
 		};
 
-		$scope.pdf = function(id){
-			alert('Próximamente');
-		};
-
-		$scope.email = function(id){
-			alert('Próximamente');
-		};
-		
 		//UTILITIES ::: --------------------------------------------------
-		var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 
 		function updateOptions(){
 			$scope.options = DataService.travel($scope.searchinput,$scope.searchMode);
@@ -266,7 +276,7 @@
 				opts[i].inicio = {
 					dia : date.getDay(),
 					mes : months[date.getMonth()],
-					anio : date.getYear()
+					anio : date.getFullYear()
 				};
 
 				var viaticos  = opts[i].gastos.viaticos || 0,
@@ -319,7 +329,7 @@
 
 			travel.comision.inicio = new Date(travel.comision.inicio);
 			travel.comision.fin = new Date(travel.comision.fin);
-			
+
 			travel.inicio = { dia: travel.comision.inicio.getDay(), mes : months[travel.comision.inicio.getMonth()], anio : travel.comision.inicio.getFullYear() };
 			travel.fin = { dia: travel.comision.fin.getDay(), mes : months[travel.comision.fin.getMonth()], anio : travel.comision.fin.getFullYear() };
 
