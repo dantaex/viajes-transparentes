@@ -1,0 +1,495 @@
+{
+  "help": "Search a DataStore resource.\n\n    The datastore_search action allows you to search data in a resource.\n    DataStore resources that belong to private CKAN resource can only be\n    read by you if you have access to the CKAN resource and send the appropriate\n    authorization.\n\n    :param resource_id: id or alias of the resource to be searched against\n    :type resource_id: string\n    :param filters: matching conditions to select, e.g {\"key1\": \"a\", \"key2\": \"b\"} (optional)\n    :type filters: dictionary\n    :param q: full text query (optional)\n    :type q: string\n    :param plain: treat as plain text query (optional, default: true)\n    :type plain: bool\n    :param language: language of the full text query (optional, default: english)\n    :type language: string\n    :param limit: maximum number of rows to return (optional, default: 100)\n    :type limit: int\n    :param offset: offset this number of rows (optional)\n    :type offset: int\n    :param fields: fields to return (optional, default: all fields in original order)\n    :type fields: list or comma separated string\n    :param sort: comma separated field names with ordering\n                 e.g.: \"fieldname1, fieldname2 desc\"\n    :type sort: string\n\n    Setting the ``plain`` flag to false enables the entire PostgreSQL `full text search query language`_.\n\n    A listing of all available resources can be found at the alias ``_table_metadata``.\n\n    .. _full text search query language: http://www.postgresql.org/docs/9.1/static/datatype-textsearch.html#DATATYPE-TSQUERY\n\n    If you need to download the full resource, read :ref:`dump`.\n\n    **Results:**\n\n    The result of this action is a dictionary with the following keys:\n\n    :rtype: A dictionary with the following keys\n    :param fields: fields/columns and their extra metadata\n    :type fields: list of dictionaries\n    :param offset: query offset value\n    :type offset: int\n    :param limit: query limit value\n    :type limit: int\n    :param filters: query filters\n    :type filters: list of dictionaries\n    :param total: number of total matching records\n    :type total: int\n    :param records: list of matching results\n    :type records: list of dictionaries\n\n    ",
+  "success": true,
+  "result": {
+    "resource_id": "a5ac444e-6c98-4393-abc5-392bfc193660",
+    "fields": [
+      {
+        "type": "int4",
+        "id": "_id"
+      },
+      {
+        "type": "text",
+        "id": "Nombre de la variable"
+      },
+      {
+        "type": "text",
+        "id": "Clave de variable"
+      },
+      {
+        "type": "text",
+        "id": "Etiqueta de variable"
+      },
+      {
+        "type": "text",
+        "id": "Tipo de dato"
+      },
+      {
+        "type": "text",
+        "id": "Descripción"
+      },
+      {
+        "type": "text",
+        "id": "Ejemplo"
+      }
+    ],
+    "records": [
+      {
+        "Clave de variable": "MEC_ORIGEN",
+        "Descripción": "Seleccionar del catálogo en cuestión en función de si la comisión se genera por una invitación externa o por requerimiento de una Unidades Responsable dentro de la institución.\n- Invitación\n- Requerimiento UR",
+        "Etiqueta de variable": "Mecanismo que origina la comisión (invitación / requerimiento de Unidad Responsable)",
+        "Nombre de la variable": "mecanismo que origina la comision",
+        "Tipo de dato": "Texto",
+        "_id": 1,
+        "Ejemplo": "Invitación"
+      },
+      {
+        "Clave de variable": "INST_GENERA",
+        "Descripción": "Institución que invita, o en su defecto Unidad Responsable que genera la comisión para el servidor público",
+        "Etiqueta de variable": "Quién invita / qué UR solicita",
+        "Nombre de la variable": "quien invita o solicita",
+        "Tipo de dato": "Texto",
+        "_id": 2,
+        "Ejemplo": "El Presidente del Consejo para la Transparencia; extendió una invitación al Comisionado Presidente GLR\n"
+      },
+      {
+        "Clave de variable": "UR",
+        "Descripción": "Unidad responsable en la que se genera la nota de viaje, el oficio relacionado a la comisión a la que se envía al funcionario público, u otra información específica sobre motivo del viaje y resultados",
+        "Etiqueta de variable": "Unidad Responsable",
+        "Nombre de la variable": "unidad responsable",
+        "Tipo de dato": "Texto",
+        "_id": 3,
+        "Ejemplo": "Oficina de la Comisionada MEPJZ"
+      },
+      {
+        "Clave de variable": "TIPO_REP",
+        "Descripción": "Seleccionar del siguiente catálogo en función del puesto del funcionario público que viaja:\n- Técnico\n- Alto Nivel",
+        "Etiqueta de variable": "Tipo de representación requerida",
+        "Nombre de la variable": "tipo de representacion",
+        "Tipo de dato": "Texto",
+        "_id": 4,
+        "Ejemplo": "Alto Nivel"
+      },
+      {
+        "Clave de variable": "CONSECUTIVO",
+        "Descripción": "Número de identificación único asignado por las áreas de control del IFAI para identificar la comisión",
+        "Etiqueta de variable": "Número de comisión",
+        "Nombre de la variable": "numero de comision",
+        "Tipo de dato": "Texto",
+        "_id": 5,
+        "Ejemplo": "2013.I.0013"
+      },
+      {
+        "Clave de variable": "NOMBRE",
+        "Descripción": "Nombre del servidor público que es enviado a la comisión, seleccionable de un catálogo con los nombres de los servidores públicos",
+        "Etiqueta de variable": "Servidor público comisionado",
+        "Nombre de la variable": "servidor publico comisionado",
+        "Tipo de dato": "Texto",
+        "_id": 6,
+        "Ejemplo": "MARIA ELENA PEREZ-JAEN ZERMEÑO"
+      },
+      {
+        "Clave de variable": "CARGO",
+        "Descripción": "Cargo del servidor público en el IFAI, asociado al nombre del servidor público",
+        "Etiqueta de variable": "Cargo",
+        "Nombre de la variable": "cargo",
+        "Tipo de dato": "Texto",
+        "_id": 7,
+        "Ejemplo": "COMISIONADA"
+      },
+      {
+        "Clave de variable": "GRUPO",
+        "Descripción": "Clave del IFAI designada para el tipo de puesto del servidor público, asociada al cargo",
+        "Etiqueta de variable": "Grupo jerárquico",
+        "Nombre de la variable": "grupo jerarquico",
+        "Tipo de dato": "Texto",
+        "_id": 8,
+        "Ejemplo": "HB1"
+      },
+      {
+        "Clave de variable": "TIPO_VIAJE",
+        "Descripción": "Selección del tipo de viaje del siguiente catálogo\n- Nacional\n- Internacional",
+        "Etiqueta de variable": "Tipo de viaje",
+        "Nombre de la variable": "tipo viaje",
+        "Tipo de dato": "Texto",
+        "_id": 9,
+        "Ejemplo": "Internacional"
+      },
+      {
+        "Clave de variable": "ACUERDO",
+        "Descripción": "Número de acuerdo o documento oficial mediante el cual se autoriza la comisión del servidor público",
+        "Etiqueta de variable": "No. de acuerdo de autorización del pleno / de coordinadores",
+        "Nombre de la variable": "Numero de acuerdo de autorizacion",
+        "Tipo de dato": "Texto",
+        "_id": 10,
+        "Ejemplo": "ACT-PUB/03/04/2013.03.01"
+      },
+      {
+        "Clave de variable": "OFICIO",
+        "Descripción": "Número de oficio a través del cuál se comisiona al servidor público",
+        "Etiqueta de variable": "No. de oficio de comisión",
+        "Nombre de la variable": "numero de oficio",
+        "Tipo de dato": "Numero",
+        "_id": 11,
+        "Ejemplo": "IFAI/Comisionados/Ponencias/087/13\n"
+      },
+      {
+        "Clave de variable": "PAIS_ORIGEN",
+        "Descripción": "País de donde inicia la comisión",
+        "Etiqueta de variable": "País de origen",
+        "Nombre de la variable": "pais de origen",
+        "Tipo de dato": "Texto",
+        "_id": 12,
+        "Ejemplo": "México"
+      },
+      {
+        "Clave de variable": "ESTADO_ORIGEN",
+        "Descripción": "Estado, departamento o equivalnete de donde inicia la comisión",
+        "Etiqueta de variable": "Estado de origen",
+        "Nombre de la variable": "estado de origen",
+        "Tipo de dato": "Texto",
+        "_id": 13,
+        "Ejemplo": "Distrito Federal"
+      },
+      {
+        "Clave de variable": "CIUDAD_ORIGEN",
+        "Descripción": "Ciudad, municipio o equivalente de donde inicia la comisión",
+        "Etiqueta de variable": "Ciudad de origen",
+        "Nombre de la variable": "ciudad de origen",
+        "Tipo de dato": "Texto",
+        "_id": 14,
+        "Ejemplo": "Ciudad de México"
+      },
+      {
+        "Clave de variable": "PAIS_DESTINO",
+        "Descripción": "País en donde se realizará la comisión",
+        "Etiqueta de variable": "País de destino",
+        "Nombre de la variable": "pais destino",
+        "Tipo de dato": "Texto",
+        "_id": 15,
+        "Ejemplo": "Chile"
+      },
+      {
+        "Clave de variable": "ESTADO_DESTINO",
+        "Descripción": "Estado, departamento o equivalnete en donde se realizará la comisión",
+        "Etiqueta de variable": "Estado o equivalente de destino",
+        "Nombre de la variable": "estado destino",
+        "Tipo de dato": "Texto",
+        "_id": 16,
+        "Ejemplo": "Santiago de Chile"
+      },
+      {
+        "Clave de variable": "CIUDAD_DESTINO",
+        "Descripción": "Ciudad, municipio o equivalente en donde se realizará la comisión",
+        "Etiqueta de variable": "Ciudad de destino",
+        "Nombre de la variable": "ciudad destino",
+        "Tipo de dato": "Texto",
+        "_id": 17,
+        "Ejemplo": "Santiago de Chile"
+      },
+      {
+        "Clave de variable": "TARIFA_DIARIA",
+        "Descripción": "Tarifa de viáticos diaria asignada al funcionario de acuerdo con su perfil y el lugar a donde viaja. ",
+        "Etiqueta de variable": "Tarifa diaria de viáticos por día",
+        "Nombre de la variable": "tarifa diaria para viaticos",
+        "Tipo de dato": "Número",
+        "_id": 18,
+        "Ejemplo": "450.0"
+      },
+      {
+        "Clave de variable": "MONEDA",
+        "Descripción": "Seleccionar del catálogo:\n- MXP\n- USD",
+        "Etiqueta de variable": "Moneda de los viáticos",
+        "Nombre de la variable": "Moneda",
+        "Tipo de dato": "Texto",
+        "_id": 19,
+        "Ejemplo": "USD"
+      },
+      {
+        "Clave de variable": "TEMA",
+        "Descripción": "Seleccionar el tema de acuerdo con el siguiente catálogo:\n- Políticas de acceso a la información\n- Asuntos internacionales\n- Normativa de acceso a la información\n- Capacitacion y cultura de la transparencia\n- Gestión documental de archivos\n- Indicadores y evaluación\n- Normatividad de datos personales\n- Supervisión, vigilancia, verificación y sanciones\n- Tecnologías de la Información\n- Gobierno abierto y transparencia\n- Vinculación con Estados y Municipios\n- Vinculación con nuevos sujetos obligados\n- Vinculación y promoción del derecho",
+        "Etiqueta de variable": "Tema",
+        "Nombre de la variable": "tema",
+        "Tipo de dato": "Texto",
+        "_id": 20,
+        "Ejemplo": "Asuntos Internacionales"
+      },
+      {
+        "Clave de variable": "TIPO_COM",
+        "Descripción": "Selección de un catálogo, mismo que se irá ajustando con el tiempo, según las necesidades del IFAI:\n- Recibir capacitación\n- Impartir capacitación\n- Prticipación en evento público\n- Notificación\n- Verificación\n- etc.",
+        "Etiqueta de variable": "Tipo de comisión",
+        "Nombre de la variable": "tipo de comision",
+        "Tipo de dato": "Texto",
+        "_id": 21,
+        "Ejemplo": "Participación en evento público"
+      },
+      {
+        "Clave de variable": "EVENTO",
+        "Descripción": "Mención el evento o actividad a la que asiste el funcionario en su comisión",
+        "Etiqueta de variable": "Nombre del evento o actividad principal a la que se asiste",
+        "Nombre de la variable": "nombre del evento o actividad",
+        "Tipo de dato": "",
+        "_id": 22,
+        "Ejemplo": "V Encuentro RTA y IV Seminario Internacional de Transparencia “DEL DICHO AL HECHO: cómo pasar del discurso público a la acción”"
+      },
+      {
+        "Clave de variable": "URL_EVENTO",
+        "Descripción": "Liga de internet relacionada con el evento al cual el funcionario asiste como objeto de la comisión, pudiendo ser un micrositio, programa, convocatoria, etc.",
+        "Etiqueta de variable": "URL del evento",
+        "Nombre de la variable": "URL del evento",
+        "Tipo de dato": "Texto",
+        "_id": 23,
+        "Ejemplo": "No disponible"
+      },
+      {
+        "Clave de variable": "FECHAINICIO_PART",
+        "Descripción": "Fecha en la que inicia la participación del funcionario en la comisión",
+        "Etiqueta de variable": "Fecha de inicio de participación en el evento o actividad",
+        "Nombre de la variable": "Fecha de inicio de participacion",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 24,
+        "Ejemplo": "2013-04-23 00:00:00"
+      },
+      {
+        "Clave de variable": "FECHAFIN_PART",
+        "Descripción": "Fecha en la que finaliza la participación del funcionario en la comisión",
+        "Etiqueta de variable": "Fecha de fin de participación en el evento o actividad",
+        "Nombre de la variable": "fecha fin participacion",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 25,
+        "Ejemplo": "2013-04-25 00:00:00"
+      },
+      {
+        "Clave de variable": "MOTIVO",
+        "Descripción": "Describe el motivo por el cual el funcionario público fue enviado a la comisión en cuestión",
+        "Etiqueta de variable": "Motivo de la comisión",
+        "Nombre de la variable": "motivo de la comision",
+        "Tipo de dato": "Texto",
+        "_id": 26,
+        "Ejemplo": "PRESIDIR EL V ENCUENTRO DE LA RED \"DE TRANSPARENCIA Y ACCESO A LA INFORMACION\" (RTA); ASI COMO PARTICIPAR EN EL \"SEMINARIO INTERNACIONAL 2013; DEL DICHO AL HECHO; DEL DISCURSO PUBLICO A LA ACCION\" AMBOS EVENTOS ORGANIZADOS POR EL CONSEJO PARA LA TRANSPARENCIA DE CHILE."
+      },
+      {
+        "Clave de variable": "ANTECEDENTE",
+        "Descripción": "Describe los antecedentes relacionados con la comisión a la que fue enviado el funcionario y del evento al que asistió",
+        "Etiqueta de variable": "Antecedentes",
+        "Nombre de la variable": "Antecedentes",
+        "Tipo de dato": "Texto",
+        "_id": 27,
+        "Ejemplo": "El 20 de abril de 2009 se suscribió en la Ciudad de Santiago de Chile; el Convenio de Cooperación en Materia de Transparencia y Acceso a la Información entre el CPLT de la República de Chile y el IFAI.\n"
+      },
+      {
+        "Clave de variable": "ACTIVIDAD",
+        "Descripción": "Breve descripción de las actividades realizadas por el funcionario en la comisión, contemplando el programa y su agenda de trabajo.",
+        "Etiqueta de variable": "Actividades realizadas",
+        "Nombre de la variable": "Actividades realizadas",
+        "Tipo de dato": "Texto",
+        "_id": 28,
+        "Ejemplo": "El día 22 de abril; la Comisionada María Elena Pérez-Jaén Zermeño y el Director General de Coordinación y Vigilancia de la Administración Pública Federal (DGCV); José Luis Marzal Ruíz; sostuvieron una reunión de trabajo en las oficinas del CPLT; con el señor Raúl Ferrada; Director General del CPLT y representante de la Secretaría Ejecutiva de la TA y la Señora Katerina Kilwadenko; adscrita al área de Comunicaciones de la Dirección General del CPLT; a efecto de coordinar los trabajos de la RTA y las participaciones correspondientes. Adicionalmente; se llevó a cabo una reunión informal con los representantes de Gobierno de la Ciudad Autónoma de Buenos Aires; en su carácter  de aspirantes a integrarse a la red; en la que se trataron los objetivos y algunos de los trabajos que actualmente se llevan a cabo. Por parte del gobierno de la Ciudad Autónoma de Buenos Aires; participaron los siguientes funcionarios: Álvaro González; Subsecretario de Asuntos Públicos; Ignacio Cámara; Gerente Operativo de Alertas Oportunas; Gabriel Buenos; Gerente Operativo de Acceso a la Información. El d{la 23 de abril; se iniciaron las actividades del \"V Encuentro de la RTA\". Durante este evento se desarrollaron los siguientes temas:\n1.- Presentación; Formalización e inclusión de nuevos miembros. \nEl Director General del CPLT de Chile; Raúl Ferrada y la Comisionada del IFAI; María Elena Pérez-Jaén Zermeño; dieron la bienvenida a los miembros de la RTA; así como a los representantes de instituciones; organismos y/o entidades públicas. Por su parte; la Comisionada Mía Elena Pérez-Jaén Zermeño destacó los logros del primer trimestre del 2013; sobre el desarrollo del documento de posicionamiento regional; en el que se definieron las acciones para alcanzar el objetivo primordial de la RTA. Asimismo; cada participante postulante hizo una presentación en la que describieron su institución y/u organismo y el marco normativo que los rige. Además; realizaron comentarios acerca de los desafíos institucionales que enfrentan en materia de transparencia y acceso a la información; identificaron las temáticas de interés para el intercambio con la RTA y; finalmente; se hizo una descripción general de la disponibilidad de sus recursos humanos; económicos y tecnológicos; entre otros; con los que podrían dar apoyo a los trabajos en la RTA. De la misma manera ; los representantes de la Dirección Provisional de Anticorrupción y Transparencia del Sector Público de la Provincia de Santa Fe; Argentina; en su carácter de miembros asolados de la RTA; así como la Contraloría General de la Unión de Brasil; la Defensora del Pueblo del Perú; la Unidad de Acceso a la Información Pública de Uruguay; todos miembros plenos de la RTA; además del CPLT y el IFAI; en su calidad de Secretaría Ejecutiva y Presidencia; respectivamente; aceptaron por unanimidad el ingreso a la TA de las siguientes instituciones; organismos y/o entidades públicas: El Instituto de Acceso a la Información Pública de El Salvador y la Defensoría del Pueblo de Ecuador; como Miembros Plenos; El Gobierno de la Ciudad Autónoma de Buenos Aires; representado por la subsecretaria de Asuntos Públicos; la Comisión de Alto Nivel Anticorrupción de la Presidencia del Consejo de Ministros de Perú; y la Subsecretaría de Transparencia y Anticorrupción de El Salvador; como Miembros Asociados; y la Fundación Internacional para Iberoamérica de Administración y Políticas Públicas (FIIAP) del Programa de Cooperación Regional Eurosocial de la Unión Europea; como Miembro Adherente. Es importante destacar que; en el encuentro participaron como oyentes en la reunión; representantes de la alianza Regional por la Libre Expresión e Información Pública de Honduras y de la Secretaría de Transparencia de Colombia.\n2.-Presentación de la versión final del \"Mapa Estratégico\" con indicadores y validación de herramientas de seguimiento.\nEn este punto se expuso la \"Estrategia de trabajo de la RTA 2013-2015\"; y el sistema de seguimiento como una forma de recordar los compromisos adquiridos en torno al proceso de planificación estratégica realizado y; así; formalizar el proceso de seguimiento de compromisos que reportará los niveles de cumplimiento de ésta.\nDe igual manera; en el encuentro se aprobó el \"Mapa Estratégico de la RTA\" con la definición de responsabilidades según los objetivos; y se hicieron reuniones bilaterales con cada país para formalizar sus indicadores y metas.\nEn seguimiento a lo anterior; cada uno de los países miembros (Brasil; Chile; Uruguay; Perú y México) expusieron sus indicadores bajo los cuales se medirá el cumplimiento de sus metas dentro de la RTA.\nComo ejemplo de lo anterior; México; como coordinador del grupo de \"Jurisprudencia\"; coordinado por el IFAI; y por conducto del Director General de Coordinación y Vigilancia de la Administración Pública Federal; José Luis Marzal Ruíz; Precisó que los indicadores del grupo son los siguientes:\nPorcentaje de implementación de un plan de relacionamiento con los stakeholders.\nPorcentaje de implementación de un plan de trabajo con stakeholders en la promoción y fortalecimiento del derecho de acceso a la información pública.\nParticipación del grupo.\nConclusiones de debates temáticos.\nConsultas al vínculo de jurisprudencia.\nActualización de la base de datos de jurisprudencias.\nModificaciones a los criterios.\nAsimismo; el Director General de Coordinación y Vigilancia de la Administración pública Federal presentó los avances del grupo de Jurisprudencia\" al resto de los miembros  de la RTA.\n3. Validación del sistema de seguimiento o y evaluación.\n\nEn lo atinente a este punto; es dable mencionar que se acordó que el control de gestión de los planes de trabajo tendrá las siguientes características: la verificación de lo planificado; la aplicación de forma periódica; y contemplara la participación de todos los países; y así también permitirá los ajustes para la retroalimentación.\n\nPor lo anterior; se estableció el calendario del proceso de control de gestión 2013; y e l registro del cumplimiento de las metas; lo cual; se registrara mediante alertas; mismas que tendrán los colores respectivos de un semáforo. El color rojo corresponderá al nivel de cumplimiento menor al 75%; el amarillo el nivel de cumplimiento entre 75% y 89%; y el verde se referirá al cumplimiento mayoral 90%. AI respecto; es de precisarse que se dejara constancia de los casos en los que no existan avances para reportar en el periodo específico.\n\nCanales de difuso en\n\n\nDe igual manera; se convino que la difusión de los niveles de cumplimiento de los miembros de la red; se realicen a través de boletines temáticos en cada proceso de control; en los cuales quedara testimonio de los avances y; en caso de que no existan; no se elaborara un boletín específico ; perdiendo la oportunidad de difundir el trabajo realizado.\n\n4. Presentación de proyectos por país con fuentes de financiamiento según etapa.\n\n\n\"Jurisprudencia”\nCoordinador: México\n\n\nEn esta actividad; se revisó el diagnóstico del tipo de información que en materia de \"Acceso a la Información\" posee cada país; así también; se definió la propuesta del vínculo electrónico; de la ficha técnica y de las definiciones de \"criterio\"; de las cuales hará uso el grupo.\n\nAdemás; se estableció el formato de la hoja de datos y se hicieron  aclaraciones  respecto del proceso que se va a utilizar para llegar a las conclusiones de las fichas técnicas para; finalmente; consolidar los indicadores; revisando las acciones ejecutadas a la fecha y las que se encuentren pendientes.\n\nAdicionalmente; es de señalar que el IFAI ya está trabajando en el portal electrónico y en los ajustes del documento \"identificación de las diferencias y similitudes\". Cabe referir que; hasta la primera semana de mayo; se podrán enviar comentarios al respecto y la información de los países que aun no lo han hecho; y que quieran ser parte del vínculo electrónico de \"Jurisprudencia”.\n\"Capacitación\"\n\nEn este apartado; se dio a conocer el \"Plan de Capacitación\"  que tiene como objetivos principales los siguientes:\n\n• Promover  el  acceso  a  instrumentos  y  mecanismos  de  conocimiento  para  todas   las instituciones miembros de la RTA; (legislación; casos; cursos; piezas de difusión; expertos);\n\n• Mejorar las competencias de los integrantes de las organizaciones garantes en los aspectos clave para el cumplimiento de los cometidos;\n\n• impulsar el intercambio  de conocimientos  entre  los miembros de  la RTA para  uniformar\ncriterios y conceptos;\n\n• Capacitar  a  los  sujetos  obligados  y  las  personas  de  los  países  miembros  de  la  RTA;\naprovechando los recursos ya existentes y los que se generen; y\n\n• Facilitar el intercambio de experiencias entre las distintas instituciones que integra n la RTA.\n\nEl  plan fue  presentado  describiendo  las distintas  actividades  con sus indicadores  y  medias  de\nverificación.\n\nLa Unidad de Acceso a la Información Publica de Uruguay refirió que cubrirá un alto porcentaje de las costas; pero necesita apoyo para la realización de 2 talleres de capacitación; e implementar el programa de intercambio de experiencias.\n\nPara lo anterior; se acordó colaborar en conjunto con \"Euro Social\";  en la ejecución  de un nuevo\nportal; mediante el cual se podrán satisfacer las siguientes necesidades:\n\n\n• Aplicación del \"repositorio de información\" con una clasificación adecuada.\n\n• implementación de una \"comunidad d\" para la RTA.\n\n• Definición de temáticas prioritarias para la realización de debates o foros de intercambio.\n\n• Realización de; al menos; un debate o foro de discusión en la comunidad de RTA.\n\n• Rediseño del portal de la  RTA.\n\n• implementación del \"testing\" de usuarios.\n\n• Envío de boletines a miembros; sujetos obligados y organizaciones  de la sociedad civil.\n\n• Publicación de documentos digitales en los portales de la RTA y de los sujetos obligados (documentos; noticias e imágenes).\n\n\"Archivos\" Coordinador: Chile\n\nSobre el particular; en esta segunda  etapa; se explicó que la actividad estará  relacionada con la identificación de buenas prácticas; a través de un taller de trabajo con miembros y expertos en la\nmateria. El insumo de este proyecto se establecerá mediante el diagnóstico realizado en materia de archives de los países miembros. La formalización considera la aprobación de los miembros de la RTA de las buenas prácticas que se identifiquen y su difusión; las cuales se consolidaran en un documento.\n\n\"indicadores\"\nCoordinador: Perú\n\n\nEn este apartado; se presentó el estudio de indicadores en la región; el cual tuvo como objetivo general identificar y evaluar la forma en la que los distintos organismos públicos de los países que participan en la RTA; cumplen con el procedimiento lega l para hacer efectivo el derecho de acceder a información pública; esto es; la manera en que reciben y responden las solicitudes de información que presentan las personas; tanto de manera presencial; como por vía electrónica.\n\nPor otra parte; se expusieron los objetivos específicos del estudio mencionado; a saber:\n\n\na) identificar el nivel de implementación de las condiciones mínimas para  la  adecuada atención de las solicitudes de acceso a la información publica; a partir de la detección de las barreras que enfrentan los ciudadanos al momento de presentar sus solicitudes de información;\nidentificar el cumplimiento de los plazos previstos en la normativa de acceso a la información publica correspondiente a cada país que integra la RTA; y\n\nc) Evaluar el tipo; la calidad y la oportunidad de las respuestas recibidas a las solicitudes de información ingresadas; de forma presencia I y vía internet.\n\n5. . Validación de los protocolos de comunicación.\n\n\nNo se omite mencionar; que se le entreg6 a cada  uno  de  los  miembros  e l \"protocolo  de comunicaciones\"; el cual debe ser ajustado con el grupo de \"Capacitación y Difusión\" y con la Presidencia. De la misma manera; se hizo especial énfasis en la construcción del \"Boletín de Noticias”; respecto del que se acord6 incluir temas; en relación con el trabajo de la sociedad civil y eventos pr6ximos.\n\n6.  Presentación de resultados: \"Usuario Simulado\".\n\n\nLa Defensoría del Pueblo del Perú hizo una detallada presentación sabré los resultados del \"Usuario Simulado\"; para precisar algunos datos entregados; destacándose el trabajo que realiz6 la Defensora como coordinador del tema de indicadores . Asimismo; se organizó el panel del día siguiente; en el cual se presentaron los principales resultados de este estudio. En este panel participaron Chile; Perú y México.\n7. Compromiso de medición 2.0: \"Usuario Simulado\".\n\n\nEl CPLT refirió que está dispuesto a apoyar con la nueva medición del \"Usuario Simulado\" a la Defensoría del Pueblo del Perú; trabajando en una propuesta de metodología para esta segunda etapa; y haciéndose cargo del análisis de datos. No se omite referir; que varios países se sumaron a esta  iniciativa.\n\n\n \nDurante el desarrollo de la jornada de trabajo; la Comisionada María Elena Pérez-Jaén Zermeño se comprometió a entregar a la Defensoría el documento denominado \"Estudio de la Métrica\"; el cual; también se basa en la metodología de  \"Usuario Simulado\"; con el objeto de aportar elementos adicionales que podrán ser tornados en la medición 2.0.\n\nAdicionalmente; la Comisionada Pérez-Jaén come\n"
+      },
+      {
+        "Clave de variable": "RESULTADO",
+        "Descripción": "Breve decripción de los resultados derivados de la comisión en cuestión",
+        "Etiqueta de variable": "Resultados obtenidos",
+        "Nombre de la variable": "Resultados obtenidos",
+        "Tipo de dato": "Texto",
+        "_id": 29,
+        "Ejemplo": "No disponible"
+      },
+      {
+        "Clave de variable": "CONTRIBUCION_IFAI",
+        "Descripción": "Breve descripción de las contribuciones que la comisión y la participación del funcionario generan para el IFAI",
+        "Etiqueta de variable": "Contribuciones para el IFAI",
+        "Nombre de la variable": "Contribuciones para el IFAI",
+        "Tipo de dato": "Texto",
+        "_id": 30,
+        "Ejemplo": "No disponible"
+      },
+      {
+        "Clave de variable": "URL_COMUNICADO",
+        "Descripción": "URL que vincula a una nota, blog o comunicado oficial ya sea generada por la institución convocante o por el IFAI para reportar los resultados de la actividad realizada durante la comisión",
+        "Etiqueta de variable": "Link al comunicado",
+        "Nombre de la variable": "Link al comunicado",
+        "Tipo de dato": "Texto",
+        "_id": 31,
+        "Ejemplo": "No disponible"
+      },
+      {
+        "Clave de variable": "CUBRE_PASAJE",
+        "Descripción": "Mención de la institución que cubre el costo del viaje, puede ser el IFAI o la institución que invita al funcionario público",
+        "Etiqueta de variable": "Institución que cubre pasaje",
+        "Nombre de la variable": "institucion que cubre el pasaje",
+        "Tipo de dato": "Texto",
+        "_id": 32,
+        "Ejemplo": "IFAI"
+      },
+      {
+        "Clave de variable": "TIPO_PASAJE",
+        "Descripción": "Descripción del tipo de pasaje utilizado. Escoger entre:\n- Terrestre\n- Aéreo\n- Marítimo",
+        "Etiqueta de variable": "Tipo de pasaje (terrestre; aéreo; marítimo)",
+        "Nombre de la variable": "tipo de pasaje",
+        "Tipo de dato": "Texto",
+        "_id": 33,
+        "Ejemplo": "Aéreo"
+      },
+      {
+        "Clave de variable": "LINEA_ORIGEN",
+        "Descripción": "En caso de viajes aéreos mención de la aerolínea por la que viaja. El campo es abierto puesto que existe gran cantidad de opciones y no se está limitando a algunas opciones",
+        "Etiqueta de variable": "Aerolínea(s) de vuelo de ida",
+        "Nombre de la variable": "aerolinea de ida",
+        "Tipo de dato": "Texto",
+        "_id": 34,
+        "Ejemplo": "Aeroméxico"
+      },
+      {
+        "Clave de variable": "VUELO_ORIGEN",
+        "Descripción": "Número de vuelo. De acuerdo con la asignación dada por la aerolínea en cuestión",
+        "Etiqueta de variable": "Número(s) de vuelo(s) de ida",
+        "Nombre de la variable": "numero de vuelos",
+        "Tipo de dato": "Texto",
+        "_id": 35,
+        "Ejemplo": "AM010"
+      },
+      {
+        "Clave de variable": "LINEA_REGRESO",
+        "Descripción": "En caso de viajes aereos mención de la aerolínea por la que viaja. El campo es abierto puesto que existe gran cantidad de opciones y no se está limitando a algunas opciones",
+        "Etiqueta de variable": "Aerolínea(s) de vuelo de regreso",
+        "Nombre de la variable": "aerolinea de regreso",
+        "Tipo de dato": "Texto",
+        "_id": 36,
+        "Ejemplo": "Aeroméxico"
+      },
+      {
+        "Clave de variable": "VUELO_REGRESO",
+        "Descripción": "Número de vuelo. De acuerdo con la asignación dada por la aerolínea en cuestión",
+        "Etiqueta de variable": "Número(s) de vuelo(s) de regreso",
+        "Nombre de la variable": "numero de vuelos de regreso",
+        "Tipo de dato": "Texto",
+        "_id": 37,
+        "Ejemplo": "AM8001"
+      },
+      {
+        "Clave de variable": "FECHAINICIO_COM",
+        "Descripción": "Fecha en la que se inicia la comisión según el oficio de la misma",
+        "Etiqueta de variable": "Fecha de inicio de la comisión",
+        "Nombre de la variable": "fecha inicio comision",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 38,
+        "Ejemplo": "2013-04-21 00:00:00"
+      },
+      {
+        "Clave de variable": "FECHAFIN_COM",
+        "Descripción": "Fecha en la que se termina la comisión según el oficio de la misma",
+        "Etiqueta de variable": "Fecha de término de la comisión",
+        "Nombre de la variable": "fecha termino comision",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 39,
+        "Ejemplo": "2013-04-26 00:00:00"
+      },
+      {
+        "Clave de variable": "GASTO_PASAJE",
+        "Descripción": "Monto del gasto generado por viáticos, relacionado específicamente con el transporte del funcionario.",
+        "Etiqueta de variable": "Gasto por concepto de pasajes en M.N.",
+        "Nombre de la variable": "gasto por pasajes en mn",
+        "Tipo de dato": "Numero",
+        "_id": 40,
+        "Ejemplo": "26120.0"
+      },
+      {
+        "Clave de variable": "GASTO_VIATICO",
+        "Descripción": "Monto del gasto generado por viáticos, relacionado rubros diferentes al transporte del funcionario (hospedaje y alimentación principalmente)",
+        "Etiqueta de variable": "Gasto por concepto de viáticos en M.N.",
+        "Nombre de la variable": "gasto por viaticos mn",
+        "Tipo de dato": "Texto",
+        "_id": 41,
+        "Ejemplo": "13156.07"
+      },
+      {
+        "Clave de variable": "INST_HOSPEDAJE",
+        "Descripción": "Mención de la institución que cubre el costo del hospedaje, puede ser el IFAI o la institución que invita al funcionario público",
+        "Etiqueta de variable": "Institución que cubre hospedaje",
+        "Nombre de la variable": "institucion que cubre hospedaje",
+        "Tipo de dato": "Texto",
+        "_id": 42,
+        "Ejemplo": "IFAI"
+      },
+      {
+        "Clave de variable": "HOTEL",
+        "Descripción": "Nombre del hotel o recinto en donde se hospeda el funcionario durante su comisión",
+        "Etiqueta de variable": "Nombre del hotel",
+        "Nombre de la variable": "nombre de hotel",
+        "Tipo de dato": "Texto",
+        "_id": 43,
+        "Ejemplo": "Eurotel"
+      },
+      {
+        "Clave de variable": "FECHAINICIO_HOTEL",
+        "Descripción": "Fecha en la que el funcionario se registra en el hotel descrito en el campo anterior",
+        "Etiqueta de variable": "Fecha de entrada",
+        "Nombre de la variable": "Fecha de entrada",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 44,
+        "Ejemplo": "2013-04-22 00:00:00"
+      },
+      {
+        "Clave de variable": "FECHAFIN_HOTEL",
+        "Descripción": "Fecha en la que el funcionario registra su salida del hotel descrito previamente",
+        "Etiqueta de variable": "Fecha de salida",
+        "Nombre de la variable": "Fecha de salida",
+        "Tipo de dato": "Fecha dd/mm/aaaa",
+        "_id": 45,
+        "Ejemplo": "2013-04-26 00:00:00"
+      },
+      {
+        "Clave de variable": "COSTO_HOTEL",
+        "Descripción": "Costo total del hospedaje reportado en el oficio correspondiente",
+        "Etiqueta de variable": "Costo total del hospedaje",
+        "Nombre de la variable": "Costo total del hospedaje",
+        "Tipo de dato": "Numero",
+        "_id": 46,
+        "Ejemplo": "1555.74"
+      },
+      {
+        "Clave de variable": "COMPROBADO",
+        "Descripción": "Costo total generado durante el viaje del que se cuenta con comprobantes oficialmente aceptados por el IFAI, según lo reportado por el funcionario en el oficio correspondiente",
+        "Etiqueta de variable": "Monto comprobado de viáticos",
+        "Nombre de la variable": "monto comprobado de viaticos",
+        "Tipo de dato": "Numero",
+        "_id": 47,
+        "Ejemplo": "13156.07"
+      },
+      {
+        "Clave de variable": "SIN_COMPROBAR",
+        "Descripción": "Costo total generado durante el viaje del que no se cuenta con comprobantes oficialmente aceptados por el IFAI, según lo reportado por el funcionario en el oficio correspondiente",
+        "Etiqueta de variable": "Monto sin comprobación",
+        "Nombre de la variable": "monto sin comprobacion",
+        "Tipo de dato": "Numero",
+        "_id": 48,
+        "Ejemplo": "0.0"
+      },
+      {
+        "Clave de variable": "VIATICO_DEVUELTO",
+        "Descripción": "Monto devuelto por el funcionario a la cuenta del IFAI correspondiente, según lineamientos internos, reportado en el oficio correspondiente",
+        "Etiqueta de variable": "Monto de viáticos devueltos",
+        "Nombre de la variable": "monto de viaticos devueltos",
+        "Tipo de dato": "Texto",
+        "_id": 49,
+        "Ejemplo": "436.63"
+      },
+      {
+        "Clave de variable": "OBSERVACIONES",
+        "Descripción": "Campo para la descripción de observaciones específicas del registro, como traslados atípicos dentro de una misma comisión, extensión o recorte del tiempo de la comisión, etc.",
+        "Etiqueta de variable": "Observaciones",
+        "Nombre de la variable": "observaciones",
+        "Tipo de dato": "Texto",
+        "_id": 50,
+        "Ejemplo": "No aplica"
+      }
+    ],
+    "_links": {
+      "start": "/api/action/datastore_search?limit=50&resource_id=a5ac444e-6c98-4393-abc5-392bfc193660",
+      "next": "/api/action/datastore_search?offset=50&limit=50&resource_id=a5ac444e-6c98-4393-abc5-392bfc193660"
+    },
+    "limit": 50,
+    "total": 50
+  }
+}

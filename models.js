@@ -86,7 +86,7 @@ var Viaje = new db.Schema({
 	tipo_rep : {type: String, enum: ['Técnico', 'Alto Nivel']},
 	tipo_viaje : {type: String, enum: ['Nacional', 'Internacional']},
 	ur : String,
-	institucion_generadora : String,
+	institucion_generadora : String,// TRANSFORMAR ESTO! EN REFS!
 	//	grupo_jerarquico : {type: String, enum: ['HB1','KA02','KA2','KB1','KB2','KB3','MB2','MC03','MC1','MC2','MC3','NA1','NB3','NC1','NC2','NC3','OB02','OB2','OC002','OC02','OC1','OC2','OC3','PA1','PA3','PC1','PC2','PC3']},
 	
 	pasaje : {
@@ -127,8 +127,8 @@ var Viaje = new db.Schema({
 		inicio : {type: Date, required : true},
 		fin : {type: Date, required : true},
 		nombre : String
-	}
-
+	},
+	created : {type: Date, default : Date.now }
 });
 
 exports.instituciones = db.mongoose.model('Institucion',Institucion);

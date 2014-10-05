@@ -1,0 +1,9 @@
+mixin select(name, value, ...items)
+	select(name=name, value=value, ng-model=name)
+		each item in items
+			option(value=item)= item
+mixin datepicker(model, isopen, opener)
+	input( type="text" class="form-control" datepicker-popup="dd-MM-yyyy" ng-model=model is-open=isopen min-date="'01-01-2007'" max-date="'2015-06-22'" datepicker-options="dateOptions" ng-required="true")
+	span.input-group-btn
+		button(type="button" class="btn btn-default" ng-click=opener)
+			i.glyphicon.glyphicon-calendar

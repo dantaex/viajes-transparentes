@@ -1,3 +1,5 @@
+include ./mixins.jade
+
 doctype html
 html(ng-app="admin")
 head
@@ -7,83 +9,238 @@ head
 	link(rel='stylesheet', href='/css/style.css')
 body.ar-adm(ng-controller="AdminController")
 	#user_panel.ar-panel(ng-class="{aractive:currentPanel=='user_panel'}")
-		.ar-advice Por ahora, el panel no cuenta con la opción "recordarme", por lo que si esta pestaña se cierra, deberá volver proporcionar su contraseña, próximamente esto cambiará
-		h2 Nuevo viaje
-		form.login-form(ng-submit="login()")
+		.ar-advice(class="{{ui_adv_2}}") {{ui_adv_text}}
+
+		#navigation
+			.navbar.navbar-default(role="navigation")
+				.container-fluid
+					.navbar-header
+						button.navbar-toggle.collapsed(type="button" data-toggle="collapse" data-target="#danavigation")
+							span.sr-only Toggle navigation
+							span.icon-bar
+							span.icon-bar
+							span.icon-bar
+						a.navbar-brand Viajes Transparentes
+					#danavigation.collapse.navbar-collapse
+						ul.nav.navbar-nav.navbar-right
+							li
+								a
+									span.fui-gear
+							li
+								a(ng-click="signout()") Salir
+
+					
+
+		#travel_subpanel
+			form.login-form.form.ar-form(ng-submit="createTravel()")
+				h3 Reportar viaje
+
+				.form-group
+					label.ar-label Servidor público
+					select(name='travelData.servidor' ng-model='travelData.servidor')
+						option(value='{{serv._id}}'  ng-repeat="serv in userData.permissions.auth_servidores") {{serv.nombre}}
+					//- +select('travelData.servidor','Técnico','Técnico', 'Alto Nivel')
+
+				.form-group
+					label.ar-label Origen
+					select(name='travelData.origen' ng-model='travelData.origen')
+						option(ng-repeat="doc in cities" value='{{doc._id}}' ) {{doc.ciudad}}, {{doc.pais}}
+
+				.form-group
+					label.ar-label Destino
+					select(name='travelData.destino' ng-model='travelData.destino')
+						option(ng-repeat="doc in cities" value='{{doc._id}}' ) {{doc.ciudad}}, {{doc.pais}}
+
+
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.motivo" placeholder="Motivo" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					label.ar-label Mecanismo de origen
+					+select('travelData.mec_origen','Invitación','Invitación', 'Requerimiento de UR')
+				.form-group
+					label.ar-label Tipo de representación
+					+select('travelData.tipo_rep','Técnico','Técnico', 'Alto Nivel')
+				.form-group
+					label.ar-label Tipo de Viaje
+					+select('travelData.tipo_viaje','Nacional', 'Nacional', 'Internacional')
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.ur" placeholder="Unidad Responsable" required autofocus title="Unidad responsable en la que se genera la nota de viaje, el oficio relacionado a la comisión a la que se envía al funcionario público, u otra información específica sobre motivo del viaje y resultados")
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.institucion_generadora" placeholder="Unidad Generadora" required autofocus title="Institución que invita, o en su defecto Unidad Responsable que genera la comisión para el servidor público")
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.oficio" placeholder="Oficio" required autofocus)
+					label.login-field-icon.fui-document
+				.form-group
+					input.form-control(type="text" value="" ng-model="url_comunicado" placeholder="URL del comunicado" required autofocus title="URL que vincula a una nota, blog o comunicado oficial ya sea generada por la institución convocante o por el IFAI para reportar los resultados de la actividad realizada durante la comisión")
+					label.login-field-icon.fui-link
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.consecutivo" placeholder="Consecutivo" required autofocus title="Número de identificación único asignado por las áreas de control del IFAI para identificar la comisión")
+					label.login-field-icon.fui-tag
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.acuerdo" placeholder="Acuerdo" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					textarea.form-control(value="" ng-model="travelData.antecedente" placeholder="Antecedente" required autofocus title="Describe los antecedentes relacionados con la comisión a la que fue enviado el funcionario y del evento al que asistió")
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					textarea.form-control(value="" ng-model="travelData.contribucion_ifai" placeholder="Contribución IFAI" title="Breve descripción de las contribuciones que la comisión y la participación del funcionario generan para el IFAI" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					textarea.form-control(value="" ng-model="travelData.observaciones" placeholder="Observaciones" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked
+				
+				.ar-form-section
+					label Transporte
+				.form-group
+					label.ar-label Institución que costea el transporte
+					select(name='travelData.institucion_pasaje' ng-model='travelData.institucion_pasaje')
+						option(ng-repeat="doc in userData.permissions.auth_instituciones" value='{{doc._id}}' ) {{doc.nombre}}
+				.form-group
+					label.ar-label Tipo de transporte
+					+select('travelData.pasaje.tipo', 'Aéreo', 'Aéreo', 'Terrestre', 'Marítimo')
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.pasaje.vuelo_origen" placeholder="Vuelo origen" required autofocus title="Número del vuelo de origen")
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.pasaje.linea_origen" placeholder="Línea origen" required autofocus title="Nombre de la Aerolínea o línea del vuelo de origen")
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.pasaje.vuelo_regreso" placeholder="Vuelo regreso" required autofocus title="Número del vuelo de regreso")
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.pasaje.linea_regreso" placeholder="Línea regreso" required autofocus title="Nombre de la Aerolínea o línea del vuelo de regreso")
+					label.login-field-icon.fui-checkbox-unchecked		
+
+				.ar-form-section
+					label Comisión
+				.form-group
+					label.ar-label Inicio de Comisión
+					+datepicker('travelData.comision.inicio','travelData.comision_inicio_opened','open_dp_cmi($event)')
+				.form-group
+					label.ar-label Fin de Comisión
+					+datepicker('travelData.comision.fin','travelData.comision_fin_opened','open_dp_cmf($event)')
+				.form-group
+					label.ar-label Tipo de Comisión
+					+select('travelData.comision.tipo','Prticipación en evento público', 'Prticipación en evento público', 'capacitación', 'Impartir capacitación', 'Notificación', 'Verificación')
+
+				.ar-form-section
+					label Gastos
+				.form-group
+					label.ar-label Moneda
+					+select('travelData.gastos.moneda','MXN', 'MXN', 'USD')
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.viaticos" placeholder="Gasto por concepto de viáticos" required autofocus title="Monto del gasto generado por viáticos, relacionado rubros diferentes al transporte del funcionario (alimentación principalmente)")
+					label.login-field-icon.fui-checkbox-unchecked
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.comprobado" placeholder="Monto comprobado de gastos" required autofocus title="Costo total generado durante el viaje del que se cuenta con comprobantes oficialmente aceptados por el IFAI, según lo reportado por el funcionario en el oficio correspondiente")
+					label.login-field-icon.fui-checkbox-unchecked 
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.sin_comprobar" placeholder="Monto sin comprobación" required autofocus title="Costo total generado durante el viaje del que NO se cuenta con comprobantes oficialmente aceptados por el IFAI, según lo reportado por el funcionario en el oficio correspondiente")
+					label.login-field-icon.fui-checkbox-unchecked 
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.hospedaje" placeholder="Costo total del hospedaje" required autofocus title="Costo total del hospedaje reportado en el oficio correspondiente")
+					label.login-field-icon.fui-checkbox-unchecked 
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.tarifa_diaria" placeholder="Tarifa diaria" required autofocus title="Tarifa de viáticos diaria asignada al funcionario de acuerdo con su perfil y el lugar a donde viaja")
+					label.login-field-icon.fui-checkbox-unchecked 
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.pasaje" placeholder="Gasto por concepto de pasajes" required autofocus title="Monto del gasto generado por viáticos, relacionado específicamente con el transporte del funcionario.")
+					label.login-field-icon.fui-checkbox-unchecked 
+				.form-group
+					input.form-control(type="number" value="" ng-model="travelData.gastos.viatico_devuelto" placeholder="Monto de viáticos devueltos" required autofocus title="Monto devuelto por el funcionario a la cuenta del IFAI correspondiente, según lineamientos internos, reportado en el oficio correspondiente")
+					label.login-field-icon.fui-checkbox-unchecked 
+
+
+
+				.ar-form-section
+					label Evento
+				.form-group
+					label.ar-label Inicio de Evento
+					+datepicker('travelData.evento.inicio','travelData.evento_inicio_opened','open_dp_evi($event)')
+				.form-group
+					label.ar-label Fin de Evento
+					+datepicker('travelData.evento.fin','travelData.evento_fin_opened','open_dp_evf($event)')
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.evento.nombre" placeholder="Nombre del evento" required autofocus title="Nombre del evento en que participó")
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.evento.tema" placeholder="Tema que se trató en el evento" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.evento.url" placeholder="URL del evento" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					textarea.form-control(value="" ng-model="travelData.evento.actividades" placeholder="Actividades" required autofocus title="Actividades realizadas en el evento")
+					label.login-field-icon.fui-checkbox-unchecked
+
+
+				.ar-form-section
+					label Hotel
+				.form-group
+					input.form-control(type="text" value="" ng-model="travelData.hotel.nombre" placeholder="Nombre del hotel" required autofocus)
+					label.login-field-icon.fui-checkbox-unchecked		
+				.form-group
+					label.ar-label Inicio del Hospedaje
+					+datepicker('travelData.hotel.inicio','travelData.hotel_inicio_opened','open_dp_hoi($event)')
+				.form-group
+					label.ar-label Fin del Hospedaje
+					+datepicker('travelData.hotel.fin','travelData.hotel_fin_opened','open_dp_hof($event)')
+				.form-group
+					label.ar-label Institución que costea el hospedaje
+					select(name='travelData.institucion_hospedaje' ng-model='travelData.institucion_hospedaje')
+						option(ng-repeat="doc in userData.permissions.auth_instituciones" value='{{doc._id}}' ) {{doc.nombre}}
+				
+				input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Guardar Datos")
+		.ar-sponsors
+			.col-sm-3.ar-sponsor
+				a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-imco(href="http://imco.org.mx/" target="_blank") 
+
 	#login_panel.ar-panel(ng-class="{aractive:currentPanel=='login_panel'}")
 		.ar-advice(class="{{ui_adv}}") Datos incorrectos
-		.login-block
-			h4 Iniciar Sesión
-			form.login-form(name="login_form" ng-submit="login()" method="POST")
-				.form-group
-					input.form-control.login-field(type="text" value="" ng-model="email" name="email" placeholder= "Correo Electrónico" required autofocus)
-					label.login-field-icon.fui-user(for="login-name")
-				.form-group
-					input.form-control.login-field(type="password" value="" ng-model="password" placeholder="Contraseña" name="password")
-					label.login-field-icon.fui-lock(for="login-pass")
-				input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
-				a.login-link(href="#") Recuperar contraseña
+		.ar-loginbigblock
+			.ar-logo
+			.login-block
+				form.login-form(name="login_form" ng-submit="login()" method="POST")
+					h4 Iniciar Sesión
+					.form-group
+						input.form-control.login-field(type="text" value="" ng-model="email" name="email" placeholder= "Correo Electrónico" required autofocus)
+						label.login-field-icon.fui-user(for="login-name")
+					.form-group
+						input.form-control.login-field(type="password" value="" ng-model="password" placeholder="Contraseña" name="password")
+						label.login-field-icon.fui-lock(for="login-pass")
+					input.btn.btn-primary.btn-large.btn-block(type="submit" href="#" value="Iniciar")
+					a.login-link(href="#") Recuperar contraseña
+
+		.ar-sponsors
+			.col-sm-3.ar-sponsor
+				a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
+			.col-sm-3.ar-sponsor
+				a.ar-imco(href="http://imco.org.mx/" target="_blank") 
 		
+	#loading_panel.ar-panel(ng-class="{aractive:currentPanel=='loading_panel'}")
+		p
+			h6 Viajes Transparentes
+		div.loader.loading
+			| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path transform="translate(2)" d="M0 12 V20 H4 V12z"> <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(8)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.2" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(14)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.4" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(20)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(26)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.8" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path></svg>
 
 
+
+	script(src='/js/jquery.min.js')
+	script(src='/js/flat-ui.min.js')
 	script(src='/js/angular.min.js')
+	script(src='/js/ui-bootstrap.min.js')
 	script(src='/js/sha256.js')
-	script.
-		(function(){
-			var app = angular.module('admin',[])
-			.controller('AdminController', function($http, $scope, $q, $timeout){
-
-				$scope.currentPanel = 'login_panel';
-				$scope.ui_adv = '';
-
-				$scope.navigateTo = function(panel){
-					$scope.currentPanel = panel;
-				};
-
-				//check if logged
-				console.log(document.cookie);
-				try{
-					var ss = JSON.parse(document.cookie);
-					$scope.navigateTo('user_panel');
-				} catch(e){
-					//not logged
-					console.log('not logged in');
-				}
-				
-				$scope.login = function(){
-					var email = Sha256.hash($scope.email),
-						pass  = Sha256.hash($scope.password),
-						start = Date.now(),
-						accesstoken = Sha256.hash(pass+start);
-
-					$http.get( '/users/'+email+credentials(email,accesstoken,start) )
-						.then(
-							function(response) { 
-								var res = response.data;
-								console.log(res);
-								if(res.status== "success"){
-									$scope.navigateTo('user_panel');
-									var d = new Date();
-									d.setTime(d.getTime() + (6*24*60*60*1000));
-									var expires = d.toUTCString();
-									document.cookie='{"publickey":"'+email+'","expires":"'+expires+'"}';
-								} else if (res.status == 'error'){
-									$scope.ui_adv = 'ar-in';
-									setTimeout(function(){ 
-										$scope.$apply(function(){
-											$scope.ui_adv = 'ar-out';											
-										});
-									 },1500);
-								}
-							}, 
-								function(what){ alert('Ocurrió un problema, intente de nuevo'); }
-							);
-				};
-				
-				function credentials(publickey,accesstoken,data){
-					if(data) return '?publickey='+publickey+'&accesstoken='+accesstoken+'&data='+data;
-					else	 return '?publickey='+publickey+'&accesstoken='+accesstoken;
-				}				
-
-			});
-		})()
+	script(src='/js/admin.js')

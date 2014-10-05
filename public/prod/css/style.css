@@ -36,6 +36,9 @@ h3 {
 h3 {
   font-weight: 300;
 }
+h4 {
+  font-weight: 200;
+}
 #map {
   position: absolute;
   top: 0px;
@@ -54,7 +57,7 @@ h3 {
 #welcome_panel {
   padding-top: 1px;
   margin-top: -1px;
-  background-color: rgba(250,200,200,0.7);
+  background-color: #334;
 }
 #search_panel {
   z-index: 3;
@@ -65,6 +68,8 @@ h3 {
   width: 100%;
   position: absolute;
   overflow-y: scroll;
+  padding-top: 1px;
+  margin-top: -1px;
   -webkit-transition: margin 0.25s ease;
   -moz-transition: margin 0.25s ease;
   -ms-transition: margin 0.25s ease;
@@ -84,10 +89,7 @@ h3 {
 }
 .ar-welcome-options button {
   display: inline-block;
-  max-width: 150px;
-}
-.ar-welcome-options button.ar-explore {
-  margin-right: 40px;
+  max-width: 200px;
 }
 ul.ar-travels {
   list-style: none;
@@ -97,6 +99,7 @@ ul.ar-travels li {
   min-height: 100px;
   text-align: justify;
   cursor: pointer;
+  margin: 30px 0;
 }
 ul.ar-travels li div {
   display: inline-block;
@@ -149,11 +152,12 @@ ul.ar-travels li div {
   text-transform: capitalize;
 }
 .ar-from-to {
-  display: block;
+  display: block !important;
   width: 100%;
   text-align: center;
   color: #999;
   font-size: 0.7em;
+  margin-top: -7px;
 }
 .ar-from-to span {
   border-bottom: 2px solid #999;
@@ -605,23 +609,40 @@ ul.ar-options-list .ar-from-to div.ar-from {
   content: "\e009   ";
 }
 #login_panel,
-#user_panel {
+#user_panel,
+#loading_panel {
   background-color: #fff;
+}
+#login_panel,
+#user_panel {
+  display: none;
 }
 .ar-adm .ar-panel {
   z-index: 0;
 }
-.ar-panel.aractive {
+#loading_panel {
+  padding-top: 100px;
+}
+#loading_panel .loader {
+  width: 80%;
+  height: 100px;
+  margin-top: 100px;
+}
+.ar-panel.aractive,
+#login_panel.ar-panel.aractive,
+#user_panel.ar-panel.aractive {
   z-index: 3;
+  display: block;
 }
 .ar-advice {
-  width: auto;
-  max-width: 90%;
+  position: absolute;
+  width: 300px;
   background-color: #f39c12;
   color: #fff;
   padding: 10px;
+  left: 50%;
+  margin-left: -150px;
   text-align: center;
-  margin: 0 auto;
   border-radius: 0px 0px 4px 4px;
   -webkit-transition: margin 0.45s ease-out;
   -moz-transition: margin 0.45s ease-out;
@@ -630,6 +651,86 @@ ul.ar-options-list .ar-from-to div.ar-from {
   transition: margin 0.45s ease-out;
   margin-top: -60px;
 }
+.form-group {
+  position: relative;
+}
+span.input-group-btn {
+  display: block;
+  position: absolute;
+  bottom: 0px;
+  right: 39px;
+}
 .ar-advice.ar-in {
   margin-top: 0px;
+}
+.ar-form {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 24px 23px 20px;
+  background-color: rgba(255,255,255,0.9);
+}
+.ar-form input,
+.ar-form select,
+.ar-form textarea {
+  background-color: transparent;
+}
+select {
+  width: 100%;
+  border: 2px solid #bdc3c7;
+  border-radius: 6px;
+  padding: 8px 12px;
+}
+.ar-form-section label {
+  display: block;
+  width: 100%;
+  border-bottom: 1px solid #999;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.ar-sponsors {
+  width: 100%;
+  min-height: 120px;
+  padding-top: 90px;
+  padding-bottom: 40px;
+}
+.ar-sponsor {
+  height: 90px;
+  background-color: #4169e1;
+}
+.ar-logo {
+  margin: 0 auto;
+  margin-top: 50px;
+  height: 150px;
+  width: 200px;
+  background-color: #1abc9c;
+}
+.login-form {
+  background-color: transparent;
+}
+.login-form .login-field {
+  border: 1px solid #ccc;
+}
+p h6 {
+  text-align: center;
+}
+@media (min-width: 100px) {
+  .ar-loginbigblock {
+    max-width: 600px;
+    margin: 0 auto;
+    overflow: auto;
+  }
+  .ar-loginbigblock .ar-logo {
+    float: left;
+    margin-top: 90px;
+  }
+  .ar-loginbigblock .login-block {
+    float: right;
+    width: 390px;
+  }
+}
+@media (min-height: 600px) {
+  .ar-loginbigblock {
+    margin-top: 150px;
+    margin-top: 10vh;
+  }
 }

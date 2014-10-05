@@ -47,8 +47,8 @@ body(ng-controller="NavigationController as nav")
 							.ar-to {{option.destinos}}
 					div(class="ar-view")
 
-		#explore_panel.ar-panel
-			h1 Im explore panel
+		//- #explore_panel.ar-panel
+		//- 	h1 Im explore panel
 		#travel_panel.ar-panel
 			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="peep('welcome_panel')" ng-mouseleave="unpeep('welcome_panel')")
 			.ar-wrapper.w7
@@ -111,19 +111,25 @@ body(ng-controller="NavigationController as nav")
 		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
 			.ar-wrapper
 				h1 Te damos la bienvenida a Viajes Transparentes
-				p El IFAI pone a tus disposición toda la información sobre viajes de funcionarios públicos
-				p
+				p El IFAI pone a tus disposición toda la información sobre viajes de funcionarios públicos, desde costos hasta resultados
+
+				//- p
 					a(href="#") Cuanto gasta en promedio un servidor público en un viaje
 					| , los 
 					a(href="#") viajes más costosos del año
 					| , o los 
 					a(href="#") hoteles mas frecuentados
 					|  así como los resultados de los acuerdos obtenidos, puedes:
+			.ar-badges
+				.col-xs-12
+
 				.ar-welcome-options
-					button(type="button" class="ar-explore btn btn-block btn-lg btn-primary") Explorar 
+					//- button(type="button" class="ar-explore btn btn-block btn-lg btn-primary") Explorar 
 						span(class="glyphicon glyphicon-plane")
 					button(ng-click="searchPanel()" type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
 						span(class="glyphicon glyphicon-search")
+
+			.ar-wrapper
 				p Últimos viajes realizados
 				ul.ar-travels
 					each travel in data
@@ -156,6 +162,16 @@ body(ng-controller="NavigationController as nav")
 
 				p#nota * Los datos para los gastos de los viajes marcados están incompletos
 				p#nota ** Los datos para las fechas marcadas son incoherentes
+			.ar-clear
+			.ar-sponsors
+				.col-sm-3.ar-sponsor
+					a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
+				.col-sm-3.ar-sponsor
+					a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
+				.col-sm-3.ar-sponsor
+					a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
+				.col-sm-3.ar-sponsor
+					a.ar-imco(href="http://imco.org.mx/" target="_blank") 			
 
 	script(src='/js/angular.min.js')
 	script(src='/js/underscore.js')

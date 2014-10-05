@@ -127,6 +127,10 @@ function listen(app){
 			});
 	});
 	app.post('/travel', restrictedAccess , function(req,res){
+
+		console.log('Server receives:');
+		console.log(req.body);
+
 		var doc = new db.viajes(req.body);
 		doc.save(function(err,newborn){
 			if(err)	res.send({status:'error', msg: err});
@@ -159,7 +163,7 @@ function listen(app){
 	//used for "login"
 	app.get('/users/:id', restrictedAccess, function(req,res){ 
 		db.users.findOne({id:req.params.id})
-			.select('name permissions -_id')
+			.select('name email permissions -_id')
 			.populate([
 				{path:'permissions.auth_servidores', select:'nombre'},
 				{path:'permissions.auth_instituciones', select:'nombre'},
