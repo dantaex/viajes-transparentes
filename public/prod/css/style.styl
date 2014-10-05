@@ -50,7 +50,26 @@ h4
 	padding-top 1px
 	margin-top -1px
 	// background-color rgba(250,200,200,0.7)
-	background-color #333344
+	// background-color #333344
+	background-color #FFFFFF
+
+.ar-badges
+	margin 0 0 30px 0
+	overflow auto
+	max-width 1400px
+
+p.ar-center
+	text-align center
+
+.ar-badge
+	background-color transparent
+	background-image url(../img/email.svg)
+	background-position center center
+	background-size contain
+	background-repeat no-repeat
+	width 95%
+	height 170px 	
+
 #search_panel
 	z-index 3
 	background-color rgba(250,250,250,0.95)
@@ -374,11 +393,10 @@ input.ar-search:focus
 	background-position center center
 	background-repeat no-repeat
 	background-size 40%
-	position absolute
+	position fixed
 	top 20px
 	right 50px
 	cursor pointer
-	z-index 2
 
 #debug.wtf
 	position absolute
@@ -448,7 +466,7 @@ ul.ar-autocomplete-list li.active
 	border-right 1px solid main-color
 
 ul.ar-options-list
-	max-width 500px
+	max-width 570px
 	margin 0 auto
 	list-style none
 	padding 0px
@@ -481,6 +499,7 @@ ul.ar-options-list li .ar-option-upper
 	min-height 45px	
 ul.ar-options-list li .ar-option-middler
 	width 100%
+	overflow auto
 ul.ar-options-list li .ar-option-bottom
 	margin-bottom 20px
 
@@ -555,6 +574,9 @@ ul.ar-options-list .ar-from-to div.ar-from
 	display none
 .ar-adm .ar-panel
 	z-index 0
+.ar-panel.in 
+	z-index 3
+
 
 #loading_panel
 	padding-top 100px
@@ -620,8 +642,9 @@ select
 .ar-sponsors
 	width 100%
 	min-height 120px
-	padding-top 90px
+	padding-top 40px
 	padding-bottom 40px
+	overflow auto
 .ar-sponsor
 	height 90px
 	background-color royalblue
@@ -638,6 +661,34 @@ select
 p h6
 	text-align center
 
+.ar-subcription input
+	border 1px solid #bdc3c7
+	border-radius 6px 6px 0px 0px
+	border-bottom 0px
+	text-align center
+	-webkit-transition all .25s ease-out
+	-moz-transition all .25s ease-out
+	-ms-transition all .25s ease-out
+	-o-transition all .25s ease-out
+	transition all .25s ease-out
+.ar-subcription button
+	border-radius  0px 0px 6px 6px
+form.ar-subcription
+	max-width 500px
+form.ar-subcription input.listo
+	height 0px
+	padding 0px
+form.ar-subcription label.listo
+	display none
+form.ar-subcription button.listo
+	border-radius 6px
+form.ar-subcription button span 
+	display none
+form.ar-subcription button.listo span 
+	display block
+	
+
+
 @media(min-width:100px)
 	.ar-loginbigblock
 		max-width 600px
@@ -653,3 +704,42 @@ p h6
 	.ar-loginbigblock
 		margin-top 150px
 		margin-top 10vh
+@media(max-width:725px)
+	ul.ar-options-list li .ar-name,
+	ul.ar-travels li div.ar-name
+		width 100%
+	ul.ar-travels li div.ar-from-to
+		text-align left
+	ul.ar-travels li div.ar-view
+		position absolute
+		right 20px
+	#travel_panel
+		width 100%
+	.backbtn
+		display none
+	ul.ar-options-list li .ar-name
+		width 100%
+		margin-left 32px
+		margin-top -25px
+		float none
+	ul.ar-options-list li .ar-person-photo
+		margin 0px
+	ul.ar-options-list li .ar-date
+		width 100%
+		background-size 21px
+	ul.ar-options-list li .ar-option-upper
+		min-height 30px
+.ar-credits
+	max-width 1200px
+	margin 0 auto
+	font-size 0.8em
+	text-align right
+	overflow auto
+	min-height 40px
+.ar-credits div
+	display block
+.ar-credits div.ar-left
+	margin 0 10px
+	float left
+.ar-credits div.ar-right
+	float right

@@ -20,14 +20,9 @@ body(ng-controller="NavigationController as nav")
 					button.btn.btn-primary(ng-click="switchMode('eventos');" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
 	
 			.ar-search-bar
-				//- input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keypress="autocomplete($event)" ng-keydown="moveAlongList($event)")
 				input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="list_out='ar-out'" ng-focus="list_out='ar-in'")
 				ul(class="ar-autocomplete-list {{list_out}}")
 					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
-
-			//-
-				div(class="loader {{loading}}")
-					| <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32"><path transform="translate(2)" d="M0 12 V20 H4 V12z"> <animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(8)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.2" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline"/></path><path transform="translate(14)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.4" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(20)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.6" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path><path transform="translate(26)" d="M0 12 V20 H4 V12z"><animate attributeName="d" values="M0 12 V20 H4 V12z; M0 4 V28 H4 V4z; M0 12 V20 H4 V12z; M0 12 V20 H4 V12z" dur="1.2s" repeatCount="indefinite" begin="0.8" keytimes="0;.2;.5;1" keySplines="0.2 0.2 0.4 0.8;0.2 0.6 0.4 0.8;0.2 0.8 0.4 0.8" calcMode="spline" /></path></svg>
 	
 			ul.ar-options-list
 				li(ng-repeat="option in options" ng-click="view(option._id)")
@@ -47,10 +42,7 @@ body(ng-controller="NavigationController as nav")
 							.ar-to {{option.destinos}}
 					div(class="ar-view")
 
-		//- #explore_panel.ar-panel
-		//- 	h1 Im explore panel
 		#travel_panel.ar-panel
-			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="peep('welcome_panel')" ng-mouseleave="unpeep('welcome_panel')")
 			.ar-wrapper.w7
 				.col-xs-12
 					.col-xs-3
@@ -107,30 +99,33 @@ body(ng-controller="NavigationController as nav")
 					.ar-borderer Eviarme esto por correo
 
 				.ar-spacer
-
+			.backbtn(ng-click="navigateTo('welcome_panel','backward')")
+			
 		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
 			.ar-wrapper
-				h1 Te damos la bienvenida a Viajes Transparentes
-				p El IFAI pone a tus disposición toda la información sobre viajes de funcionarios públicos, desde costos hasta resultados
+				h4 Te damos la bienvenida a
+				.ar-logo
+				h1 Viajes Transparentes
+				p El Instituto Federal de Acceso a la Información (IFAI) pone a tu disposición toda la información sobre viajes de funcionarios públicos, nacionales e internacionales, desde costos hasta resultados, por favor explora los datos y comparte la información que deses
 
-				//- p
-					a(href="#") Cuanto gasta en promedio un servidor público en un viaje
-					| , los 
-					a(href="#") viajes más costosos del año
-					| , o los 
-					a(href="#") hoteles mas frecuentados
-					|  así como los resultados de los acuerdos obtenidos, puedes:
 			.ar-badges
-				.col-xs-12
+				.col-sm-3.col-xs-6
+					.ar-badge
+				.col-sm-3.col-xs-6
+					.ar-badge
+				.col-sm-3.col-xs-6
+					.ar-badge
+				.col-sm-3.col-xs-6
+					.ar-badge
+			
+			p.ar-center o bien
 
-				.ar-welcome-options
-					//- button(type="button" class="ar-explore btn btn-block btn-lg btn-primary") Explorar 
-						span(class="glyphicon glyphicon-plane")
-					button(ng-click="searchPanel()" type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
-						span(class="glyphicon glyphicon-search")
+			.ar-welcome-options
+				button(ng-click="searchPanel()" type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
+					span(class="glyphicon glyphicon-search")
 
 			.ar-wrapper
-				p Últimos viajes realizados
+				p Últimos datos publicados
 				ul.ar-travels
 					each travel in data
 						li(id="#{travel._id}" ng-click="view('#{travel._id}')")
@@ -159,19 +154,45 @@ body(ng-controller="NavigationController as nav")
 							//- div #{travel._destinos[0].ciudad}
 							- var destinos = []; for(var i=travel._destinos.length-1;i>=0;i--) destinos.push( travel._destinos[i].ciudad+','+travel._destinos[i].pais );
 							div.ar-from-to #{travel._origen.ciudad},#{travel._origen.pais} <span></span> #{destinos.join('; ')}
+				
+				.col-sm-12.col-xs-12
+					h6 Recibe los datos en tu correo
+					p Cada vez que se de de alta un nuevo viaje recibirás un correo electrónico con todos los datos
 
-				p#nota * Los datos para los gastos de los viajes marcados están incompletos
-				p#nota ** Los datos para las fechas marcadas son incoherentes
+					form.ar-subcription.login-form.form.ar-form(ng-submit="createTravel()")
+						.form-group
+							input(class="form-control {{subscribed}}" type="email" ng-model="subscriptor" placeholder="Correo electrónico")
+							label.login-field-icon.fui-mail(class="{{subscribed}}")
+							button(ng-click="subscribe()" type="button" class="btn btn-block btn-lg btn-primary {{subscribed}}") {{subscribed}}
+								span(class="fui-check")
+
+				p#nota * Algunos datos están incompletos
+				p#nota Esta es una muestra representativa de los datos.
 			.ar-clear
 			.ar-sponsors
-				.col-sm-3.ar-sponsor
+				.col-sm-3.col-xs-6.ar-sponsor
 					a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
-				.col-sm-3.ar-sponsor
+				.col-sm-3.col-xs-6.ar-sponsor
 					a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
-				.col-sm-3.ar-sponsor
+				.col-sm-3.col-xs-6.ar-sponsor
 					a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
-				.col-sm-3.ar-sponsor
+				.col-sm-3.col-xs-6.ar-sponsor
 					a.ar-imco(href="http://imco.org.mx/" target="_blank") 			
+			.ar-credits
+				div.ar-left			
+					a(href="/rest") 
+						span.fui-list-small-thumbnails 
+						| REST
+				div.ar-left
+					a(href="") 
+						span.fui-github
+						|  Fuente
+				.ar-right Hecho por 
+					a(href="http://twitter.com/AixAimee" target="_blank") @aixaimee 
+					| y 
+					a(href="http://twitter.com/Dantaex" target="_blank") @dantaex 
+					| en 
+					a(href="http://aerostato.mx" target="_blank") aerostato.mx
 
 	script(src='/js/angular.min.js')
 	script(src='/js/underscore.js')

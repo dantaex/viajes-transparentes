@@ -33,7 +33,7 @@ GOODIES
 	RESTFul API, so super scalable and easily consumed by a variety of other services
 
 	HMAC Authentication and API security (No XSRF, No password sniffing, 
-	No cookies to steal, No session to persist across servers) Sha256 of course.
+	No session to persist across servers) Sha256 of course.
 
 	Express NodeJS (cached, superfast, everything ready for a simple npm install)
 

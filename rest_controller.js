@@ -4,10 +4,65 @@
 
 var db = require('./models'),
 	sh = require('./lib/sha256'),
-	fc = require('./lib/flowcontrol');
+	fc = require('./lib/flowcontrol'),
+	jade = require('jade'),
+	Mailgun = require('mailgun-js');
+
+//Your api key, from Mailgun’s Control Panel
+var api_key = 'key-8q8i2vy87lzsnudd9-gegjlcp64e-c54';
+
+//Your domain, from the Mailgun Control Panel
+var domain = 'sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
+
+//Your sending email address
+var from_who = 'suscripciones@sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
+
+var mailingList = 'viajestransparentes@sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
 
 function listen(app){
 	
+	//the vero only post action that is not restricted
+	app.post('/subscriptions', function(req,res){
+		db.subscriptors.findOne({email:req.body.email},function(err,doc){
+			if(err) res.send({status:'error',msg:err});
+			else if(doc) res.send({status:'exception',msg:'already subscribed'});
+			else{
+				var doc = new db.subscriptors(req.body);
+				doc.save(function(err,newdoc){
+					if(err)	res.send({status:'error', msg: err});
+					else{
+						res.send({status:'success', lastid: newdoc.id });
+
+						mailgun = new Mailgun({apiKey: api_key, domain: domain});
+										
+						//For the sake of this tutorial you need to create a mailing list on Mailgun.com/cp/lists and put its address below
+						mailgun.lists(mailingList)
+							.members().add({ members: [{address: newdoc.email}], subscribed: true }, function (err, body) {
+							if (err) console.log('Mailgun mailing list error',err);
+							else {
+								//send email
+								jade.renderFile('views/mailthanks.jade', { email : newdoc.email }, function(err, html){
+									var message = html || '¡Gracias por suscribirse a Viajes Transparentes!',
+										data = {
+											from: from_who,
+											to: newdoc.email,
+											subject: 'Su suscripción a Viajes Transparentes',
+											html: message
+										};
+									mailgun.messages().send(data, function (err, body) {
+										if (err) console.log("Got an error: ", err);
+										else console.log('Got a new guy subscribed!');
+									});
+								});
+							}
+						});
+
+					}
+				});
+			}
+		});
+	});
+
 	// Ciudades --------------------------------
 	app.get('/cities', function(req,res){ sendAll(db.ciudades,res) });
 	app.get('/cities/:id', function(req,res){ 
@@ -127,14 +182,28 @@ function listen(app){
 			});
 	});
 	app.post('/travel', restrictedAccess , function(req,res){
-
-		console.log('Server receives:');
-		console.log(req.body);
-
 		var doc = new db.viajes(req.body);
 		doc.save(function(err,newborn){
 			if(err)	res.send({status:'error', msg: err});
-			else res.send({status:'success', lastid: newborn.id });
+			else{
+				res.send({status:'success', lastid: newborn.id });
+
+				//send emial to subscriptors
+				//RENDER POR JADE DEL NUEVO VIAJE...
+				//POR AHORA TEXTO PLANI?
+				// var message = html || '¡Gracias por suscribirse a Viajes Transparentes!',
+				// 	data = {
+				// 		from: from_who,
+				// 		to: mailingList,
+				// 		subject: 'Un nuevo viaje ha sido publicado',
+				// 		html: message
+				// 	};
+				// mailgun.messages().send(data, function (err, body) {
+				// 	if (err) console.log("Got an error: ", err);
+				// 	else console.log('Got a new guy subscribed!');
+				// });
+
+			} 
 		});
 	});
 	

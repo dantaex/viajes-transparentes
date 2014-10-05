@@ -194,25 +194,26 @@
 			}
 		};
 
-		$scope.peep = function(panel){
-			switch(panel){
-				case 'welcome_panel' :
-					$scope.welcome_panel_class = 'almost';
-				break;
-				// case 'search_panel' :
-				
-				// break;
-				// case 'explore_panel' :
-				
-				// break;
-				case 'travel_panel' :
-					$scope.welcome_panel_class = 'out';
-				break;
+		$scope.subscribed = 'Suscribirme';
+		$scope.subscribe = function(){
+			if($scope.subscribed != 'listo'){
+				$http.post('/subscriptions',{email:$scope.subscriptor})
+					.then(function(response) {
+							if(response.data.status == 'success'){
+								$scope.subscribed = 'listo';
+								alert('yesss!');
+							} else{
+								console.log(response);
+							}
+						},
+						function(what){
+							console.log('Error subscribing',what);
+						});
 			}
 		};
-
+		
 		$scope.switchMode = function(mode){
- 			$scope.searchMode='destinos';
+ 			$scope.searchMode=mode;
  			$scope.searchinput='';
  			$scope.suggestions=[];
  			$scope.options = [];

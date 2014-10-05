@@ -1,5 +1,17 @@
 var db = require('./dbconfig');
 
+var Subscriptor = new db.Schema({
+	email : String,
+	// subscription_key : {type: String, required: true},
+	subscription_status: {type: Boolean, default: true},
+	subscribed_to: {
+		everything : {type: Boolean, default: true},
+		servidores : [{ type: db.Schema.ObjectId, ref: 'Servidor'}],
+	},
+	created : {type: Date, default : Date.now }
+});
+
+
 /**
 * level: 'root' is intended to have authority over everything
 * auth_institutions : a collection of which institutions this user can modify
@@ -136,4 +148,5 @@ exports.servidores = db.mongoose.model('Servidor',Servidor);
 exports.viajes = db.mongoose.model('Viaje',Viaje);
 exports.ciudades = db.mongoose.model('Ciudad',Ciudad);
 exports.users = db.mongoose.model('User',User);
+exports.subscriptors = db.mongoose.model('Subscriptor',Subscriptor);
 exports.mongoose = db.mongoose;
