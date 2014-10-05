@@ -163,7 +163,7 @@
 			$scope.navigateTo('search_panel',function(){
 				$scope.history.pushState({ status: 'search_panel', travelData : {} },'Viajes Transparentes',$scope.domain+'buscar/');
 				/**
-				* Yes yes bad practice... bullshit!
+				* Bad practice? bullshit!
 				* just take a look at this http://stackoverflow.com/questions/14833326/how-to-set-focus-on-input-field
 				* this is the fastest and simplest way
 				*/

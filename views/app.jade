@@ -5,11 +5,11 @@ head
 	link(rel='stylesheet', href='/css/bootstrap.min.css')
 	link(rel='stylesheet', href='/css/flat-ui.min.css')
 	link(rel='stylesheet', href='/css/style.css')
+	meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
 body(ng-controller="NavigationController as nav")
 	#map
 	#panel
 		#search_panel(class="ar-panel {{search_panel_class}}")
-			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="" ng-mouseleave="")
 			h3 Buscar viajes
 
 			.ar-btn-wrapper
@@ -40,19 +40,22 @@ body(ng-controller="NavigationController as nav")
 							.ar-from {{option.origen}} 
 							| .....
 							.ar-to {{option.destinos}}
+						.ar-long-text-line {{option.evento.nombre}}
 					div(class="ar-view")
-
-		#travel_panel.ar-panel
+			
+			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="" ng-mouseleave="")
+			
+		#travel_panel.ar-panel(class="ar-panel {{travel_panel_class}}" ng-cloak)
 			.ar-wrapper.w7
-				.col-xs-12
-					.col-xs-3
+				.ar-top-info
+					.ar-travel-transport
 						div(class="ar-travel-type {{currentTravel.transportClass}}")
-					.col-xs-8.ar-text-right
+						.ar-travel-title Viaje {{currentTravel.tipo_viaje}} {{currentTravel.pasaje.tipo}}
+					.ar-text-right
 						div(class="ar-travel-cost") {{currentTravel.totalCost}}
 						div(class="ar-currency") {{currentTravel.gastos.moneda}}
 				div.ar-from-to {{currentTravel.origen}} <span></span> {{currentTravel.destinos}}
-				.col-xs-11
-					div.ar-date {{currentTravel.inicio.dia}}° <span>de</span> {{currentTravel.inicio.mes}} <span class="ar-frmto"></span> {{currentTravel.fin.dia}}° <span>de</span> {{currentTravel.fin.mes}}, {{currentTravel.inicio.anio}} <span>({{currentTravel.dias}})</span>
+				div.ar-date {{currentTravel.inicio.dia}}° <span>de</span> {{currentTravel.inicio.mes}} <span class="ar-frmto"></span> {{currentTravel.fin.dia}}° <span>de</span> {{currentTravel.fin.mes}}, {{currentTravel.inicio.anio}} <span>({{currentTravel.dias}})</span>
 				div.ar-gdetails
 					div(class="ar-hotel") {{currentTravel.hotel.nombre}}
 					div(class="ar-airline") {{currentTravel.pasaje.linea_origen}}
@@ -63,7 +66,7 @@ body(ng-controller="NavigationController as nav")
 					a.ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
 					span {{currentTravel._servidor.puesto.toLowerCase()}} - {{institutions[currentTravel._servidor._institucion].nombre}}
 				
-				div.ar-stuff-nobody-gives-a-fuck-about
+				div.ar-stuff
 					h6 Motivo
 					p {{currentTravel.motivo}}
 					h6 Resultado
@@ -131,13 +134,13 @@ body(ng-controller="NavigationController as nav")
 						li(id="#{travel._id}" ng-click="view('#{travel._id}')")
 							div(class="ar-view")
 							if travel.pasaje.tipo=='Aéreo'
-								div(class="ar-travel-type ar-transport-air")
+								div(class="ar-travel-type ar-transport-air" title="Transporte aréreo")
 							else if travel.pasaje.tipo=='Terrestre'
-								div(class="ar-travel-type ar-transport-land")
+								div(class="ar-travel-type ar-transport-land" title="Transporte terrestre")
 							else if travel.pasaje.tipo=='Marítimo'
-								div(class="ar-travel-type ar-transport-sea")
+								div(class="ar-travel-type ar-transport-sea" title="Transporte marítimo")
 							else
-								div(class="ar-travel-type ar-transport-unk")
+								div(class="ar-travel-type ar-transport-unk" title="Transporte desconocido")
 							div.ar-travel-cost #{_.str.numberFormat(travel.gastos.viaticos+travel.gastos.pasaje+travel.gastos.hospedaje,2)}
 							div.ar-star-err
 								if travel.gastos.hospedaje==null || travel.gastos.pasaje==null || travel.gastos.viaticos==null

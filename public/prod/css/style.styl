@@ -1,5 +1,8 @@
 main-color = #1abc9c
 
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak
+	display none !important
+
 *::-webkit-scrollbar
 	width 1px
 	background-color white
@@ -54,7 +57,7 @@ h4
 	background-color #FFFFFF
 
 .ar-badges
-	margin 0 0 30px 0
+	margin 0 auto 30px auto
 	overflow auto
 	max-width 1400px
 
@@ -79,6 +82,7 @@ p.ar-center
 	width 100%
 	position absolute
 	overflow-y scroll
+	overflow-x hidden
 	padding-top 1px
 	margin-top -1px
 	-webkit-transition margin .25s ease
@@ -130,6 +134,9 @@ ul.ar-travels li div
 	background-image url(../img/bus.svg)
 .ar-transport-sea
 	background-image url(../img/boat.svg)
+.ar-transport-unk
+	background-image url(../img/travel.svg)
+	
 .ar-travel-cost
 	font-size 1.45em
 .ar-currency
@@ -155,7 +162,7 @@ ul.ar-travels li div
 	width 100%
 	text-align center
 	color #999
-	font-size 0.7em
+	font-size 0.9em
 	margin-top -7px
 
 .ar-from-to span
@@ -218,55 +225,65 @@ ul.ar-travels li:hover .ar-view
 	background-color #FFFFFF
 	width 70%
 	right 0px
-#travel_panel .ar-travel-type
-	width 70px
-	height 70px
-	margin-left 20px
-#travel_panel .ar-travel-cost
-	font-size 2.1em
-	display inline-block
-#travel_panel .ar-currency
-	display inline-block
-	font-size 1.5em 
-	height 100%
-	text-align left
-	vertical-align 0px
-#travel_panel .ar-from-to
-	font-size 1em
-#travel_panel .ar-from-to span
-	height 18px
-	width 35%
-#travel_panel .ar-date
-	font-size 1.1em
-	text-align right
-#travel_panel .ar-date span
-	color #777
-	font-size 0.8em
-#travel_panel .ar-date span.ar-frmto
-	border-bottom 1px solid #999
-	width 100px
-	display inline-block
-#travel_panel .ar-person
-	font-size 1.8em
-	text-align center
-	width 100%
-	margin-top 20px
-#travel_panel .ar-person span
-	width 100%
-	display block
-	font-size 0.4em
-	text-transform capitalize
-#travel_panel h6, #travel_panel h7
-	text-indent 50px
-#travel_panel h7
-	width 100%
-	display block
-	font-weight bold
-	
+	.ar-travel-type
+		width 40px
+		height 40px
+		margin-left 50px
+		float left
+	.ar-travel-cost
+		font-size 1.6em
+		display inline-block
+	.ar-currency
+		display inline-block
+		font-size 1.1em 
+		height 100%
+		text-align left
+		vertical-align 0px
+	.ar-from-to
+		font-size 1em
+		overflow auto
+		text-align left
+	.ar-from-to span
+		height 18px
+		width 35%
+	.ar-date
+		font-size 1.1em
+		text-align left
+	.ar-date span
+		color #777
+		font-size 0.8em
+	.ar-from-to
+		margin 10px auto
 
-#travel_panel .ar-name
-	display inline-block
-	vertical-align top
+#travel_panel //continues
+	.ar-date span.ar-frmto
+		border-bottom 1px solid #999
+		width 100px
+		display inline-block
+	.ar-person
+		font-size 1.8em
+		text-align center
+		width 100%
+		margin-top 20px
+	.ar-person span
+		width 100%
+		display block
+		font-size 0.4em
+		text-transform capitalize
+	p
+		margin-left 20px
+	h7
+		width 100%
+		display block
+		font-weight bold
+	.ar-name
+		display inline-block
+		vertical-align top
+	.ar-stuff-maybe-someone-will-ever-read h6
+		text-indent 0px
+	.ar-stuff-maybe-someone-will-ever-read
+		margin-top 40px
+
 .ar-person-photo
 	height 60px
 	width 60px
@@ -283,6 +300,7 @@ ul.ar-travels li:hover .ar-view
 .ar-hotel,.ar-airline
 	background-repeat no-repeat
 	background-position left center
+	background-position-x 0px
 	background-size contain
 	display block
 	text-indent 40px
@@ -302,19 +320,14 @@ ul.ar-travels li:hover .ar-view
 	background-image url(../img/ticket.svg)
 	width 200px
 	float right
-.ar-stuff-nobody-gives-a-fuck-about p
-	max-width 650px
+.ar-stuff p
 	margin 0 auto
 	display block
 	font-size 0.75em
-.ar-stuff-nobody-gives-a-fuck-about p.ar-pbigger
+.ar-stuff p.ar-pbigger
 	font-size 1.0em
 	font-weight bold
 
-#travel_panel .ar-stuff-maybe-someone-will-ever-read h6
-	text-indent 0px
-#travel_panel .ar-stuff-maybe-someone-will-ever-read
-	margin-top 40px
 
 #pdf
 	background-image url(../img/pdf.svg)
@@ -395,8 +408,11 @@ input.ar-search:focus
 	background-size 40%
 	position fixed
 	top 20px
-	right 50px
+	right 1%
 	cursor pointer
+	display none
+.ar-panel.in .backbtn
+	display block
 
 #debug.wtf
 	position absolute
@@ -542,11 +558,9 @@ ul.ar-options-list li .ar-date
 	background-image url(../img/calendar.svg)
 
 ul.ar-options-list .ar-from-to
-	min-height 40px
 	position relative
 ul.ar-options-list .ar-from-to div
 	display block
-	min-height 40px
 	min-width 160px
 ul.ar-options-list .ar-from-to div.ar-to
 	float right
@@ -675,60 +689,155 @@ p h6
 	border-radius  0px 0px 6px 6px
 form.ar-subcription
 	max-width 500px
-form.ar-subcription input.listo
-	height 0px
-	padding 0px
-form.ar-subcription label.listo
-	display none
-form.ar-subcription button.listo
-	border-radius 6px
-form.ar-subcription button span 
-	display none
-form.ar-subcription button.listo span 
-	display block
-	
+	input.listo
+		height 0px
+		padding 0px
+	label.listo
+		display none
+	button.listo
+		border-radius 6px
+	button span 
+		display none
+	button.listo span 
+		display block
+
+.ar-top-info
+	overflow auto
+
+.ar-long-text-line
+	overflow hidden
+	text-overflow ellipsis
+	white-space nowrap
+	font-size 0.7em
+	color #999
+
+.ar-travel-transport
+	padding-top 5px
+	width 390px
+	float left
+.ar-travel-title
+	font-size 1.4em
+	max-width 380px
 
 
-@media(min-width:100px)
+
+//everything
+@media(min-width:1400px)
+	.backbtn
+		right 50px
+@media(min-width:1200px)
+	#travel_panel .ar-name
+		min-width 450px
+
+@media(min-width:1000px) and (max-width:1400px)
+	.ar-text-right
+		margin-right 70px
+
+//login
+@media(min-width:1000px)
 	.ar-loginbigblock
 		max-width 600px
 		margin 0 auto
 		overflow auto
-	.ar-loginbigblock .ar-logo
-		float left
-		margin-top 90px
-	.ar-loginbigblock .login-block
-		float right
-		width 390px
+		.ar-logo
+			float left
+			margin-top 90px
+		.login-block
+			float right
+			width 390px
 @media(min-height:600px)
 	.ar-loginbigblock
 		margin-top 150px
-		margin-top 10vh
+		margin-top 10vh		
+
+//travel panel
+@media(min-width:726px) and (max-width:1200px)
+	#travel_panel .ar-wrapper
+		padding-left 20px
+	#travel_panel .ar-name
+		width 100%
+
+//search panel
 @media(max-width:725px)
 	ul.ar-options-list li .ar-name,
-	ul.ar-travels li div.ar-name
+	ul.ar-travels 
+		li div.ar-name
+			width 100%
+		li div.ar-from-to
+			text-align left
+		li div.ar-view
+			position absolute
+			right 20px
+	ul.ar-options-list li
+		.ar-name
+			width 100%
+			margin-left 32px
+			margin-top -25px
+			float none
+		.ar-person-photo
+			margin 0px
+		.ar-date
+			width 100%
+			background-size 21px
+		.ar-option-upper
+			min-height 30px
+
+//travel panel
+@media(max-width:1000px)
+	.col-xs-8.ar-text-right
+		float right
+
+	#travel_panel	
 		width 100%
-	ul.ar-travels li div.ar-from-to
-		text-align left
-	ul.ar-travels li div.ar-view
-		position absolute
-		right 20px
-	#travel_panel
-		width 100%
-	.backbtn
-		display none
-	ul.ar-options-list li .ar-name
-		width 100%
-		margin-left 32px
-		margin-top -25px
-		float none
-	ul.ar-options-list li .ar-person-photo
-		margin 0px
-	ul.ar-options-list li .ar-date
-		width 100%
-		background-size 21px
-	ul.ar-options-list li .ar-option-upper
-		min-height 30px
+		.ar-name
+			width 100%
+		h6,h7
+			text-indent 0px
+		p
+			text-indent 5px
+			margin-left 10px
+		.ar-travel-type
+			margin-left 0px
+			
+	#travel_panel.ar-panel.in .backbtn,
+	#search_panel.ar-panel.in .backbtn
+		position static
+		margin 0 auto 50px auto		
+
+	#search_panel.ar-panel .backbtn
+		right 5%
+		
+
+@media(max-width:800px)
+	#travel_panel .ar-travel-type
+		margin-left 0px
+		padding-left 0px
+		width 30px
+		height 30px
+	#travel_panel .ar-date
+		float left
+
+@media(max-width:1000px)
+	#travel_panel .ar-from-to span
+		width 5%
+
+//everything
+@media(max-width:450px)
+	h1,.h1
+		font-size 2.0em
+	#welcome_panel
+		ul.ar-travels
+			padding 0px
+		ul.ar-travels li div
+			text-align left
+		.ar-travel-cost
+			width auto
+			min-width 50px
+		.ar-from-to span
+			width 10px
+		ul.ar-travels li:hover .ar-view
+			opacity 0.0
+
 .ar-credits
 	max-width 1200px
 	margin 0 auto
@@ -736,10 +845,11 @@ form.ar-subcription button.listo span
 	text-align right
 	overflow auto
 	min-height 40px
-.ar-credits div
-	display block
-.ar-credits div.ar-left
-	margin 0 10px
-	float left
-.ar-credits div.ar-right
-	float right
+	div
+		display block
+	div.ar-left
+		margin 0 10px
+		float left
+	div.ar-right
+		float right
+		margin-right 10px

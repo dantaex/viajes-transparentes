@@ -1,3 +1,11 @@
+[ng:cloak],
+[ng-cloak],
+[data-ng-cloak],
+[x-ng-cloak],
+.ng-cloak,
+.x-ng-cloak {
+  display: none !important;
+}
 *::-webkit-scrollbar {
   width: 1px;
   background-color: #fff;
@@ -60,7 +68,7 @@ h4 {
   background-color: #fff;
 }
 .ar-badges {
-  margin: 0 0 30px 0;
+  margin: 0 auto 30px auto;
   overflow: auto;
   max-width: 1400px;
 }
@@ -85,6 +93,7 @@ p.ar-center {
   width: 100%;
   position: absolute;
   overflow-y: scroll;
+  overflow-x: hidden;
   padding-top: 1px;
   margin-top: -1px;
   -webkit-transition: margin 0.25s ease;
@@ -142,6 +151,9 @@ ul.ar-travels li div {
 .ar-transport-sea {
   background-image: url("../img/boat.svg");
 }
+.ar-transport-unk {
+  background-image: url("../img/travel.svg");
+}
 .ar-travel-cost {
   font-size: 1.45em;
 }
@@ -173,7 +185,7 @@ ul.ar-travels li div {
   width: 100%;
   text-align: center;
   color: #999;
-  font-size: 0.7em;
+  font-size: 0.9em;
   margin-top: -7px;
 }
 .ar-from-to span {
@@ -237,23 +249,26 @@ ul.ar-travels li:hover .ar-view {
   right: 0px;
 }
 #travel_panel .ar-travel-type {
-  width: 70px;
-  height: 70px;
-  margin-left: 20px;
+  width: 40px;
+  height: 40px;
+  margin-left: 50px;
+  float: left;
 }
 #travel_panel .ar-travel-cost {
-  font-size: 2.1em;
+  font-size: 1.6em;
   display: inline-block;
 }
 #travel_panel .ar-currency {
   display: inline-block;
-  font-size: 1.5em;
+  font-size: 1.1em;
   height: 100%;
   text-align: left;
   vertical-align: 0px;
 }
 #travel_panel .ar-from-to {
   font-size: 1em;
+  overflow: auto;
+  text-align: left;
 }
 #travel_panel .ar-from-to span {
   height: 18px;
@@ -261,11 +276,14 @@ ul.ar-travels li:hover .ar-view {
 }
 #travel_panel .ar-date {
   font-size: 1.1em;
-  text-align: right;
+  text-align: left;
 }
 #travel_panel .ar-date span {
   color: #777;
   font-size: 0.8em;
+}
+#travel_panel .ar-from-to {
+  margin: 10px auto;
 }
 #travel_panel .ar-date span.ar-frmto {
   border-bottom: 1px solid #999;
@@ -284,9 +302,8 @@ ul.ar-travels li:hover .ar-view {
   font-size: 0.4em;
   text-transform: capitalize;
 }
-#travel_panel h6,
-#travel_panel h7 {
-  text-indent: 50px;
+#travel_panel p {
+  margin-left: 20px;
 }
 #travel_panel h7 {
   width: 100%;
@@ -296,6 +313,12 @@ ul.ar-travels li:hover .ar-view {
 #travel_panel .ar-name {
   display: inline-block;
   vertical-align: top;
+}
+#travel_panel .ar-stuff-maybe-someone-will-ever-read h6 {
+  text-indent: 0px;
+}
+#travel_panel .ar-stuff-maybe-someone-will-ever-read {
+  margin-top: 40px;
 }
 .ar-person-photo {
   height: 60px;
@@ -314,6 +337,7 @@ ul.ar-travels li:hover .ar-view {
 .ar-airline {
   background-repeat: no-repeat;
   background-position: left center;
+  background-position-x: 0px;
   background-size: contain;
   display: block;
   text-indent: 40px;
@@ -335,21 +359,14 @@ ul.ar-travels li:hover .ar-view {
   width: 200px;
   float: right;
 }
-.ar-stuff-nobody-gives-a-fuck-about p {
-  max-width: 650px;
+.ar-stuff p {
   margin: 0 auto;
   display: block;
   font-size: 0.75em;
 }
-.ar-stuff-nobody-gives-a-fuck-about p.ar-pbigger {
+.ar-stuff p.ar-pbigger {
   font-size: 1em;
   font-weight: bold;
-}
-#travel_panel .ar-stuff-maybe-someone-will-ever-read h6 {
-  text-indent: 0px;
-}
-#travel_panel .ar-stuff-maybe-someone-will-ever-read {
-  margin-top: 40px;
 }
 #pdf {
   background-image: url("../img/pdf.svg");
@@ -441,8 +458,12 @@ input.ar-search:focus {
   background-size: 40%;
   position: fixed;
   top: 20px;
-  right: 50px;
+  right: 1%;
   cursor: pointer;
+  display: none;
+}
+.ar-panel.in .backbtn {
+  display: block;
 }
 #debug.wtf {
   position: absolute;
@@ -599,12 +620,10 @@ ul.ar-options-list li .ar-date {
   background-image: url("../img/calendar.svg");
 }
 ul.ar-options-list .ar-from-to {
-  min-height: 40px;
   position: relative;
 }
 ul.ar-options-list .ar-from-to div {
   display: block;
-  min-height: 40px;
   min-width: 160px;
 }
 ul.ar-options-list .ar-from-to div.ar-to {
@@ -767,7 +786,41 @@ form.ar-subcription button span {
 form.ar-subcription button.listo span {
   display: block;
 }
-@media (min-width: 100px) {
+.ar-top-info {
+  overflow: auto;
+}
+.ar-long-text-line {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 0.7em;
+  color: #999;
+}
+.ar-travel-transport {
+  padding-top: 5px;
+  width: 390px;
+  float: left;
+}
+.ar-travel-title {
+  font-size: 1.4em;
+  max-width: 380px;
+}
+@media (min-width: 1400px) {
+  .backbtn {
+    right: 50px;
+  }
+}
+@media (min-width: 1200px) {
+  #travel_panel .ar-name {
+    min-width: 450px;
+  }
+}
+@media (min-width: 1000px) and (max-width: 1400px) {
+  .ar-text-right {
+    margin-right: 70px;
+  }
+}
+@media (min-width: 1000px) {
   .ar-loginbigblock {
     max-width: 600px;
     margin: 0 auto;
@@ -788,23 +841,27 @@ form.ar-subcription button.listo span {
     margin-top: 10vh;
   }
 }
+@media (min-width: 726px) and (max-width: 1200px) {
+  #travel_panel .ar-wrapper {
+    padding-left: 20px;
+  }
+  #travel_panel .ar-name {
+    width: 100%;
+  }
+}
 @media (max-width: 725px) {
-  ul.ar-options-list li .ar-name,
+  ul.ar-options-list li .ar-name li div.ar-name,
   ul.ar-travels li div.ar-name {
     width: 100%;
   }
+  ul.ar-options-list li .ar-name li div.ar-from-to,
   ul.ar-travels li div.ar-from-to {
     text-align: left;
   }
+  ul.ar-options-list li .ar-name li div.ar-view,
   ul.ar-travels li div.ar-view {
     position: absolute;
     right: 20px;
-  }
-  #travel_panel {
-    width: 100%;
-  }
-  .backbtn {
-    display: none;
   }
   ul.ar-options-list li .ar-name {
     width: 100%;
@@ -821,6 +878,74 @@ form.ar-subcription button.listo span {
   }
   ul.ar-options-list li .ar-option-upper {
     min-height: 30px;
+  }
+}
+@media (max-width: 1000px) {
+  .col-xs-8.ar-text-right {
+    float: right;
+  }
+  #travel_panel {
+    width: 100%;
+  }
+  #travel_panel .ar-name {
+    width: 100%;
+  }
+  #travel_panel h6,
+  #travel_panel h7 {
+    text-indent: 0px;
+  }
+  #travel_panel p {
+    text-indent: 5px;
+    margin-left: 10px;
+  }
+  #travel_panel .ar-travel-type {
+    margin-left: 0px;
+  }
+  #travel_panel.ar-panel.in .backbtn,
+  #search_panel.ar-panel.in .backbtn {
+    position: static;
+    margin: 0 auto 50px auto;
+  }
+  #search_panel.ar-panel .backbtn {
+    right: 5%;
+  }
+}
+@media (max-width: 800px) {
+  #travel_panel .ar-travel-type {
+    margin-left: 0px;
+    padding-left: 0px;
+    width: 30px;
+    height: 30px;
+  }
+  #travel_panel .ar-date {
+    float: left;
+  }
+}
+@media (max-width: 1000px) {
+  #travel_panel .ar-from-to span {
+    width: 5%;
+  }
+}
+@media (max-width: 450px) {
+  h1,
+  .h1 {
+    font-size: 2em;
+  }
+  #welcome_panel ul.ar-travels {
+    padding: 0px;
+  }
+  #welcome_panel ul.ar-travels li div {
+    text-align: left;
+  }
+  #welcome_panel .ar-travel-cost {
+    width: auto;
+    min-width: 50px;
+  }
+  #welcome_panel .ar-from-to span {
+    width: 10px;
+  }
+  #welcome_panel ul.ar-travels li:hover .ar-view {
+    opacity: 0;
   }
 }
 .ar-credits {
@@ -840,4 +965,5 @@ form.ar-subcription button.listo span {
 }
 .ar-credits div.ar-right {
   float: right;
+  margin-right: 10px;
 }

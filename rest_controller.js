@@ -297,7 +297,8 @@ function findViajes(filter,res,callback,limit){
 			'_servidor':true,
 			'gastos':true,
 			'pasaje':true,
-			'comision':true
+			'comision':true,
+			'evento.nombre' : true
 		})
 		.populate([
 			{path:'_servidor',select:'nombre'},
