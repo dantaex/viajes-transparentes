@@ -63,6 +63,31 @@ function listen(app){
 		});
 	});
 
+	app.get('/chartdata', function(req,res){
+		db.viajes.find(
+				{},
+				'comision.inicio _id',
+				function(err,docs){
+					if(err)	res.send({status:'error', msg: err });
+					else res.send({status:'success', data: docs});
+				}
+			);
+	}); 
+	// Users --------------------------------
+	app.get('/users/:id', restrictedAccess, function(req,res){ 
+		db.users.findOne({id:req.params.id})
+			.select('name email permissions -_id')
+			.populate([
+				{path:'permissions.auth_servidores', select:'nombre'},
+				{path:'permissions.auth_instituciones', select:'nombre'},
+				{path:'permissions.auth_viajes',select:'tipo_viaje _origen _destinos comision'}
+			])
+			.exec(function(err,doc){
+				if(err)	res.send({status:'error', msg: err});
+				res.send({status:'success', data: doc});
+			})
+	});
+
 	// Ciudades --------------------------------
 	app.get('/cities', function(req,res){ sendAll(db.ciudades,res) });
 	app.get('/cities/:id', function(req,res){ 
@@ -229,20 +254,7 @@ function listen(app){
 		);
 	});
 
-	//used for "login"
-	app.get('/users/:id', restrictedAccess, function(req,res){ 
-		db.users.findOne({id:req.params.id})
-			.select('name email permissions -_id')
-			.populate([
-				{path:'permissions.auth_servidores', select:'nombre'},
-				{path:'permissions.auth_instituciones', select:'nombre'},
-				{path:'permissions.auth_viajes',select:'tipo_viaje _origen _destinos comision'}
-			])
-			.exec(function(err,doc){
-				if(err)	res.send({status:'error', msg: err});
-				res.send({status:'success', data: doc});
-			})
-	});
+
 }
 
 

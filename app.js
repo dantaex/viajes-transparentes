@@ -68,7 +68,7 @@ app.get('/', function(req,res){ home(req,res,'welcome_panel') } );
 app.get('/buscar', function(req,res){ home(req,res,'search_panel'); });
 app.get('/viajes', function(req,res){ home(req,res,'travel_panel'); });
 app.get('/viajes/:travelid', function(req,res){ home(req,res,'travel_panel'); });
-app.get('/explorar', function(req,res){ home(req,res,'explore_panel'); });
+app.get('/graficas', function(req,res){ home(req,res,'chart_panel'); });
 app.get('/servidores', function(req,res){ home(req,res,'traveller_panel'); });
 app.get('/adm', function(req,res){ res.render('adminapp') });
 

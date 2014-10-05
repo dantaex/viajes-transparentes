@@ -26,6 +26,15 @@
 						function(){
 							console.log('Could not load options');
 						});
+			},
+			chartData : function(){
+				return $http.get( '/chartdata' )
+					.then(function(result) { 
+							return result.data.data; 
+						}, 
+						function(){ 
+							console.log('Could not load suggestions');
+						});
 			}
 		};
 	});
@@ -75,7 +84,41 @@
 				'destinos'  : data[1],
 				'eventos'   : data[2],
 			};
+		});
+
+		/* graph data */
+		$scope.chartData = DataService.chartData();
+		$scope.chartData.then(function(data){ 
+			var travelbymonth = [0,0,0,0,0,0,0,0,0,0,0,0];
+			var ndata= [];
+			for (var i = data.length - 1; i >= 0; i--) {
+				ndata[i] = {
+					id : data[i]._id,
+					date : new Date(data[i].comision.inicio)
+				};
+				
+				try{
+					travelbymonth[ ndata[i].date.getMonth() ]++;
+				} catch(e){
+					console.log('invalid thing ',e);
+				}
+			}
+			var chartdata ={
+				labels : months,
+				datasets: [{
+					label: "Viajes",
+					fillColor: "rgba(26,188,156,0.2)",
+					strokeColor: "rgba(26,188,156,1)",
+					pointColor: "rgba(26,188,156,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(26,188,156,1)",
+					data: travelbymonth
+				}]
+			}
+			displayChart("yearlongchart",chartdata);
 		});		
+
 
 		$scope.some=function(){
 			alert('ooooo');
@@ -97,11 +140,11 @@
 					for (var i = 0; i < 10 && i < ll; i++) {
 						if( sugs[i].title.indexOf($scope.searchinput) != -1 )
 							filtered.push(sugs[i]);
-					};
+					}
 					$scope.suggestions = filtered;
 				}
 				if(call-lastKeyPress > 700){
-					updateOptions();
+					$scope.updateOptions();
 				}
 				lastKeyPress = call;
 			} else if (e.keyCode == 13 && $scope.suggestionIndex > -1 && $scope.suggestions.length > 0){
@@ -110,7 +153,7 @@
 				//and empty suggestions
 				$scope.suggestions = [];
 				//and update options
-				updateOptions();
+				$scope.updateOptions();
 			}
 		};
 		/*
@@ -140,23 +183,29 @@
 		$scope.welcome_panel_class = 'in';
 		$scope.travel_panel_class  = 'out';
 		$scope.search_panel_class  = 'out';
-		$scope.explore_panel_class = 'out';
+		$scope.chart_panel_class = 'out';
 
 		$scope.navigateTo = function(panel,then){
 
 			$scope.welcome_panel_class = 'out';
 			$scope.travel_panel_class  = 'out';
 			$scope.search_panel_class  = 'out';
-			$scope.explore_panel_class = 'out';
+			$scope.chart_panel_class = 'out';
 			
 			switch(panel){
 				case 'welcome_panel': $scope.welcome_panel_class = 'in'; break;
 				case 'search_panel' : $scope.search_panel_class = 'in'; break;
-				case 'explore_panel': $scope.explore_panel_class = 'in'; break;
+				case 'chart_panel': $scope.chart_panel_class = 'in'; break;
 				case 'travel_panel' : $scope.travel_panel_class = 'in'; break;
 			}
 			if(typeof then == 'function') then();
 			else if(then == 'backward')   $scope.history.back();
+		};
+
+		$scope.chartPanel = function(){
+			$scope.navigateTo('chart_panel',function(){
+				$scope.history.pushState({ status: 'chart_panel', travelData : {} },'Viajes Transparentes',$scope.domain+'graficas/');				
+			});
 		};
 
 		$scope.searchPanel = function(){
@@ -201,7 +250,6 @@
 					.then(function(response) {
 							if(response.data.status == 'success'){
 								$scope.subscribed = 'listo';
-								alert('yesss!');
 							} else{
 								console.log(response);
 							}
@@ -213,11 +261,15 @@
 		};
 		
 		$scope.switchMode = function(mode){
- 			$scope.searchMode=mode;
- 			$scope.searchinput='';
- 			$scope.suggestions=[];
- 			$scope.options = [];
- 			document.getElementById('search-input').focus();	
+			if(mode=='inicio')
+				alert('Próximamente');
+			else{
+	 			$scope.searchMode=mode;
+	 			$scope.searchinput='';
+	 			$scope.suggestions=[];
+	 			$scope.options = [];
+	 			document.getElementById('search-input').focus();
+			}
 		};
 
 		$scope.pdf = function(id){
@@ -234,6 +286,10 @@
 		$scope.history = history || window.history;
 
 		switch(section){
+			case 'chart_panel' :
+				$scope.history.replaceState({status:'chart_panel',travelData:{}},null,document.URL);
+				$scope.navigateTo('chart_panel');				
+			break;			
 			case 'welcome_panel' :
 				$scope.history.replaceState({status:'welcome_panel',travelData:{}},null,document.URL);
 				$scope.navigateTo('welcome_panel');
@@ -261,15 +317,18 @@
 			});
 		};
 
-		//UTILITIES ::: --------------------------------------------------
-
-		function updateOptions(){
+		$scope.updateOptions = function(submited){
 			$scope.options = DataService.travel($scope.searchinput,$scope.searchMode);
 			$scope.options.then(function(data){
 				$scope.options = formatOptions(data);
 				$scope.loading = '';
-			});			
+			});
+			if(submited){
+				hideMobileKeyboards();
+			}
 		}
+
+		//UTILITIES ::: --------------------------------------------------
 
 		function formatOptions(opts){
 			for (var i = opts.length - 1; i >= 0; i--) {
@@ -348,6 +407,37 @@
 			return dictionary;
 		}
 
+		//Tricks and aberrations ::: --------------------------------------------------
+
+		function hideMobileKeyboards(){
+			//verify size
+			var w = window,
+			    d = document,
+			    e = d.documentElement,
+			    g = d.getElementsByTagName('body')[0],
+			    x = w.innerWidth || e.clientWidth || g.clientWidth,
+			    y = w.innerHeight|| e.clientHeight|| g.clientHeight;			
+			if(x < 500 && y< 500){
+				var where = document.getElementById('here');
+				var field = document.createElement('input');
+				field.setAttribute('type', 'text');
+				// document.body.appendChild(field);
+				where.appendChild(field);
+
+				setTimeout(function() {
+				    field.focus();
+				    setTimeout(function() {
+				        field.setAttribute('style', 'display:none;');
+				    }, 15);
+				}, 15);
+			}
+		}
+
+		function displayChart(dom_id,data){
+			var context = document.getElementById(dom_id).getContext("2d");
+			// var myNewChart = new Chart(context).Line(data, options);
+			var myNewChart = new Chart(context).Line(data);
+		}
 	});
 	
 })(console);

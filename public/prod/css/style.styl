@@ -29,11 +29,19 @@ body
 	padding-top 1px
 	margin-top -1px
 h1,h3
-	text-align center
+	text-align center	
 h3
 	font-weight 300
 h4
 	font-weight 200
+
+h1
+	font-weight 100
+
+body
+	background-image url(../img/bg1.png)
+	background-size cover
+	background-position top center
 
 #map
 	position absolute
@@ -47,14 +55,12 @@ h4
 	position relative
 	height 100%
 	z-index 1
-	background-color rgba(200,200,250,0.7)
 	overflow-x hidden
 #welcome_panel
 	padding-top 1px
 	margin-top -1px
-	// background-color rgba(250,200,200,0.7)
 	// background-color #333344
-	background-color #FFFFFF
+	// background-color #FFFFFF
 
 .ar-badges
 	margin 0 auto 30px auto
@@ -64,20 +70,29 @@ h4
 p.ar-center
 	text-align center
 
-.ar-badge
+.ar-badge .svg
 	background-color transparent
-	background-image url(../img/email.svg)
 	background-position center center
 	background-size contain
 	background-repeat no-repeat
-	width 95%
-	height 170px 	
+	width 100%
+	min-height 170px
+	cursor pointer
+
+.ar-badge p
+	text-align center
+#g-mapa.ar-badge .svg
+	background-image url(../img/badge-mapa.svg)
+#g-comparar.ar-badge .svg
+	background-image url(../img/badge-compara.svg)
+#g-anual.ar-badge .svg
+	background-image url(../img/badge-viajes.svg)
 
 #search_panel
 	z-index 3
-	background-color rgba(250,250,250,0.95)
 
 .ar-panel
+	background-color rgba(255,255,255,0.9)
 	height 100%
 	width 100%
 	position absolute
@@ -90,6 +105,11 @@ p.ar-center
 	-ms-transition margin .25s ease
 	-o-transition margin .25s ease
 	transition margin .25s ease
+
+.ar-wrapper2
+	max-width 1000px
+	margin 0 auto
+	padding 17px
 
 .ar-wrapper
 	max-width 800px
@@ -218,11 +238,22 @@ ul.ar-travels li:hover .ar-view
 	margin-left -100% 
 #search_panel.in
 	margin-left 0px
+.ar-search-bar
+	text-align center
+#search_panel
+	button.btn-primary.ar-effective-search-button
+		margin 20px auto
+		min-width 200px
+		display none
 
+#chart_panel.out
+	margin-left -100%	
+#chart_panel.in
+	margin-left 0px
 
-
+#travel_panel.out
+	margin-right -100%
 #travel_panel
-	background-color #FFFFFF
 	width 70%
 	right 0px
 	.ar-travel-type
@@ -475,7 +506,7 @@ ul.ar-autocomplete-list li.active
 	text-align center
 	display block
 	width 100%
-	height 50px
+	min-height 50px
 .btn-group .btn
 	border-right 0px	
 .btn-group .btn:last-child
@@ -661,13 +692,19 @@ select
 	overflow auto
 .ar-sponsor
 	height 90px
-	background-color royalblue
 .ar-logo
 	margin 0 auto
-	margin-top 50px
-	height 150px
-	width 200px
-	background-color main-color
+	margin-top 20px
+	height 250px
+	width 100%
+	background-image url(../img/logo.svg)
+	background-position center center
+	background-repeat no-repeat
+	background-size contain
+h1.ar-lg-ti
+	display none
+	// background-color main-color
+
 .login-form
 	background-color transparent
 .login-form .login-field
@@ -719,6 +756,35 @@ form.ar-subcription
 	font-size 1.4em
 	max-width 380px
 
+button.btn.btn-primary[disabled],
+button.btn.btn-primary.disabled
+	border 1px solid #999999
+	border-left 0px
+	border-right 0px
+	background-color transparent
+	color #999999
+
+
+#here
+	overflow hidden
+	height 0px
+
+.ar-graph
+	text-align center
+.ar-graph canvas
+	width 95%
+	height 200px
+	height 50vh
+	margin 0 auto
+
+.ar-hashtag
+	text-align center
+	font-size 2em
+	margin-bottom 20px
+
+.ar-loginbigblock .ar-logo
+	width 200px
+	height 150px
 
 
 //everything
@@ -758,6 +824,52 @@ form.ar-subcription
 		width 100%
 
 //search panel
+@media(max-width:400px)
+	#search_panel
+		.ar-btn-wrapper
+			text-align center
+		.ar-btn-wrapper button
+			margin 10px
+			border 1px solid main-color
+			border-radius 3px
+			float none
+			display inline-block
+		.ar-btn-wrapper button[disabled],
+		.ar-btn-wrapper button.disabled
+			border 1px solid #999999
+			
+		.ar-search-bar
+			margin-right 15px
+			margin-left 15px
+		ul.ar-options-list li .ar-name
+			text-align left
+			font-size 1.1em
+			margin-left 5px
+//search panel
+@media(max-width:300px)
+	#search_panel
+		ul.ar-options-list li
+			margin-top 40px
+			margin-bottom 40px
+		ul.ar-options-list li .ar-name
+			margin-top 0px
+			width 100%
+		.ar-person-photo
+			display none
+
+@media(max-width:350px)
+	.ar-hashtag
+		font-size 1.2em
+		font-size 10vw
+
+
+@media(max-width:600px)
+	#search_panel
+		ul.ar-options-list
+			margin-left 15px
+			margin-right 15px
+
+
 @media(max-width:725px)
 	ul.ar-options-list li .ar-name,
 	ul.ar-travels 
@@ -800,9 +912,10 @@ form.ar-subcription
 			margin-left 0px
 			
 	#travel_panel.ar-panel.in .backbtn,
-	#search_panel.ar-panel.in .backbtn
+	#search_panel.ar-panel.in .backbtn,
+	#chart_panel.ar-panel.in .backbtn
 		position static
-		margin 0 auto 50px auto		
+		margin 80px auto 50px auto		
 
 	#search_panel.ar-panel .backbtn
 		right 5%
@@ -821,10 +934,15 @@ form.ar-subcription
 	#travel_panel .ar-from-to span
 		width 5%
 
+@media(max-width:600px)
+	#search_panel button.btn-primary.ar-effective-search-button
+		display block
+
 //everything
 @media(max-width:450px)
 	h1,.h1
 		font-size 2.0em
+
 	#welcome_panel
 		ul.ar-travels
 			padding 0px
@@ -837,6 +955,42 @@ form.ar-subcription
 			width 10px
 		ul.ar-travels li:hover .ar-view
 			opacity 0.0
+
+	.ar-actions .ar-borderer span
+		display none
+	#travel_panel
+		.ar-date span.ar-frmto
+			width 10px
+		.ar-gdetails
+			height auto
+			margin-top 20px
+		.ar-hotel, .ar-airline
+			float none
+			margin 10px 0
+		.ar-date
+			float none
+			
+
+@media(max-width:767px)
+	.ar-badges p
+		margin-top -30px
+
+@media(min-width:490px) and (max-width:768px)
+	.ar-actions .ar-borderer
+		padding-top 150px
+
+@media(max-width:630px)
+	#travel_panel
+		.ar-travel-title,
+		.ar-text-right
+			width 100%
+			max-width 100%		
+			float none
+			width 100%
+			text-align left
+		.ar-travel-transport
+			width 100%
+			max-width 100%
 
 .ar-credits
 	max-width 1200px
@@ -853,3 +1007,20 @@ form.ar-subcription
 	div.ar-right
 		float right
 		margin-right 10px
+
+.ar-sponsor a
+	width 100%
+	height 100%
+	background-size contain
+	background-repeat no-repeat
+	background-position center center
+	display block
+
+.ar-codeando
+	background-image url(../img/codeandomexico.svg)
+.ar-ifai
+	background-image url(../img/ifai.svg)
+.ar-socialtic
+	background-image url(../img/socialtic.svg)
+.ar-imco
+	background-image url(../img/imco.svg)

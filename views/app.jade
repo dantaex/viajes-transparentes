@@ -16,11 +16,14 @@ body(ng-controller="NavigationController as nav")
 				.btn-group.ar-search-nav
 					button.btn.btn-primary(ng-click="switchMode('destinos')" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span></a> Destino
 					button.btn.btn-primary(ng-click="switchMode('servidores');" ng-class="{active:searchMode=='servidores'}") <span class="fui-user"></span></a> Persona
-					button.btn.btn-primary(ng-click="switchMode('inicio');" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
+					button.btn.btn-primary.disabled( title="próximamente" ng-click="switchMode('inicio');" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
 					button.btn.btn-primary(ng-click="switchMode('eventos');" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
 	
 			.ar-search-bar
-				input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="list_out='ar-out'" ng-focus="list_out='ar-in'")
+				form(ng-submit="updateOptions('yes')")
+					input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="list_out='ar-out'" ng-focus="list_out='ar-in'")
+					//- button.btn.btn-primary.ar-effective-search-button(ng-click="updateOptions()") Buscar
+				#here
 				ul(class="ar-autocomplete-list {{list_out}}")
 					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
 	
@@ -44,6 +47,17 @@ body(ng-controller="NavigationController as nav")
 					div(class="ar-view")
 			
 			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="" ng-mouseleave="")
+
+			.ar-clear
+			.ar-sponsors
+				.col-sm-3.col-xs-6.ar-sponsor
+					a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
+				.col-sm-3.col-xs-6.ar-sponsor
+					a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
+				.col-sm-3.col-xs-6.ar-sponsor
+					a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
+				.col-sm-3.col-xs-6.ar-sponsor
+					a.ar-imco(href="http://imco.org.mx/" target="_blank") 
 			
 		#travel_panel.ar-panel(class="ar-panel {{travel_panel_class}}" ng-cloak)
 			.ar-wrapper.w7
@@ -92,35 +106,55 @@ body(ng-controller="NavigationController as nav")
 
 				.ar-clear
 
-				#pdf.ar-actions.col-xs-3(ng-click="pdf()")
-					.ar-borderer Descargar en formato PDF
-				a#twitter.ar-actions.col-xs-3(target="_blank" href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
-					.ar-borderer Compartir en Twitter
-				a#facebook.ar-actions.col-xs-3(target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}") 
-					.ar-borderer Mostrar en Facebook
-				#email.ar-actions.col-xs-3(ng-click="email()")
-					.ar-borderer Eviarme esto por correo
+				#pdf.ar-actions.col-sm-3.col-xs-6(ng-click="pdf()")
+					.ar-borderer 
+						span Descargar en formato PDF
+				a#twitter.ar-actions.col-sm-3.col-xs-6(target="_blank" href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+					.ar-borderer 
+						span Compartir en Twitter
+				a#facebook.ar-actions.col-sm-3.col-xs-6(target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}") 
+					.ar-borderer 
+						span Mostrar en Facebook
+				#email.ar-actions.col-sm-3.col-xs-6(ng-click="email()")
+					.ar-borderer 
+						span Evíenme esto por correo
 
 				.ar-spacer
 			.backbtn(ng-click="navigateTo('welcome_panel','backward')")
 			
-		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
+		#chart_panel(class="ar-panel {{chart_panel_class}}")
 			.ar-wrapper
+				h3 Viajes por mes
+				p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil, minus.	
+			.ar-graph
+				canvas(id="yearlongchart" width="1000" height="400")
+			.ar-hashtag 
+				a(href="http://twitter.com/share?url=&text=La%20nueva%20app%20para%20visualizar%20viajes%20de%20funcionarios%20publicos%20Viajes%20Transparentes%20&hashtags=IFAI,ViajesTransparentes,transparencia") #ViajesTransparentes
+				.ar-wrapper
+					p Próximamente más gráficas
+			.backbtn(ng-click="navigateTo('welcome_panel','backward')")
+
+		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
+			.ar-wrapper2
 				h4 Te damos la bienvenida a
 				.ar-logo
-				h1 Viajes Transparentes
+				h1.ar-lg-ti Viajes Transparentes
 				p El Instituto Federal de Acceso a la Información (IFAI) pone a tu disposición toda la información sobre viajes de funcionarios públicos, nacionales e internacionales, desde costos hasta resultados, por favor explora los datos y comparte la información que deses
 
-			.ar-badges
-				.col-sm-3.col-xs-6
-					.ar-badge
-				.col-sm-3.col-xs-6
-					.ar-badge
-				.col-sm-3.col-xs-6
-					.ar-badge
-				.col-sm-3.col-xs-6
-					.ar-badge
-			
+				.ar-badges
+					.col-sm-4
+						#g-anual.ar-badge(ng-click="chartPanel()")
+							.svg
+							p Viajes durante el año
+					.col-sm-4
+						#g-comparar.ar-badge
+							.svg
+							p Comparar viajes
+					.col-sm-4
+						#g-mapa.ar-badge
+							.svg
+							p Estados y países más frecuentados
+
 			p.ar-center o bien
 
 			.ar-welcome-options
@@ -182,7 +216,7 @@ body(ng-controller="NavigationController as nav")
 				.col-sm-3.col-xs-6.ar-sponsor
 					a.ar-imco(href="http://imco.org.mx/" target="_blank") 			
 			.ar-credits
-				div.ar-left			
+				div.ar-left
 					a(href="/rest") 
 						span.fui-list-small-thumbnails 
 						| REST
@@ -199,7 +233,8 @@ body(ng-controller="NavigationController as nav")
 
 	script(src='/js/angular.min.js')
 	script(src='/js/underscore.js')
-	script(src='/js/jspdf.js')
+	//- script(src='/js/jspdf.js')
+	script(src='/js/chart.js')
 	script(src='/js/app.js')
 	if initialData
 		script.
