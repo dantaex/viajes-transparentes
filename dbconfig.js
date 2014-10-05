@@ -7,11 +7,12 @@
 
 var mongoose = require('mongoose');
 var db_server = 'mongodb://localhost:27017/viajes';
+var db_remote_server = 'mongodb://vtmongouser:dbpass1231564oluptyre@ds043170.mongolab.com:43170/heroku_app30422903';
 
 mongoose.connection.on(
 	'open', 
 	function(){
-		console.log('Connected to '+db_server);
+		console.log('Connected to '+db_remote_server);
 	}
 );
 
@@ -22,7 +23,7 @@ mongoose.connection.on(
 	}
 );
 
-mongoose.connect(db_server);
+mongoose.connect(db_remote_server);
 
 exports.mongoose = mongoose;
 exports.Schema = mongoose.Schema;

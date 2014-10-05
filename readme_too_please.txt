@@ -39,7 +39,6 @@ GOODIES
 
 	Well documented, clean code
 
-	* Not enough? Works Offline !
 
 	Get all of these goodies for MXN 50,000 only!, or totally free 
 	if you're not the IFAI since this is completely Open Source
