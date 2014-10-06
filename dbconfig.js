@@ -7,7 +7,7 @@
 
 var mongoose = require('mongoose');
 var db_server = 'mongodb://localhost:27017/viajes';
-var db_remote_server = 'mongodb://vtmongouser:dbpass1231564oluptyre@ds043170.mongolab.com:43170/heroku_app30422903';
+var db_remote_server = 'YOUR_MONGO_REMOTE_ADDRESS';
 
 mongoose.connection.on(
 	'open', 

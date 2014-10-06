@@ -8,16 +8,13 @@ var db = require('./models'),
 	jade = require('jade'),
 	Mailgun = require('mailgun-js');
 
-//Your api key, from Mailgun’s Control Panel
-var api_key = 'key-8q8i2vy87lzsnudd9-gegjlcp64e-c54';
 
-//Your domain, from the Mailgun Control Panel
-var domain = 'sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
-
+//Mailgun config
+var api_key = 'key-0000000000000000000000000';
+var domain = 'domain.dom';
+var mailingList = 'whatevamailinlist@domain.dom';
 //Your sending email address
-var from_who = 'suscripciones@sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
-
-var mailingList = 'viajestransparentes@sandbox7447fa2019f34f97b88e55ba09346ea8.mailgun.org';
+var from_who = 'whateva@domain.dom';
 
 function listen(app){
 	
