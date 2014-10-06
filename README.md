@@ -8,6 +8,7 @@ Hecha para el [RetoViajesTransparentes](http://ifai.codeandomexico.org)
 ####¿Que tiene de bueno esta app?
 
 * Es única, no esta hecha con plantillas ni scaffolds.
+
 * Hecha con tecnologías ágiles, rápidas y modernas
     (NodeJS, Express, MongoDB, Jade, Stylus, Gulp, Bootstrap, HTML5.)
     
@@ -17,13 +18,23 @@ Hecha para el [RetoViajesTransparentes](http://ifai.codeandomexico.org)
         cd viajes-transparentes && npm install
     
 * Hecha con tecnologías 100% Open Source.
+
 * Enfoque moderno: single page app (HTML5 History handling)
+
 * Funciona mediante arquitectura REST, y la Api rest está abierta para consumo
+
 * Tiene seguridad HMAC, por lo que no hay rieesgo de XSRF, ni siffing de passwords.
-* Hospedada en la nube
+
+* Hospedada en la nube más robusta del mundo AWS-heroku (usada por Pinterest, Forsquare, Netflix, Nokia, ...)
+
 * Sin sesiones, el servidor es 100% stateless, por lo que puede escalarse para atender a 10 millones de usuarios en 10 minutos.
+
+* Suscripciones por email, servicio corriendo en Mailgun
+
 * Es responsiva, probada en Android y iOS
+
 * Funciona en Internet Explorer (en caso de que en verdad quieran probarlo ahí)
+
 * El diseño gráfico de botones y figuras es exclusivo y único
 
 ####¿Qué cosas están implementadas?
