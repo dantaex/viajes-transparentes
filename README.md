@@ -63,16 +63,15 @@ package.json
     cd viajes-transparentes && npm install
 
 ##Screenshots
-Añadir algún screenshot interesante del proyecto. Muy recomendable.
+[Snapshot](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/snapshot.png)
 
 ##Demo
 http://demovt.herokuapp.com/
 
 ##Contribuye
 
-Sección para explicar cómo contribuir a su proyecto. Debe añadir enlace al archivo CONTRIBUTING.md. Ejemplo:
 
-Este proyecto está totalmente abierto a  [código](https://github.com/CodeandoMexico/repo-guidelines/pulls), [ideas](https://github.com/CodeandoMexico/repo-guidelines/issues) y reporte de  [bugs](https://github.com/CodeandoMexico/repo-guidelines/issues).
+Este proyecto está totalmente abierto a  [código](https://github.com/dantaex/viajes-transparentes/pulls), [ideas](https://github.com/dantaex/viajes-transparentes/issues) y reporte de  [bugs](https://github.com/dantaex/viajes-transparentes/issues).
 
 Si tienes alguna sugerencia, mándame un correo a <jesuslink00@gmail.com>
 
@@ -83,4 +82,4 @@ Si tienes alguna sugerencia, mándame un correo a <jesuslink00@gmail.com>
 
 
 ##Licencia
-Sección para agregar la licencia. Recuerda agregar el LICENSE.txt al repositorio.
+MIT License
