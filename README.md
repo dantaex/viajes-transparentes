@@ -5,8 +5,31 @@ Viajes Transparentes
 Viajes Transparentes es una web app de código abierto hecha para difundir y comunicar información de transparencia gubernamental, en especial sobre viajes de funcionarios públicos
 Hecha para el [RetoViajesTransparentes](http://ifai.codeandomexico.org)
 
-Hecho
-* Intefaz responsiva, intuitiva, sencilla, limpia y única (sin templates)
+####¿Que tiene de bueno esta app?
+
+* Es única, no esta hecha con plantillas ni scaffolds.
+* Hecha con tecnologías ágiles, rápidas y modernas
+    (NodeJS, Express, MongoDB, Jade, Stylus, Gulp, Bootstrap, HTML5.)
+    
+* Es súper facil de instalar y configurar: 
+    
+        git clone https://github.com/dantaex/viajes-transparentes
+        cd viajes-transparentes && npm install
+    
+* Hecha con tecnologías 100% Open Source.
+* Enfoque moderno: single page app (HTML5 History handling)
+* Funciona mediante arquitectura REST, y la Api rest está abierta para consumo
+* Tiene seguridad HMAC, por lo que no hay rieesgo de XSRF, ni siffing de passwords.
+* Hospedada en la nube
+* Sin sesiones, el servidor es 100% stateless, por lo que puede escalarse para atender a 10 millones de usuarios en 10 minutos.
+* Es responsiva, probada en Android y iOS
+* Funciona en Internet Explorer (en caso de que en verdad quieran probarlo ahí)
+* El diseño gráfico de botones y figuras es exclusivo y único
+
+####¿Qué cosas están implementadas?
+Todo lo mencionado anteriormente, y de forma más específica:
+
+* Intefaz responsiva
 * HTML5
 * Bootstrap layout
 * Íconos SVG (retina ready)
@@ -19,9 +42,10 @@ Hecho
 * Panel de control para administradores (subir datos)
 * Validación del lado del cliente y del lado del servidor
 * RESTful API
-* Autenticación HMAC (Sin sesiones para persistir, sin vulnerabilidad  XSRF, sin transmisión de password)  
+* Autenticación HMAC
 
-Por Hacer
+####¿Qué cosas faltan por hacer?
+
 * Gulp tasks 
 * Minificar CSS, JS
 * One click PDF download
@@ -29,6 +53,7 @@ Por Hacer
 * HTML5 storage
 * Búsqueda por rango de fechas
 * Conectar con foursquare
+
 
 ##Dependencias
 
