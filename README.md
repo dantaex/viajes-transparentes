@@ -104,6 +104,10 @@ package.json
 ##Demo
 http://demovt.herokuapp.com/
 
+##Video
+Una disculpa por la calidad de la producción :P
+http://youtu.be/UKtoO38v6HI
+
 ##Contribuye
 
 
