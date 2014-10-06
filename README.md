@@ -63,7 +63,7 @@ package.json
     cd viajes-transparentes && npm install
 
 ##Screenshots
-[Snapshot](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/snapshot.png)
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/snapshot.png "Viajes Transparentes")
 
 ##Demo
 http://demovt.herokuapp.com/
