@@ -108,8 +108,11 @@ http://demovt.herokuapp.com/
 Una disculpa por la calidad de la producción :P
 http://youtu.be/UKtoO38v6HI
 
-##Contribuye
+##Carta 
+https://www.dropbox.com/s/offjcrzkab23b3w/cartaprotestadecirverdadretoviajestransparentes.pdf?dl=0
 
+
+##Contribuye
 
 Este proyecto está totalmente abierto a  [código](https://github.com/dantaex/viajes-transparentes/pulls), [ideas](https://github.com/dantaex/viajes-transparentes/issues) y reporte de  [bugs](https://github.com/dantaex/viajes-transparentes/issues).
 
