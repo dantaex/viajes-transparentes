@@ -47,7 +47,6 @@ Todo lo mencionado anteriormente, y de forma más específica:
 * Navegación ajax (HTML5 history handling)
 * Rendering clásico en homepage (SEO friendly)
 * Compartir con un link (one link social share Facebook + Twitter, no plugins)
-* Libre de JQuery
 * Suscripción por email corriendo en Mailgun
 * Búsqueda sensitiva optimizada (search autocomplete)
 * Panel de control para administradores (subir datos)
