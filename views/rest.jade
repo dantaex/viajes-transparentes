@@ -1,0 +1,39 @@
+doctype html
+html
+head
+	title= 'Viajes Transparentes'
+	link(rel='stylesheet', href='/css/bootstrap.min.css')
+	link(rel='stylesheet', href='/css/flat-ui.min.css')
+	link(rel='stylesheet', href='/css/style.css')
+body.ar-adm
+	
+	#welcome_panel.ar-panel
+		.ar-wrapper
+			h3	API REST
+			span Viajes Transparentes
+			
+			p Todos los datos en esta aplicación pueden ser consultados por cualquier persona, aplicación o servicio
+			p Aquí las instrucciones
+			.ar-code
+				div
+					a(target="_blank" href="/travellers") /travellers 
+					p Obtiene la lista de servidores públicos
+				div
+					a(target="_blank" href="/travellers?term=paloma%20alcantara") /travellers?term=paloma%20alcantara
+					p Obtiene la lista de servidores públicos filtrada por "paloma alcantara"
+				div
+					a(target="_blank" href="/travellers?limit=50") /travellers?limit=50 
+					p Obtiene una lista de 50 servidores públicos
+				div
+					a(target="_blank" href="/travellers?term=a&limit=3") /travellers?term=a&limit=3
+					p Obtiene una lista de 3 servidores públicos filtrados por la letra "a"
+				div
+					a(target="_blank" href="/travellers/5428d95fb7f7f849f6286ba9") /travellers/5428d95fb7f7f849f6286ba9
+					p Obtiene todos los datos del servidor público con id 5428d95fb7f7f849f6286ba9 
+			
+			p Se aplica las mismas condiciones para la ruta de viajes "/travel"
+
+			br 
+
+			a(href="/") regresar
+

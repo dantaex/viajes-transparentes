@@ -1,0 +1,170 @@
+#travel_panel.ar-panel(class="ar-panel {{travel_panel_class}}" ng-cloak)
+	.ar-tp-bger-shrinker
+		.ar-wrapper.w7
+			.ar-the-hint Información sobre el viaje {{currentTravel.consecutivo}}
+			section.ar-vwrap.ar-theimportant-title
+				.ar-thetraveltitle
+					.ar-thetravelevent(class="{{tte_expanded}}")
+						.ar-theexpander(ng-click="expandOrContract()")
+						p(title="{{currentTravel.evento.nombre}}") {{currentTravel.evento.nombre}}
+					.ar-sensitivetraveldata
+						.col-xs-12.col-sm-6
+							span Oficio: {{currentTravel.oficio}} 
+						.col-xs-12.col-sm-6
+							span Consecutivo {{currentTravel.consecutivo}}
+				div
+					div.ar-person
+						div(class="ar-person-photo {{currentTravel._servidor.tipo_rep.charAt(0).toLowerCase()}}")
+						//- a(href="{{document.URL+'servidor/'+currentTravel._servidor._id}}").ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
+						.ar-person-name
+							.ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
+							span Puesto: {{currentTravel._servidor.puesto.toLowerCase()}}
+							span Institución: {{institutions[currentTravel._servidor._institucion].nombre}}
+							.ar-tac
+								#ignorePDF1.btn-group
+									button.btn.btn-primary(ng-click="travellerPanel(currentTravel._servidor._id)") Ver perfil
+									button.btn.btn-primary(ng-show="!loggedUser.follows[currentTravel._servidor._id]" ng-click="followTravellerAttempt(currentTravel._servidor._id)") Seguir
+								span(ng-show="loggedUser.follows[currentTravel._servidor._id]") [Siguiendo]
+			
+			section.ar-fancy-buttons#ignorePDF2
+				.ar-fancy-button.ar-hideon450 Compartir
+				a.ar-fancy-button.ar-twitter( title="Compartir en twitter" target="_blank" ng-href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+				a.ar-fancy-button.ar-facebook( title="Compartir en facebook" target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}")
+				.ar-fancy-button.ar-pdf( title="Descargar en PDF" ng-click="pdf('travel_panel')")
+
+			section.ar-vwrap
+				.col-xs-12.col-sm-6
+					.ar-main-relcont
+						.ar-short-title Costo total
+						div(class="ar-travel-cost") {{currentTravel.totalCost}}
+						div(class="ar-currency") {{currentTravel.gastos.moneda}}
+					.ar-top-info
+						.ar-small-graph-container.col-sm-6.col-xs-6
+							canvas(id="travelCostsChart" width="200" height="200")
+						.ar-expl-cont.col-sm-6.col-xs-6
+							.ar-row60-auto
+								.col-xs-12.col-sm-6.ar-pd3
+									.ar-hostsq.ar-gsq(style="background-color:#FDB45C")
+									span Hospedaje
+								.col-xs-12.col-sm-6.ar-gsr {{currentTravel.gastos._hospedaje}}
+							.ar-row60-auto
+								.col-xs-12.col-sm-6.ar-pd3
+									.ar-viatsq.ar-gsq(style="background-color:#F7464A")
+									span Viáticos
+								.col-xs-12.col-sm-6.ar-gsr {{currentTravel.gastos._viaticos}}
+							.ar-row60-auto
+								.col-xs-12.col-sm-6.ar-pd3
+									.ar-transsq.ar-gsq(style="background-color:#46BFBD")
+									span Transporte 
+								.col-xs-12.col-sm-6.ar-gsr {{currentTravel.gastos._pasaje}}
+						.ar-costs-desg.col-xs-12(style="padding:0px")
+							canvas(id="travelCostsBarChart")
+
+				.col-xs-12.col-sm-6.ar-travel-icd
+					.ar-travel-maindata
+						div(class="ar-travel-icon-lf ar-travel-date")
+						.ar-travel-rgdata
+							.ar-date {{currentTravel.inicio.dia}}° <span>de</span> {{currentTravel.inicio.mes}} <span> al </span> {{currentTravel.fin.dia}}° <span>de</span> {{currentTravel.fin.mes}}, {{currentTravel.inicio.anio}} <span>({{currentTravel.dias}})</span>
+					.ar-travel-maindata
+						div(class="ar-travel-icon-lf ar-travel-loc")
+						.ar-travel-rgdata
+							.ar-from-to {{currentTravel.origen}} <span></span> {{currentTravel.destinos}}
+					.ar-travel-maindata
+						div(class="ar-travel-icon-lf ar-travel-type {{currentTravel.transportClass}}")
+						.ar-travel-rgdata Viaje {{currentTravel.tipo_viaje}} {{currentTravel.pasaje.tipo}}
+					.ar-travel-maindata(ng-show="currentTravel.hotel.nombre")
+						div(class="ar-travel-icon-lf ar-hotel")
+						.ar-travel-rgdata {{currentTravel.hotel.nombre}}
+					.ar-travel-maindata(ng-show="currentTravel.pasaje.linea_origen")
+						div(class="ar-travel-icon-lf ar-airline")
+						.ar-travel-rgdata {{currentTravel.pasaje.linea_origen}}
+
+					h7(ng-show="currentTravel._institucion_hospedaje||currentTravel._institucion_pasaje") Instituciones que patrocinan el viaje
+					.ar-institution
+						b {{currentTravel._institucion_hospedaje.nombre}}
+						p {{currentTravel._institucion_hospedaje.descripcion}}
+							br
+							a(href="http://{{currentTravel._institucion_hospedaje.sitio}}") {{currentTravel._institucion_hospedaje.sitio}}
+					.ar-institution(ng-show="currentTravel._institucion_hospedaje.nombre != currentTravel._institucion_pasaje.nombre")
+						b {{currentTravel._institucion_pasaje.nombre}}
+						p {{currentTravel._institucion_pasaje.descripcion}}
+							br
+							a(href="http://{{currentTravel._institucion_pasaje.sitio}}") {{currentTravel._institucion_pasaje.sitio}}
+
+			
+			section.ar-vwrap
+				
+				.col-xs-12.col-sm-4
+					h7 Motivo
+					p.ar-stuff {{currentTravel.motivo}}
+				.col-xs-12.col-sm-4
+					h7 Actividades
+					p.ar-stuff {{currentTravel.evento.actividades}}
+				.col-xs-12.col-sm-4
+					h7 Resultado
+					p.ar-pbigger {{currentTravel.resultado}}
+
+			section.ar-vwrap
+				.ar-questions 
+					h6 Preguntas y peticiones de aclaración sobre este viaje
+					div.ar-question(ng-repeat="q in currentTravel.questions")
+						.ar-question-profpic(style="background-image: url({{q.from.profpic}})")
+						.ar-question-body
+							.ar-question-from {{q.from.name}}
+								span.ar-bullet -
+								span {{q.on}}
+							p.ar-question-text {{q.text}}
+							p.ar-question-answer {{q.answer}}
+
+					div.ar-question.ar-newquestion(ng-class="{on:nq.input}")
+						.ar-question-profpic(style="background-image:url({{loggedUser.userData.profpic}})")
+						.ar-question-body
+							.ar-question-from {{loggedUser.userData.name}}
+								span.ar-bullet -
+								span {{today}}
+							p.ar-question-text {{nq.input}}
+					
+					p.ar-qencourage Haz una pregunta sobre este viaje
+
+					form.ar-question-form.ar-newquestionform.ar-subcription(ng-submit="questionSubmitAttempt(nq.input,currentTravel._id,currentTravel._servidor._id)")
+						input.form-control(type="text" placeholder="Quisiera preguntar" ng-model="nq.input" ng-disabled="nq.disabled")
+				
+
+
+			section.ar-vwrap.ar-similar-travel-section#ignorePDF3(ng-show="currentTravel.similar.length")
+				h7 ¿Cuánto han costado otros viajes al mismo destino?
+				p Viajes similares (por destino)
+				ul.ar-table
+					li.ar-similar-travel(ng-repeat="t in currentTravel.similar")
+						.ar-row.ar-noedgepadding
+							.ar-ellipsable.col-xs-12.col-sm-4 {{t.evento.nombre}}
+							.ar-txtr.col-xs-12.col-sm-4 {{t.inicio.dia}} de {{t.inicio.mes}} de {{t.inicio.anio}}
+							.ar-btns.ar-txtr.col-xs-12.col-sm-4
+								.btn-group
+									button.btn.btn-primary(ng-click="compareList.add(t);compareList.add(currentTravel);compare()") Comparar con este viaje
+									button.btn.btn-primary(ng-click="travelPanel(t._id)") Examinar
+						.ar-row.ar-noedgepadding
+							//-tiempo
+							.ar-col.col-xs-6.col-sm-3 
+								span.ar-coltitle Duración 
+								span {{t.dias}}
+							//-hotel
+							.ar-col.col-xs-6.col-sm-3 
+								span.ar-coltitle Hotel
+								span {{t.hotel.nombre}}
+							//-aerolínea
+							.ar-col.col-xs-6.col-sm-3 
+								span.ar-coltitle Aerolínea
+								span {{t.hotel.pasaje.linea_origen}}
+							//-presupuesto									
+							.ar-col.col-xs-6.col-sm-3.ar-txtr
+								span.ar-coltitle Presupuesto 
+								span.ar-cellbigger {{t.totalCost}}
+
+			section.ar-fancy-buttons.ar-nombt#ignorePDF2
+				.ar-fancy-button.ar-hideon450 Compartir
+				a.ar-fancy-button.ar-twitter( title="Compartir en twitter" target="_blank" ng-href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+				a.ar-fancy-button.ar-facebook( title="Compartir en facebook" target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}")
+				.ar-fancy-button.ar-pdf( title="Descargar en PDF" ng-click="pdf('travel_panel')")
+
+		.backbtn(ng-click="navigateTo('welcome_panel','backward')")

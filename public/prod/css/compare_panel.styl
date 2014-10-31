@@ -1,0 +1,90 @@
+.compare_panel.out
+	margin-left -100%
+.compare_panel.in
+	margin-left 0px
+
+.compare_panel	
+	background-color rgba(255,255,255,0.7);
+	// display none
+	z-index 999
+
+	td.ar-cap
+		text-transform capitalize
+
+@media(min-width:768px)
+	.compare_panel
+		table
+			display block
+		.ar-resptable
+			display none
+
+	table
+		// display none
+		th,td
+			font-size 0.8em
+			padding-left 10px 
+			padding-right 10px 
+			max-width 500px
+			marin-bottom 7px
+		td.ar-imp
+			text-align right
+			font-weight 800
+	.ar-color-tag
+		width 10px
+
+
+@media only screen and (max-width: 767px)
+
+	.ar-peek-divider
+		border-top: 1px solid #999;
+		margin-top: 30px;
+		padding-top: 10px;
+
+	.ar-compare-peek
+		button.btn.btn-primary 
+			width 100%
+
+
+	table, thead, tbody, th, td, tr { 
+		display: block; 
+	}
+	
+
+	.ar-color-tag
+		height 20px
+		width 100%
+		margin-top 50px
+
+	/* Hide table headers (but not display: none;, for accessibility) */
+	thead tr { 
+		position: absolute;
+		top: -9999px;
+		left: -9999px;
+	}
+	
+	tr { border: 1px solid #ccc; }
+	
+	td { 
+		/* Behave  like a "row" */
+		border: none;
+		border-bottom: 1px solid #eee; 
+		position: relative;
+		padding-left: 50%; 
+	}
+	
+	td:before { 
+		/* Now like a table header */
+		position: absolute;
+		/* Top/left values mimic padding */
+		top: 6px;
+		left: 6px;
+		width: 45%; 
+		padding-right: 10px; 
+		white-space: nowrap;
+	}
+	.compare_panel	
+		td:nth-of-type(1):before { content: ""; }
+		td:nth-of-type(2):before { content: "Nombre"; }
+		td:nth-of-type(3):before { content: "Puesto"; }
+		td:nth-of-type(4):before { content: "Viajes"; }
+		td:nth-of-type(5):before { content: "Presupuesto"; }

@@ -4,15 +4,13 @@ GOODIES
 
 	HTML5 beautyfully crafted responsive single-page app
 
-	* Minified HTML,CSS,JS, dev folder with originals present
 
-	* Optimized images
 
 	Bootstrap based layout
 
 	Stylus CSS generation (easy to change)
 
-	* SVG UI elements (no empty square icons on mobile, yet RETINA+ ready)
+	SVG UI elements (no empty square icons on mobile, yet RETINA+ ready)
 
 	Dynamic Browser History handling (Navigator back and forward buttons work for in-app-ajax-like navigation as it should be, URL maps to every screen)
 
@@ -22,11 +20,7 @@ GOODIES
 
 	No jquery !
 
-	* One Click PDF document download
 
-	* Easy email subscription
-
-	* HTML5 and server-side data validation
 
 	Cloud hosted, the most reliable cloud in the world: AWS (heroku)
 
@@ -39,9 +33,16 @@ GOODIES
 
 	Well documented, clean code
 
+	Easy email subscription
 
-	Get all of these goodies for MXN 50,000 only!, or totally free 
-	if you're not the IFAI since this is completely Open Source
+
+	* 
+
+
+	* Optimized images
+	* One Click PDF document download
+	* HTML5 and server-side data validation
+	* Minified HTML,CSS,JS, dev folder with originals present
 
 Orgullosamente hecho en México por
 Angélica Tenorio Vázquez @AixAimee y

@@ -1,0 +1,28 @@
+#navigation_panel.navbar(role="navigation")
+	.container-fluid
+		.navbar-header
+			button(type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#collpsnav")
+				span.sr-only Toggle navigation
+				span.icon-bar
+				span.icon-bar
+				span.icon-bar
+			a.navbar-brand(href="/" ng-click="welcomePanel();  $event.preventDefault(); $event.stopPropagation();")
+
+		#collpsnav.collapse.navbar-collapse
+			ul.nav.navbar-nav
+				//- li
+					a(href="/graficas" ng-click="chartPanel();  $event.preventDefault(); $event.stopPropagation();") Reporte
+				li
+					a.ar-navicon.ar-searchicon(href="/buscar" ng-click="searchPanel();  $event.preventDefault(); $event.stopPropagation();" title="Buscar") Buscar
+				//- li
+					a.ar-navicon.ar-mapicon(href="/mapa" ng-click="mapPanel();  $event.preventDefault(); $event.stopPropagation();" title="Mapa") Mapa
+
+				li
+					a.ar-navicon.ar-compareicon(ng-click="pkc=!pkc;  $event.preventDefault(); $event.stopPropagation();" title="Comparar") Compara
+						span(ng-class="{in:compareList.size}") {{compareList.size}}
+
+			//- ul.nav.navbar-nav.navbar-right
+				li
+					.ar-comparelist-button(title="Comparar")
+						span(ng-class="{in:compareList.size}") {{compareList.size}}
+						a Compara

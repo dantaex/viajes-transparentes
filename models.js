@@ -1,5 +1,23 @@
 var db = require('./dbconfig');
 
+var Meta = new db.Schema({
+	totalSpent : Number,
+	averageTrips : Number,
+	total_viaticos : Number,
+	total_pasaje : Number,
+	total_hospedaje : Number,
+	grand_total : Number
+});
+
+var Question = new db.Schema({
+	_viaje: {type: db.Schema.ObjectId, ref: 'Viaje'},
+	from : {type: db.Schema.ObjectId, ref: 'Subscriptor'},
+	to : {type: db.Schema.ObjectId, ref: 'Servidor'},
+	text : {type:String, required: true},
+	answer : String,
+	created: {type: Date, default: Date.now}
+});
+
 var Subscriptor = new db.Schema({
 	email : String,
 	// subscription_key : {type: String, required: true},
@@ -8,9 +26,12 @@ var Subscriptor = new db.Schema({
 		everything : {type: Boolean, default: true},
 		servidores : [{ type: db.Schema.ObjectId, ref: 'Servidor'}],
 	},
+	profpic : String,
+	name : String,
+	channel: String, //facebook, google, email
+	channelData : {},//???? type ???
 	created : {type: Date, default : Date.now }
 });
-
 
 /**
 * level: 'root' is intended to have authority over everything
@@ -38,6 +59,10 @@ var Ciudad = new db.Schema({
 	ciudad : { type: String, required: true},
 	estado : { type: String, required: true},
 	pais : { type: String, required: true},
+	lat : Number,
+	lon : Number,
+	nvisitas : { type: Number, default: 0 },
+	_visitas : [{ type: db.Schema.ObjectId, ref: 'Viaje'}]
 });
 
 var Institucion = new db.Schema({
@@ -48,11 +73,12 @@ var Institucion = new db.Schema({
 
 var Servidor = new db.Schema({
 	nombre : { type: String, required: true},
-	//                                          !!!!!!!!!!!!!!!!!!!!!!!!!!! FIGURE THIS OUT!
 	_institucion : { 
 		type: db.Schema.ObjectId,
 		ref: 'Institucion' 
 	},
+	_viajes : [{ type: db.Schema.ObjectId, ref: 'Viaje'}],
+	nviajes : { type: Number, default: 0 },
 	email : { 
 		type: String, 
 		validate: /^$|^([0-9a-zA-Z]([-.\w]*[0-9a-zA-Z])*@([0-9a-zA-Z][-\w]*[0-9a-zA-Z]\.)+[a-zA-Z]{2,9})$/ 
@@ -61,7 +87,14 @@ var Servidor = new db.Schema({
 	cargo_superior : String,//"Nombre del Cargo Superior"
 	departamento : String, //"Nombre del Cargo"
 	clave_salarial : {type: String, enum: ['HB1','KA02','KA2','KB1','KB2','KB3','MB2','MC03','MC1','MC2','MC3','NA1','NB3','NC1','NC2','NC3','OB02','OB2','OC002','OC02','OC1','OC2','OC3','PA1','PA3','PC1','PC2','PC3']},
-	unidad_administrativa : String //"Unidad Administrativa"
+	unidad_administrativa : String, //"Unidad Administrativa"
+	spent_so_far_mxn : {type: Number, default: 0}, //cuanto ha gastado hasta hoy
+	picture : String,
+	money_ranking: Number,
+	
+	travel_ranking: Number,
+	
+	created : {type: Date, default : Date.now }
 });
 
 var Viaje = new db.Schema({
@@ -127,12 +160,14 @@ var Viaje = new db.Schema({
 	gastos : {
 		moneda : {type: String, enum: ['MXN', 'USD']},
 		viaticos : Number,
+		tcat : {type :Number, default: 1}, //tipo de cambio al día de la transacción, es decir cuantos pesos valia una unidad de la moneda extranjera ese día
 		comprobado : Number,
 		sin_comprobar : Number,
 		hospedaje : Number, //"costo hotel"
 		tarifa_diaria: Number,
 		pasaje : Number,
-		viatico_devuelto : Number
+		viatico_devuelto : Number,
+		total_mx: Number
 	},
 
 	hotel : {
@@ -140,13 +175,21 @@ var Viaje = new db.Schema({
 		fin : {type: Date, required : true},
 		nombre : String
 	},
-	created : {type: Date, default : Date.now }
+
+	//brand new
+	// questions : [{type : db.Schema.ObjectId, ref: 'Question'}],
+
+	//meta
+	created : {type: Date, default: Date.now }
 });
 
+
+exports.meta = db.mongoose.model('Meta',Meta);
 exports.instituciones = db.mongoose.model('Institucion',Institucion);
 exports.servidores = db.mongoose.model('Servidor',Servidor);
 exports.viajes = db.mongoose.model('Viaje',Viaje);
 exports.ciudades = db.mongoose.model('Ciudad',Ciudad);
 exports.users = db.mongoose.model('User',User);
 exports.subscriptors = db.mongoose.model('Subscriptor',Subscriptor);
+exports.questions = db.mongoose.model('Question',Question);
 exports.mongoose = db.mongoose;

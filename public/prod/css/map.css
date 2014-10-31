@@ -1,0 +1,4 @@
+.leaflet-map{
+  /* Leaflet maps must ALWAYS have a defined height*/
+  height: 600px;
+}

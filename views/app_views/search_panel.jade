@@ -1,0 +1,63 @@
+#search_panel(class="ar-panel {{search_panel_class}}")
+	.ar-tp-bger-shrinker
+		.ar-wrapper.w7
+			.ar-the-hint Buscar
+			//- .backbtn(ng-click="navigateTo('welcome_panel','backward'); resetSearch();")
+			.backbtn(ng-click="history.back(); resetSearch();")
+			section.ar-vwrap.ar-of
+				.ar-search-bar
+					form.input-group.ar-searchform-btng(ng-submit="submitSuggestion()")
+						input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="suggestionsOut()" ng-focus="list_out='ar-in'")
+						.input-group-btn
+							button(type="button" class="btn btn-default dropdown-toggle" data-toggle="dropdown") {{searchCategory}}
+								span.caret
+							ul(class="dropdown-menu dropdown-menu-right" role="menu")
+								li(ng-click="resetSearch('viajes','destinos')") Viajes
+								li(ng-click="resetSearch('servidores','servidores')") Servidores
+					.ar-search-crit-container(ng-show="searchCategory=='viajes'")
+						.ar-crit-for-viajes.ar-btn-wrapper
+							.btn-group.ar-search-nav
+								button.btn.btn-primary(ng-click="switchMode('destinos')" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span> Destino
+								button.btn.btn-primary(ng-click="switchMode('eventos');" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span> Evento
+					//- button.btn.btn-primary.ar-effective-search-button(ng-click="updateOptions()") Buscar
+				#here
+				ul(class="ar-autocomplete-list {{list_out}}")
+					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-click="chooseSuggestion(sug)" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
+
+			section.ar-vwrap
+				.ar-thesearchresults.col-sm-12.col-xs-12(ng-show="travellerOptions.length || travelOptions.length")
+						
+						.ar-thetravellercontainer.col-xs-12.col-sm-6.col-md-6.col-lg-6(ng-repeat="option in travellerOptions")
+							.ar-thetraveller(ng-class="{'no-photo':!option.picture}")
+								.ar-person-photo.ar-thephoto(class="{{option.clave_salarial.toLowerCase()}}" style="background-image:url({{option.picture}});")
+								.ar-thecontent
+									.ar-thetitle.ar-thename {{option.nombre}}
+										span.ar-theposition {{option.puesto}}
+									.ar-idata.ar-theinst {{option._institucion.nombre}}
+									p Presupuesto hasta ahora
+									.ar-idata.ar-thetotalspent $ {{option.spent_so_far_mxn_lt}}
+									p {{option.nviajes}}
+								.ar-theactions
+									div(class="ar-view" ng-click="travellerPanel(option._id)" title="click para ver más")
+									div(class="ar-addtocompare" ng-click="compareList.add(option)" title="Seleccionar para comparar")
+						
+						.ar-thetravellercontainer.col-xs-12.col-sm-6.col-md-6.col-lg-6(ng-repeat="option in travelOptions")
+							.ar-thetravel
+								.ar-long-text-line {{option.consecutivo}}
+								.ar-thetraveltitle
+									.ar-thetravelevent(ng-class="{'expanded':option.expanded}")
+										.ar-theexpander(ng-click="option.expanded=!option.expanded")
+										p(title="{{option.evento.nombre}}") {{option.evento.nombre}}
+								.ar-thecontent
+									.ar-idata.ar-thetotalspent {{option.totalCost}} <span>{{option.gastos.moneda}}</span>
+								.ar-person
+									div(class="ar-person-photo {{option._servidor.tipo_rep.charAt(0).toLowerCase()}}")
+									.ar-thename {{option._servidor.nombre.toLowerCase()}}
+								.ar-thecontent
+									p.ar-idata.ar-transport(class="{{option.transportClass}}") {{option.pasaje.linea_origen}}
+									p.ar-date {{option.inicio.dia}} de {{option.inicio.mes}}, {{option.inicio.anio}}
+									p.ar-to {{option.destinos}}							
+								.ar-theactions.btn-group
+									button.btn-primary.btn(class="ar-view" ng-click="travelPanel(option._id)" title="click para ver más")
+									button.btn-primary.btn(class="ar-addtocompare" ng-click="compareList.add(option)" title="Seleccionar para comparar")
+					

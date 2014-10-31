@@ -5,6 +5,7 @@
 var express = require('express'),
 	controller = require('./rest_controller'),
 	http = require('http'),
+	fc = require('./lib/flowcontrol'),
 	path = require('path');
 
 var app = express();
@@ -35,42 +36,74 @@ var db = require('./models');
 controller.listen(app);
 
 function home( req, res, section ){	
-	db.viajes.find({})
-		.select({
-			'tipo_viaje':true,
-			'_origen':true,
-			'_destinos':true,
-			'_servidor':true,
-			'gastos':true,
-			'pasaje':true,
-			'comision':true
-		})
-		.populate([
-			{path:'_servidor',select:'nombre'},
-			{path:'_destinos',select:'ciudad pais -_id'},
-			{path:'_origen',select:'ciudad pais -_id'}
-		])
-		.limit(10)
-		.exec(function(err,docs){
-			if(req.params.travelid){
-				db.viajes.findOne({_id:req.params.travelid})
-					.populate('_servidor _destinos _origen _institucion_hospedaje _institucion_pasaje')
+	//count things
+	fc.taskMap(
+		[
+			db.ciudades.count(),
+			db.viajes.count(),
+			db.servidores.count(),
+			//db.ciudades.find().select('ciudad _visitas nvisitas').sort({ nvisitas: -1 }).limit(3),
+			db.viajes.find({})
+				.select('_destinos gastos')
+				.populate('_destinos')
+				.sort({ 'gastos.total_mx': -1 })
+				.limit(7),
+			db.meta.find().select('-_id')
+		],
+		function(query,next){
+			query
+			.exec(function(err,docs){
+				next(err,docs);
+			});
+		}, 
+		function(err,counts){
+			if(err)	res.render('app',{section:section,counts:[98,44,76,[],1.4]})
+			else{						
+				if(req.params.travelid){
+					db.viajes.findOne({_id:req.params.travelid})
+						.populate('_servidor _destinos _origen _institucion_hospedaje _institucion_pasaje')
+						.exec(function(err,doc){
+							if(err) res.render('app',{section:section,counts:counts});
+							else res.render('app',{initialData:doc,section:section,counts:counts});
+						});
+				} else if (req.params.travellerid){
+
+					//PASAR ESTO A REST_CONTROLLER
+					db.servidores.findOne({_id:req.params.travellerid})
+					.populate('_institucion')
 					.exec(function(err,doc){
-						if(err) res.render('app',{data:docs,section:section});
-						else res.render('app',{data:docs,initialData:doc,section:section});
+						if(err) res.render('app',{section:section,counts:counts});
+						else if (!doc) res.render('app',{section:'welcome_panel',counts:counts});
+						else{
+							db.viajes
+								.find({ _id:{ $in: doc._viajes} })
+								.populate('_destinos')
+								.exec(function(err,docs) {
+									if(err) res.render('app',{initialData:doc,section:section,counts:counts});
+									else{
+										var traveller = doc.toObject();
+										traveller._viajes = docs;
+										res.render('app',{initialData:traveller,section:section,counts:counts});
+									}
+								});
+						} 
 					});
-			}
-			else res.render('app',{data:docs,section:section});
-		});	
+				} else res.render('app',{section:section,counts:counts});
+			}			
+		}
+	);
 }
 
 app.get('/', function(req,res){ home(req,res,'welcome_panel') } );
 app.get('/buscar', function(req,res){ home(req,res,'search_panel'); });
 app.get('/viajes', function(req,res){ home(req,res,'travel_panel'); });
-app.get('/viajes/:travelid', function(req,res){ home(req,res,'travel_panel'); });
 app.get('/graficas', function(req,res){ home(req,res,'chart_panel'); });
-app.get('/servidores', function(req,res){ home(req,res,'traveller_panel'); });
+app.get('/viajes/:travelid', function(req,res){ home(req,res,'travel_panel'); });
+app.get('/servidores/:travellerid', function(req,res){ home(req,res,'traveller_panel'); });
 app.get('/adm', function(req,res){ res.render('adminapp') });
+app.get('/rest', function(req,res){ res.render('rest') });
+app.get('/mapa', function(req,res){ home(req,res,'map_panel'); });
+
 
 
 http.createServer(app).listen(app.get('port'), function(){

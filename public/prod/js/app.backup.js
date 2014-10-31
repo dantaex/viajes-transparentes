@@ -3,7 +3,7 @@
 * Made by @dantaex
 */
 (function(cc){
-	var app = angular.module('viajes',['leaflet-directive']);
+	var app = angular.module('viajes',[]);
 
 	app.factory('DataService', function($http, $q, $timeout){
 		return {
@@ -51,7 +51,7 @@
 			},
 			travellers : function(searchinput){
 				searchinput = searchinput || '';
-				return $http.get( '/travellers/?term='+searchinput+'&limit=8' )
+				return $http.get( '/travellers/?term='+searchinput+'&limit=4' )
 					.then(function(response) { 
 							return response.data.data;
 						},
@@ -69,15 +69,6 @@
 							console.log('Could not load traveller');
 							return [];
 						});								
-			},
-			similarTrips : function(city){
-				return $http.get('/travel/?full=true&by=destinos&term='+city)
-					.then(function(response){
-							return response.data.data;
-						},
-						function(){
-							return [];
-						});
 			}
 		};
 	});
@@ -86,12 +77,12 @@
 
 		var months = ['Enero','Febrero','Marzo','Abril','Mayo','Junio','Julio','Agosto','Septiembre','Octubre','Noviembre','Diciembre'];
 		var cMonth = (new Date()).getMonth();
+		var months_upto_now = monthsUptoNow().months;
+		var numberMonths = monthsUptoNow().numbers;
 
-		//allmighty beautiful thing
-		var fc = new FlowControl();
 
 		$scope.domain = document.URL.match(/http:\/\/[^\/]+\//)[0];
-		$scope.alert = '';
+		$scope.alert = false;
 
 		/*
 		*	This is the indexed collection of full Travel data
@@ -127,31 +118,7 @@
 				}]
 			}
 			displayChart("yearlongchart",chartdata);
-			donutChart([
-				{
-					label:'Hospedaje', 
-					color:"#F7464A",
-					highlight: "#FF5A5E",
-					value: Math.floor(META.total_hospedaje * 100) / 100 
-				},
-				{
-					label:'Pasaje', 
-					color: "#46BFBD",
-					highlight: "#5AD3D1",
-					value:Math.floor( META.total_pasaje * 100) / 100
-				},
-				{
-					label:'Viaticos', 
-					color: "#FDB45C",
-					highlight: "#FFC870",
-					value:Math.floor(META.total_viaticos * 100) / 100
-				}
-				]
-				,'enquesegastamas');			
 		});	
-		//:P
-
-
 		$scope.institutions = {'542700d8df6fec2c037d773b':{nombre:'IFAI'},'54290faaab084897f2cbae5b':{nombre:'IACIP'},'54291046ab084897f2cbae5c':{nombre:'ECOM-LAC'}};
 
 		//USER LOGIN [Facebook & email] (Ask questions, follow burocrats, subscribe)  ::: --------------------------------------------		
@@ -165,8 +132,7 @@
 				profpic :  '/img/user2.svg',
 				channel: null,
 				channelData : null
-			},
-			follows : {}
+			}
 		};
 		$scope.loginModalCallback = function(){ };
 		$scope.questionSubmitAttempt = function(input,travelID,travellerID){
@@ -233,7 +199,7 @@
 								 }, {scope: 'public_profile,email'});
 							break;
 							default:
-								$scope.alert = '';
+								$scope.alert = false;
 								$scope.nq.disabled = false;									
 							break;
 						}
@@ -251,7 +217,7 @@
 				var newLoggedUserData = {
 					logged : true,
 					userData : {
-						email : $scope.loggedUser.userData.email || response.email,
+						email : response.email,
 						name : response.name,
 						profpic :  'http://graph.facebook.com/v2.1/'+response.id+'/picture',
 						channel: 'facebook',
@@ -260,8 +226,7 @@
 							facebookLink : response.link,
 							gender : response.gender
 						}
-					},
-					follows : {}
+					}
 				};
 				$scope.$apply(function(){
 					$scope.loggedUser = newLoggedUserData;
@@ -290,36 +255,20 @@
 					if(res.data.status=='success'){
 
 						//ad question to UI
-						if($scope.fullTravellers[ qdata.to ]){
-							//travellers
-							for (var i = $scope.fullTravellers[ qdata.to ]._viajes.length - 1; i >= 0; i--) {
-								if( $scope.fullTravellers[ qdata.to ]._viajes[i]._id == qdata.about)
-
-									console.log($scope.fullTravellers[ qdata.to ]._viajes[i].questions);
-									console.log($scope.fullTravellers[ qdata.to ]._viajes[i]);
-
-									if($scope.fullTravellers[ qdata.to ]._viajes[i].questions)
-										$scope.fullTravellers[ qdata.to ]._viajes[i].questions.push(qdata);
-									else
-										$scope.fullTravellers[ qdata.to ]._viajes[i].questions = [qdata];
-							};
-						} 
-
-						if($scope.fullTravels[qdata._viaje]) {
-							//travel
-							$scope.fullTravels[qdata._viaje].questions.push(qdata);
-						}
-
-						if($scope.currentTravel){
-							$scope.currentTravel.questions.push(qdata);
-						}
+						for (var i = $scope.fullTravellers[ qdata.to ]._viajes.length - 1; i >= 0; i--) {
+							if( $scope.fullTravellers[ qdata.to ]._viajes[i]._id == qdata.about)
+								if($scope.fullTravellers[ qdata.to ]._viajes[i].questions)
+									$scope.fullTravellers[ qdata.to ]._viajes[i].questions.push(qdata);
+								else
+									$scope.fullTravellers[ qdata.to ]._viajes[i].questions = [qdata];
+						};
 						
 						//clean preview
 						$scope.nq.input = '';
 						$scope.alert = 'Pregunta enviada';
 						setTimeout(function(){
 							$scope.$apply(function(){
-								$scope.alert = '';
+								$scope.alert = false;
 							});
 						},1500);
 					}
@@ -335,22 +284,21 @@
 		};
 
 		var d = new Date();
-		$scope.today = '' + d.getDate() + months[d.getMonth()] + d.getFullYear();
+		$scope.today = '' + d.getDay() + months[d.getMonth()] + d.getFullYear();
 
 
 		//SEARCH & AUTOCOMPLETION ::: --------------------------------------------		
 		$scope.travelOptions = [];
 		$scope.travellerOptions = [];
 		$scope.loading = '';
-
-		$scope.searchCategory = 'servidores';
+		$scope.models = [{name:'viajes'},{name:'personas'}];
+		$scope.searchWhat = $scope.models[0];
 		$scope.searchMode = 'servidores';
-		
 		$scope.activeSuggestion = 0;
 		$scope.suggestionIndex = -1;
-		$scope.cities = [];
 
 		$scope.suggestions = [];
+		$scope.cities = [];
 		$scope.allSuggestions = DataService.suggestions();
 		$scope.allSuggestions.then(function(data){
 			for (var i = data.length - 1; i >= 0; i--) {
@@ -373,20 +321,15 @@
 			$scope.cities = idsAsIndexes( data[1] );
 		});
 
-
-		$scope.resetSearch = function( searchCategory,searchMode){
-			if(searchCategory)
-				$scope.searchCategory = searchCategory;
-			if(searchMode)
-				$scope.searchMode = searchMode;
+		$scope.resetSearch = function(e){
+			if($scope.searchWhat.name == 'personas')
+				$scope.searchMode = 'servidores';
 			$scope.travelOptions=[];
-			$scope.travellerOptions=[];
+			$scope.servidorOptions=[];
 			$scope.suggestions=[];
 			$scope.searchinput = '';
 			searchInputFocus();
 		};
-
-
 
 		var lastKeyPress = Date.now();
 		$scope.autocomplete = function(e){
@@ -480,7 +423,7 @@
 			$scope.list_out = 'ar-out';
 		};
 		$scope.updateOptions = function(submited){
-			if( $scope.searchCategory == 'viajes' ){
+			if( $scope.searchWhat.name == 'viajes' ){
 				$scope.travelOptions = DataService.travel($scope.searchinput,$scope.searchMode);
 				$scope.travelOptions.then(function(data){
 					$scope.travelOptions = formatOptions(data);
@@ -501,47 +444,38 @@
 		//SUBSCRIPTIONS ::: --------------------------------------------------		
 		$scope.subscribed = 'Suscribirme';
 		$scope.subscribe = function(){
-			$scope.alert = 'Enviando suscripción';
 			if($scope.subscribed != 'listo'){
-				$http.post('/subscriptions',{email:$scope.loggedUser.userData.email})
+				$http.post('/subscriptions',{email:$scope.subscriptor})
 					.then(function(response) {
 							if(response.data.status == 'success'){
 								$scope.subscribed = 'listo';
 							} else{
 								console.log(response);
 							}
-							$scope.alert = '';
 						},
 						function(what){
-							$scope.alert = 'Ouch, ¡no pudimos suscribir!';
+							console.log('Error subscribing',what);
 						});
 			}
 		};
 
-
-
 		//UX TRANSITIONS ::: --------------------------------------------------		
+
+		$scope.currentPanel = 'welcome_panel';
 
 		$scope.welcome_panel_class = 'in';
 		$scope.travel_panel_class  = 'out';
 		$scope.traveller_panel_class  = 'out';
 		$scope.search_panel_class  = 'out';
 		$scope.chart_panel_class = 'out';
-		$scope.compserv_panel_class = 'out';
-		$scope.compviaj_panel_class = 'out';
-		$scope.map_panel_class = 'out';
-		$scope.pkc = false;
 
 		$scope.navigateTo = function(panel,then){
+			$scope.currentPanel = panel;
 			$scope.welcome_panel_class = 'out';
 			$scope.travel_panel_class  = 'out';
 			$scope.search_panel_class  = 'out';
 			$scope.chart_panel_class   = 'out';
 			$scope.traveller_panel_class = 'out';
-			$scope.compserv_panel_class = 'out';
-			$scope.compviaj_panel_class = 'out';
-			$scope.map_panel_class = 'out';
-			$scope.pkc = false;
 
 			switch(panel){
 				case 'welcome_panel': $scope.welcome_panel_class = 'in'; break;
@@ -549,9 +483,6 @@
 				case 'chart_panel': $scope.chart_panel_class = 'in'; break;
 				case 'travel_panel' : $scope.travel_panel_class = 'in'; break;
 				case 'traveller_panel' : $scope.traveller_panel_class = 'in'; break;
-				case 'compserv_panel' : $scope.compserv_panel_class = 'in'; break;
-				case 'compviaj_panel' : $scope.compviaj_panel_class = 'in'; break;
-				case 'map_panel' : $scope.map_panel_class = 'in'; break;
 			}
 			if(typeof then == 'function') then();
 			else if(then == 'backward')   $scope.history.back();
@@ -560,99 +491,31 @@
 		$scope.welcomePanel = function(){
 			$scope.navigateTo('welcome_panel',function(){
 				$scope.history.pushState({ status: 'welcome_panel' },'Viajes Transparentes',$scope.domain);
-				$scope.currentURL = $scope.domain;
 			});
 		};
 
 		$scope.chartPanel = function(){
 			$scope.navigateTo('chart_panel',function(){
-				$scope.history.pushState({ status: 'chart_panel' },'Viajes Transparentes',$scope.domain+'graficas/');
-				$scope.currentURL = $scope.domain+'graficas/';
+				$scope.history.pushState({ status: 'chart_panel' },'Viajes Transparentes',$scope.domain+'graficas/');				
 			});
 		};
 
 		$scope.searchPanel = function(){
 			$scope.navigateTo('search_panel',function(){
 				$scope.history.pushState({ status: 'search_panel' },'Viajes Transparentes',$scope.domain+'buscar/');
-				$scope.currentURL = $scope.domain+'buscar/';
 				searchInputFocus();
 			});
-		};
-
-		$scope.mapPanel = function(){
-			$scope.navigateTo('map_panel',function(){
-				$scope.history.pushState({ status: 'map_panel' },'Viajes Transparentes',$scope.domain+'mapa/');
-				$scope.currentURL = $scope.domain+'mapa/';
-			});
-		};
-
-		$scope.colorsToCompare = [
-			'#47b48d',
-			'#542672',
-			'#ee763b',
-			'#e03646',
-			'#b13469',
-			'#00a661',
-			'#00a5b4',
-			'#0077a7',
-			'#3c3c3c',
-			'#88bd30'
-		];
-
-		$scope.compviaj_panel = function(id){
-			$scope.navigateTo('compviaj_panel',function(){
-
-				// var compare_list_string = $scope.compareList.viajes.join(':');
-				// $scope.history.pushState({ status: 'compviaj_panel' },'Viajes Transparentes',$scope.domain+'comparar_viajes/'+compare_list_string);
-				// $scope.currentURL = $scope.domain+'comparar_viajes/';
-			});			
-		};
-
-		$scope.compserv_panel = function(id){
-			$scope.navigateTo('compserv_panel',function(){
-
-				var bardata = {
-					labels : ['Número de Viajes'],
-					datasets : [],
-				};
-
-				var donutdata = [];
-
-				for (var i = 0; i < $scope.colorsToCompare.length && i < $scope.compareList.servidores.length; i++) {
-					console.log($scope.compareList.servidores[i]._nviajes);
-					donutdata.push({
-						label: $scope.compareList.servidores[i].nombre+' - '+$scope.compareList.servidores[i].spent_so_far_mxn_lt,
-						color : $scope.colorsToCompare[i],
-						value : $scope.compareList.servidores[i].spent_so_far_mxn
-					});
-					bardata.datasets.push( {
-							label : $scope.compareList.servidores[i].nombre,
-							fillColor : $scope.colorsToCompare[i],
-							data : [ $scope.compareList.servidores[i]._nviajes ]
-						});
-					$scope.compareList.servidores[i].color = $scope.colorsToCompare[i];
-				};
-
-				displayBarChart('compserv_bar',bardata);
-				donutChart(donutdata,'compserv_donut');
-				// var compare_list_string = $scope.compareList.servidores.join(':');
-				// $scope.history.pushState({ status: 'compserv_panel' },'Viajes Transparentes',$scope.domain+'comparar_servidores/'+compare_list_string);
-				// $scope.currentURL = $scope.domain+'comparar_servidores/';
-			});			
 		};
 
 		$scope.fullTravels = {};
 		$scope.travelPanel = function(id){
 			//if and only if this shit ins't here yet
 			if( $scope.fullTravels[id] ){
-				getQuestionsForTravel($scope.fullTravels[id]);
 				var travel = $scope.fullTravels[id];
 				$scope.currentTravel = travel;
 				$scope.navigateTo('travel_panel',function(){
 					$scope.history.pushState({ status: 'travel_panel', travelid : travel._id },'Viajes Transparentes',$scope.domain+'viajes/'+travel._id);
-					$scope.currentURL = $scope.domain+'viajes/'+travel._id;
 					displayTravelCosts(travel);
-					$('#travel_panel').scrollTop(0);
 				});
 			} else {
 				cc.log('app::server request:travel');
@@ -660,49 +523,25 @@
 					.error(function(data, status, headers, config){})
 					.success(function(data, status, headers, config) {
 						travel = format(data.data);
-						travel = $scope.similarTrips(data.data);
 						$scope.fullTravels[travel._id] = travel;
-						getQuestionsForTravel($scope.fullTravels[travel._id]);
 						$scope.currentTravel = travel;
 						$scope.navigateTo('travel_panel',function(){
 							$scope.history.pushState({ status: 'travel_panel', travelid : travel._id },'Viajes Transparentes',$scope.domain+'viajes/'+travel._id);
-							$scope.currentURL = $scope.domain+'viajes/'+travel._id;
 							displayTravelCosts(travel);
-							$('#travel_panel').scrollTop(0);
 						});
 					});
 			}
 		};
 
-			$scope.similarTrips = function(travel){
-				var destination;
-				for (var i = travel._destinos.length - 1; i >= 0; i--) {
-					destination = travel._destinos[i];
-				};
-				travel.similar = DataService.similarTrips(destination.ciudad);
-				travel.similar.then(function(data){				
-					var trips = [];
-					for (var i = data.length - 1; i >= 0; i--) {
-						if(data[i]._id != travel._id){
-							trips.push( format(data[i]) );
-						}
-					};
-					travel.similar = trips;
-				});
-				return travel;
-			};
-
 		$scope.fullTravellers = {};
 		$scope.travellerPanel = function(id){
-
 			if( $scope.fullTravellers[id] ){
 				var traveller = $scope.fullTravellers[id];
 				$scope.currentTraveller = traveller;
 				displayTravellerCharts(traveller);
 				$scope.navigateTo('traveller_panel',function(){
 					$scope.history.pushState({ status: 'traveller_panel', travellerid : traveller._id },'Viajes Transparentes',$scope.domain+'servidores/'+traveller._id);
-					$scope.currentURL = $scope.domain+'servidores/'+traveller._id;
-				});
+				});				
 			} else {
 				cc.log('app::server request::traveller');
 				$scope.currentTraveller = DataService.traveller(id);
@@ -715,178 +554,75 @@
 					$scope.navigateTo('traveller_panel',function(){
 						JSON.stringify(traveller);
 						$scope.history.pushState({ status: 'traveller_panel', travellerid : traveller._id },'Viajes Transparentes',$scope.domain+'servidores/'+traveller._id);
-						$scope.currentURL = $scope.domain+'servidores/'+traveller._id;
 					});
 				});
 			}
 		};
 
-
-
 		$scope.switchMode = function(mode){
-			$scope.searchCategory='viajes';
-			$scope.searchMode=mode;
-			$scope.searchinput='';
-			$scope.suggestions=[];
-			$scope.travelOptions = [];
-			document.getElementById('search-input').focus();
+			if(mode=='inicio')
+				alert('Próximamente');
+			else{
+	 			$scope.searchMode=mode;
+	 			$scope.searchinput='';
+	 			$scope.suggestions=[];
+	 			$scope.travelOptions = [];
+	 			document.getElementById('search-input').focus();
+			}
 		};
 
-
-		/**
-		* What a compare list needs?
-		* - Fast insertion
-		* - Fast sorting
-		* Remove time doesn't matter much
-		*/
+		$scope.search_list_type = 'list';
 		$scope.compareList = {
 			size : 0,
 			list : {},
-			servidores : [],			
-			viajes : [],
 			add : function(item){
 				if(! this.list[item._id] ){
-					if(item._origen){
-						this.viajes.push(item);
-						this.list[item._id] = 'viaje';
-					} else	{
-						this.servidores.push(item);
-						this.list[item._id] = 'servidor';
-					}
+					this.list[item._id] = item;
 					this.size++;
 				}
+				console.log(this.list);
 			},
 			remove : function(id){
 				if( this.list[id] ){
-					var items = (this.list[id] == 'viaje')? this.viajes: this.servidores;
-					var ind = null;
-					for (var i = items.length - 1; i >= 0; i--) {
-						if(items[i]._id == id)
-							ind = i;
-					}
-					if(ind != null)
-						items.splice(ind,1);					
-					this.list[id] = false;
-					this.size--;
+					this.list[id] = null;
+					this.size--;	
 				}
 			},
 			clear : function(){
 				this.list = {};
-				this.servidores = [];
-				this.viajes = [];
 			}
 		};
-		$scope.compare = function(){
-			alert('mmmm');
-		};
-
-		//MISC ::: ----------------------------------------------------------
 
 		$scope.pdf = function(id){
-			var doc = new jsPDF();
-			var source = window.document.getElementById(id);
-			var eh = {
-				'#ignorePDF1' : function(e,r){return true},
-				'#ignorePDF2' : function(e,r){return true},
-				'#ignorePDF3' : function(e,r){return true}
-			};
-			doc.fromHTML( source,	15,	15,	{'width': 180, 'elementHandlers': eh} );
-			doc.output("dataurlnewwindow");
+			alert('Próximamente');
 		};
 
 		$scope.email = function(id){
 			alert('Próximamente');
 		};
 		
-		$scope.tte_expanded = '';
-		$scope.expandOrContract = function(){
-			$scope.tte_expanded=($scope.tte_expanded=='expanded')? '':'expanded';
-		};
 
-
-		$scope.followModal = 'out';
-		$scope.subscribeTo = null;//traveller id
-		$scope.followTravellerAttempt = function(travellerid){
-			//verificar si tenemos ya su correo
-			if($scope.loggedUser.userData.email){
-				followTraveller();
-			} else {
-				$scope.followModal = 'in';
-			}
-			$scope.subscribeTo = travellerid;
-		};
-		$scope.followTraveller = function(){
-			if($scope.subscribeTo){
-				$scope.alert = 'Enviando suscripción';
-				$scope.followModal = 'out';
-				$http.post('/subscriptions',{email : $scope.loggedUser.userData.email, servidor : $scope.subscribeTo })
-					.then(function(res){
-						if(res.data.status=='success'){
-							$scope.loggedUser.follows[$scope.subscribeTo] = true;
-							$scope.alert = 'Suscripción enviada con éxito';
-						} else {
-							$scope.alert = 'Ouch, hubo un problema al suscribirse';
-						}
-						setTimeout(function(){
-							$scope.$apply(function(){
-								$scope.alert = '';
-							});
-						},1500);
-					});
-
-			} else {
-				$scope.alert = 'Ese servidor no existe';
-				$scope.followModal = 'out';
-			}
-		};
 	
 		//UTILITIES ::: --------------------------------------------------
 
 		function getQuestionsForEveryTravelFrom(traveller){
 			for (var i = traveller._viajes.length - 1; i >= 0; i--) {
-				
-				DataService.questions(traveller._viajes[i]._id)
-					.then(function(data){
-						if(data.length){
-
-							for (var j = data.length - 1; j >= 0; j--) {
-								var cd = new Date(data[j].created);
-								data[j].on = '' + cd.getDate() +' '+ months[cd.getMonth()] +' '+ cd.getFullYear();
-							};
-
-							//look for who the owner is
-							for (var k = traveller._viajes.length - 1; k >= 0; k--) {
-								if( traveller._viajes[k]._id == data[0]._viaje ){
-									traveller._viajes[k].questions = data;
-								}
-							};
-
-						}
-
-					});
-
-			};
-		}
-
-		function getQuestionsForTravel(travel){
-			DataService.questions(travel._id)
-				.then(function(data){
+				var ctravel = traveller._viajes[i];
+				ctravel.questions = DataService.questions(ctravel._id);
+				ctravel.questions.then(function(data){
 					for (var j = data.length - 1; j >= 0; j--) {
 						var cd = new Date(data[j].created);
-						data[j].on = '' + cd.getDate() +' '+ months[cd.getMonth()] +' '+ cd.getFullYear();
+						data[j].on = '' + cd.getDay() + months[cd.getMonth()] + cd.getFullYear();
 					};
-					travel.questions = data;
+					ctravel.questions = data;
 				});
+			};
 		}
-
 
 		function formatTravellerOptions(opts){
 			for (var i = opts.length - 1; i >= 0; i--) {
 				opts[i].nombre = opts[i].nombre.toLowerCase();
 				opts[i].puesto = opts[i].puesto.toLowerCase();
-				
-				opts[i].spent_so_far_mxn_lt = _.str.numberFormat( opts[i].spent_so_far_mxn, 2 );
-				opts[i]._nviajes = opts[i].nviajes;
 				opts[i].nviajes = (opts[i]._viajes.length==1)? '1 viaje' : opts[i]._viajes.length + ' viajes' ;
 			};
 			return opts;
@@ -897,6 +633,9 @@
 			for (var i = traveller._viajes.length - 1; i >= 0; i--) {
 				traveller._viajes[i] = format( traveller._viajes[i] );
 				traveller._viajes[i].destino = '';
+
+				console.log("Viaje:");
+				console.log(traveller._viajes[i]);
 
 				var comma = ',';
 				for (var j = traveller._viajes[i]._destinos.length - 1; j >= 0; j--) {
@@ -914,7 +653,7 @@
 			for (var i = opts.length - 1; i >= 0; i--) {
 				var date = new Date(opts[i].comision.inicio);
 				opts[i].inicio = {
-					dia : date.getDate(),
+					dia : date.getDay(),
 					mes : months[date.getMonth()],
 					anio : date.getFullYear()
 				};
@@ -976,15 +715,11 @@
 			travel.comision.inicio = new Date(travel.comision.inicio);
 			travel.comision.fin = new Date(travel.comision.fin);
 
-			travel.inicio = { dia: travel.comision.inicio.getDate(), mes : months[travel.comision.inicio.getMonth()], anio : travel.comision.inicio.getFullYear() };
-			travel.fin = { dia: travel.comision.fin.getDate(), mes : months[travel.comision.fin.getMonth()], anio : travel.comision.fin.getFullYear() };
+			travel.inicio = { dia: travel.comision.inicio.getDay(), mes : months[travel.comision.inicio.getMonth()], anio : travel.comision.inicio.getFullYear() };
+			travel.fin = { dia: travel.comision.fin.getDay(), mes : months[travel.comision.fin.getMonth()], anio : travel.comision.fin.getFullYear() };
 
-			if(travel.motivo){
-				var m = travel.motivo.charAt(0).toUpperCase();
-				travel.motivo = m + travel.motivo.toLowerCase().substr(1);
-			} else {
-				travel.motivo = '';
-			}
+			var m = travel.motivo.charAt(0).toUpperCase();
+			travel.motivo = m + travel.motivo.toLowerCase().substr(1);
 
 			 return travel;
 		}
@@ -1004,36 +739,43 @@
 			return new Chart(context).Line(data,{scaleShowGridLines:false});
 		}		
 
-		function displayBarChart(dom_id,data){
-			var context = document.getElementById(dom_id).getContext("2d");
-			return new Chart(context).Bar(data,{scaleShowGridLines:false});
-		}	
-
 		function displayTravellerCharts(traveller){
+			var tripsLastYear = [0,0,0,0,0,0,0,0,0,0,0,0];
+			var trips = traveller._viajes;
 
-			var years = {
-				names : ['2010','2011','2012','2013','2014'],
-				trips : [0,0,0,0,0]
+			//how many trips this guy had
+			//var nmonthsFromLastYear = 12 - cMonth;
+			for (var i = 0; i < 12; i++) {
+				for (var j = 0; j < trips.length; j++) {
+
+					// if(nmonthsFromLastYear > 0){
+						if(  (new Date(trips[j].comision.inicio)).getMonth ==  numberMonths[i] )
+							tripsLastYear[i]++;
+					// } else{
+					// 	if(  (new Date(trips[j].comision.inicio)).getMonth ==  numberMonths[i] )
+					// 	tripsLastYear.push()
+					// }
+				}
+				//nmonthsFromLastYear--;
 			}
 
-			for (var i = 0; i < 7; i++) {
-				for (var j = traveller._viajes.length - 1; j >= 0; j--) {
-					if( (new Date(traveller._viajes[j].comision.inicio)).getFullYear() == years.names[i] )
-						years.trips[i]++;
-				};
-			};
+			console.log('months_upto_now');
+			console.log(months_upto_now);
+
+			console.log('tripsLastYear');
+			console.log(tripsLastYear);
 
 			var data = {
-				labels : years.names,
+				labels : months_upto_now,
 				datasets : [
 					{
-						fillColor: "rgba(58, 164, 178,0.2)",
-						strokeColor: "rgba(58, 164, 178,1)",
+						// fillColor: "rgba(220,220,220,0.2)",
+						// strokeColor: "rgba(220,220,220,1)",
 						// pointColor: "rgba(220,220,220,1)",
 						// pointStrokeColor: "#fff",
 						// pointHighlightFill: "#fff",
 						// pointHighlightStroke: "rgba(220,220,220,1)",
-						data: years.trips
+						data: tripsLastYear
 					}
 				]
 			};
@@ -1041,26 +783,8 @@
 			//timeline
 			displayChart('travellerTimeline',data);
 
-			var bardata = {
-				labels: ['Propios','Promedio'],
-				datasets : [{
-					// fillColor: "rgba(152, 188, 65,0.5)",
-					// strokeColor: "rgba(152, 188, 65,1)",
-					fillColor: "rgba(101, 55, 125,0.5)",
-					strokeColor: "rgba(101, 55, 125,1)",
-					// pointColor: "rgba(220,220,220,1)",
-					// pointStrokeColor: "#fff",
-					// pointHighlightFill: "#fff",
-					// pointHighlightStroke: "rgba(220,220,220,1)",
-					data: [
-						traveller._viajes.length,
-						META.averageTrips
-					]
-				}]
-			};
-
 			//sus gastos vs promedio
-			displayBarChart('tripsAverage',bardata);
+
 		}
 
 
@@ -1128,9 +852,11 @@
 				datasets: [
 					{
 						label: "Gastos totales VS Gastos comprobados",
-						fillColor: "#993767",
-						highlightFill: "#a34874",
-						data: [tdata._totalCost, tdata.gastos.comprobado]
+						fillColor: "rgba(151,187,205,0.5)",
+						strokeColor: "rgba(151,187,205,0.8)",
+						highlightFill: "rgba(151,187,205,0.75)",
+						highlightStroke: "rgba(151,187,205,1)",
+						data: [79, 25]
 					}
 				]
 			};
@@ -1140,14 +866,6 @@
 			var bchart = new Chart(context).Bar(bdata,{scaleShowGridLines :false,responsive: true});
 			var context = document.getElementById('travelCostsChart').getContext("2d");
 			var chart = new Chart(context).Doughnut(ddata,globaldoughnutconf);
-		}
-
-		function donutChart(data,id){
-			var canv = document.getElementById(id);
-			if(canv){
-				var context = canv.getContext('2d');
-				var chart = new Chart(context).Doughnut(data,globaldoughnutconf);
-			}
 		}
 
 		function searchInputFocus(){
@@ -1160,119 +878,29 @@
 		}
 
 
+
+
 		//HISTORY HANDLING ::: -----------------------------------------------
 
 		$scope.history = history || window.history;
 		window.onpopstate = function(event){
-			if(event.state){
-				switch(event.state.status){
-					case 'travel_panel':
-						if(event.state.travelid && $scope.fullTravels[ event.state.travelid ]){
-							$scope.$apply(function(){
-								$scope.currentTravel = $scope.fullTravels[ event.state.travelid ];
-							});
-						} else {
-							//request everything
+			$scope.$apply(function(){
 
-						}
-					break;
-					case  'traveller_panel':
-						if(event.state.travellerid && $scope.fullTravellers[ event.state.travellerid ]){
-							$scope.$apply(function(){
-								$scope.currentTraveller = $scope.fullTravellers[ event.state.travellerid ];
-							});
-						} else {
-							//request everything
-
-						}							
-					break;
-					/*
-					*	TODO: move all of these get calls to a proper data service
-					*/					
-					case 'compviaj_panel':
-						if(event.state.compare_list_string){
-
-							if($scope.compareList.viajes.join(':') != event.state.compare_list_string){
-								//request everything
-								var viajes = event.state.compare_list_string.split(':');
-								
-								if(viajes.length > 10){
-									alert('Demasiados viajes seleccionados!');
-									return null;
-								}
-
-								fc.taskList(
-									viajes,
-									function(viaje,next){
-										$http.get("/travel/"+viaje)
-											.error(function(data, status, headers, config){
-												next('err',null);
-											})
-											.success(function(data, status, headers, config) {
-												next(null,format(data.data));
-											});
-									},
-									function(err,everything){
-										$scope.$apply(function(){
-											for (var i = everything.length - 1; i >= 0; i--) {
-												$scope.compareList.add( format(everything[i]) );
-											};
-										});
-									});
-							}
-							//if not, simply navigate to it								
-						}
-					break;
-					case 'compserv_panel':
-						//request everything
-						if(event.state.compare_list_string){
-
-							if($scope.compareList.servidores.join(':') != event.state.compare_list_string){
-								//request everything
-								var servidores = event.state.compare_list_string.split(':');
-								
-								if(servidores.length > 10){
-									alert('Demasiados servidores seleccionados!');
-									return null;
-								}
-
-								fc.taskList(
-									servidores,
-									function(servidor_id,next){
-										$http.get("/travellers/"+servidor_id)
-											.error(function(data, status, headers, config){
-												next('err',null);
-											})
-											.success(function(data, status, headers, config) {
-												next(null,format(data.data));
-											});
-									},
-									function(err,everything){
-										$scope.$apply(function(){
-											for (var i = everything.length - 1; i >= 0; i--) {
-												$scope.compareList.add( everything[i] );
-											};
-										});
-									});
-							}
-							//if not, simply navigate to it								
-						}
-					break;
-				}					
-
+				if(event.state.travelid)
+					$scope.currentTravel = $scope.fullTravels[ event.state.travelid ];
+				if(event.state.travellerid)
+					$scope.currentTraveller = $scope.fullTravellers[ event.state.travellerid ];
 				// $scope.currentTravel = event.state.travelData;
 				// $scope.currentTraveller = event.state.travellerData;
-				$scope.$apply(function(){
-					$scope.navigateTo(event.state.status);
-				});
-			}
+				$scope.navigateTo(event.state.status);
+			});
 		};
 
 		//is something preloaded?
 		switch(section){
 			case 'chart_panel' :
 				$scope.history.replaceState({status:'chart_panel'},null,document.URL);
-				$scope.navigateTo('chart_panel');
+				$scope.navigateTo('chart_panel');				
 			break;			
 			case 'welcome_panel' :
 				$scope.history.replaceState({status:'welcome_panel'},null,document.URL);
@@ -1295,11 +923,9 @@
 			case 'travel_panel' :
 				if(initialData){
 					initialData = format(initialData);
-					initialData = $scope.similarTrips(initialData);
 					$scope.fullTravels[initialData._id] = initialData;
 					$scope.history.pushState({ status: 'welcome_panel'},'Viajes Transparentes',$scope.domain);
 					$scope.history.pushState({ status: 'travel_panel', travelid : initialData._id },'Viajes Transparentes',$scope.domain+'viajes/'+initialData._id);
-					getQuestionsForTravel($scope.fullTravels[initialData._id]);
 					$scope.currentTravel = $scope.fullTravels[initialData._id];
 					$scope.navigateTo('travel_panel');
 					displayTravelCosts(initialData);
@@ -1308,110 +934,14 @@
 				else
 					document.location = '/';
 			break;
-			case 'compviaj_panel' :
-				if(COMPARE_LIST){
-					for (var i = COMPARE_LIST.items.length - 1; i >= 0; i--) {
-						$scope.compareList.add(COMPARE_LIST.items[i]);
-					};
-					$scope.history.pushState({ status: 'welcome_panel'},'Viajes Transparentes',$scope.domain);
-					$scope.history.pushState({ status: 'compviaj_panel', compare_list_string : COMPARE_LIST.compare_list_string },'Viajes Transparentes',$scope.domain+'comparar_viajes/'+COMPARE_LIST.compare_list_string);
-					$scope.navigateTo('compviaj_panel');
-				} 
-				else
-					document.location = '/';
-			break;
-			case 'compserv_panel' :
-				if(COMPARE_LIST){
-					for (var i = COMPARE_LIST.items.length - 1; i >= 0; i--) {
-						$scope.compareList.add(COMPARE_LIST.items[i]);
-					};
-					$scope.history.pushState({ status: 'welcome_panel'},'Viajes Transparentes',$scope.domain);
-					$scope.history.pushState({ status: 'compserv_panel', compare_list_string : COMPARE_LIST.compare_list_string },'Viajes Transparentes',$scope.domain+'comparar_servidores/'+COMPARE_LIST.compare_list_string);
-					$scope.navigateTo('compserv_panel');
-				} 
-				else
-					document.location = '/';
-			break;			
 			case 'search_panel' :
-				//modify this to new search in home!!!!
 				$scope.history.pushState({ status: 'welcome_panel' },'Viajes Transparentes',$scope.domain);
 				$scope.history.pushState({ status: 'search_panel' },'Viajes Transparentes',$scope.domain+'buscar/');
 				$scope.navigateTo('search_panel');
 			break;
 		}
+
+
 	});
-
-
-	//Map settings ----------------------------------------------------------------	
-	app.controller("MapController", ['$scope', '$http', function($scope, $http) {
-
-		Markers = {};
-
-		//Service para alimentar los markers
-		serviceUrl = "//localhost/states";
-
-		$http.get(serviceUrl)
-		.then(
-			function(resp){
-				resp.data.data.forEach(
-					function(listElement){
-						Markers[listElement._id] = {
-							lat: listElement.lat,
-							lng: listElement.lon,
-							//message recibe un string que permite HTML para darle estilo al popup
-							message: "Se han realizado " + listElement.nvisitas + "viajes a " + listElement.ciudad + " con un total de $" + listElement.totalSpent,
-							focus: false,
-							draggable: false,
-							/*Cuando tengan el marker lo ajustan con los siguientes parametros:
-							icon: {
-								iconUrl: 'leaf-green.png',
-							    shadowUrl: 'leaf-shadow.png',
-							    iconSize:     [38, 95], // size of the icon
-							    shadowSize:   [50, 64], // size of the shadow
-							    iconAnchor:   [22, 94], // point of the icon which will correspond to marker's location
-							    shadowAnchor: [4, 62],  // the same for the shadow
-							    popupAnchor:  [-3, -76] // point from which the popup should open relative to the iconAnchor
-							}*/
-						}
-					}
-				)
-			}, 
-			function(err) {
-				alert("Error: ", err);
-		});
-
-	    angular.extend($scope, {
-	    	//Si quieren cambiar los tiles, busquen los url aqui:
-	    	//http://leaflet-extras.github.io/leaflet-providers/preview/
-	    	layers: {
-	    		baselayers: {
-	    			watercolor: {
-	    				name: "Watercolor",
-	    				url: "http://{s}.tile.stamen.com/watercolor/{z}/{x}/{y}.png",
-			    		type: 'xyz'
-	    			}
-	    		},
-	    		overlays: {
-	    			toner: {
-	    				name: "Toner",
-	    				url: "http://{s}.tile.stamen.com/toner-lines/{z}/{x}/{y}.png",
-	    				type: 'xyz',
-	    				visible: 'true'
-	    			}
-	    		}
-	    	},
-
-	    	markers: Markers,
-
-	    	center: {
-	    		lat: 23.644524198573688,
-	    		lng: -101.97509765625,
-	    		zoom: 6
-	    	},
-	        defaults: {
-	            scrollWheelZoom: false
-	        }
-	    });
-	}]);
 	
 })(console);

@@ -1,3 +1,7 @@
 div(styles="width:100%; font-family:'Trebuchet MS','Arial',sans-serif;")
-	h2 Gracias por suscribirte a Viajes Transparentes
-	p(styles="max-width:300px;") A partir de este momento recibirás notificaciones cuando tengamos nueva información sobre viajes de funcionarios públicos
+	h2 Gracias por suscribirte a 
+		span(style="color:#1abc9c;") Viajes Transparentes
+	if subscribed_to
+		p(styles="max-width:300px;text-align:justify;margin:10px;padding:10px;background-color:#e9e9e9;") A partir de este momento recibirás notificaciones cuando se reporten nuevos viajes de #{subscribed_to.nombre}
+	else
+		p(styles="max-width:300px;") A partir de este momento recibirás notificaciones cuando tengamos nueva información sobre viajes de funcionarios públicos

@@ -6,8 +6,9 @@
 */
 
 var mongoose = require('mongoose');
-var db_server = 'mongodb://localhost:27017/viajes';
-var db_remote_server = 'YOUR_MONGO_REMOTE_ADDRESS';
+var db_local_server = 'mongodb://localhost:27017/viajes';
+
+var db_remote_server = 'mongodb://USERNAME:PASSWORD@MONGO_SERVER:MONGO_PORT/DATABASE_NAME';
 
 mongoose.connection.on(
 	'open', 

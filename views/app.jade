@@ -2,245 +2,212 @@ doctype html
 html(ng-app='viajes')
 head
 	title= 'Viajes Transparentes'
+	link(rel="shortcut icon", href="/favicon.ico", type="image/x-icon")
+	link(rel="apple-touch-icon", href="/apple-touch-icon.png")
+	link(rel="apple-touch-icon", sizes="57x57", href="/apple-touch-icon-57x57.png")
+	link(rel="apple-touch-icon", sizes="72x72", href="/apple-touch-icon-72x72.png")
+	link(rel="apple-touch-icon", sizes="76x76", href="/apple-touch-icon-76x76.png")
+	link(rel="apple-touch-icon", sizes="114x114", href="/apple-touch-icon-114x114.png")
+	link(rel="apple-touch-icon", sizes="120x120", href="/apple-touch-icon-120x120.png")
+	link(rel="apple-touch-icon", sizes="144x144", href="/apple-touch-icon-144x144.png")
+	link(rel="apple-touch-icon", sizes="152x152", href="/apple-touch-icon-152x152.png")
 	link(rel='stylesheet', href='/css/bootstrap.min.css')
 	link(rel='stylesheet', href='/css/flat-ui.min.css')
 	link(rel='stylesheet', href='/css/style.css')
+	link(rel='stylesheet', href='/css/map.css')
+	link(rel="stylesheet", href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css")
 	meta(name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0")
+
 body(ng-controller="NavigationController as nav")
-	#map
+	//-FB shit
+	script.
+		window.fbAsyncInit = function() {
+			FB.init({
+				appId      : '602116963234110',
+				cookie     : true,  
+				xfbml      : true, 
+				version    : 'v2.1'
+			});
+
+			FB.getLoginStatus(function(response) {
+				if (response.status === 'connected') FBSTATUS = 'connected';
+				else if (response.status === 'not_authorized') FBSTATUS = 'not_authorized';
+			});
+		};
+		FBSTATUS = 'unknown';
+		(function(d, s, id){
+			var js, fjs = d.getElementsByTagName(s)[0];
+			if (d.getElementById(id)) {return;}
+			js = d.createElement(s); js.id = id;
+			js.src = "//connect.facebook.net/en_US/sdk.js";
+			fjs.parentNode.insertBefore(js, fjs);
+		}(document, 'script', 'facebook-jssdk'));
+	#fb-root
+
+
+	//- App panel
 	#panel
-		#search_panel(class="ar-panel {{search_panel_class}}")
-			h3 Buscar viajes
+		
+		include ./app_views/welcome_panel.jade
 
-			.ar-btn-wrapper
-				.btn-group.ar-search-nav
-					button.btn.btn-primary(ng-click="switchMode('destinos')" ng-class="{active:searchMode=='destinos'}") <span class="fui-location"></span></a> Destino
-					button.btn.btn-primary(ng-click="switchMode('servidores');" ng-class="{active:searchMode=='servidores'}") <span class="fui-user"></span></a> Persona
-					button.btn.btn-primary.disabled( title="próximamente" ng-click="switchMode('inicio');" ng-class="{active:searchMode=='inicio'}") <span class="fui-calendar"></span></a> Fecha
-					button.btn.btn-primary(ng-click="switchMode('eventos');" ng-class="{active:searchMode=='eventos'}") <span class="fui-bookmark"></span></a> Evento
-	
-			.ar-search-bar
-				form(ng-submit="updateOptions('yes')")
-					input#search-input.ar-search(type="text" placeholder="Buscar" required autofocus ng-model="searchinput" ng-keyup="autocomplete($event)" ng-keydown="moveUpOrDown($event)" ng-blur="list_out='ar-out'" ng-focus="list_out='ar-in'")
-					//- button.btn.btn-primary.ar-effective-search-button(ng-click="updateOptions()") Buscar
-				#here
-				ul(class="ar-autocomplete-list {{list_out}}")
-					li.ar-suggestion( ng-repeat="sug in suggestions" ng-class="{active:activeSuggestion==sug.id}" ng-mouseover="setSuggestion(sug.id)") {{sug.title}}
-	
-			ul.ar-options-list
-				li(ng-repeat="option in options" ng-click="view(option._id)")
-					div.ar-option-upper
-						div.ar-money {{option.totalCost}} <span>{{option.gastos.moneda}}</span>
-						div.ar-transport(class="{{option.transportClass}}") {{option.pasaje.linea_origen}}
-					div.ar-option-middler
-						div(class="ar-person-photo {{option._servidor.tipo_rep.charAt(0).toLowerCase()}}")
-						//- a.ar-name(href="{{document.URL+'servidor/'+option._servidor._id}}") {{option._servidor.nombre.toLowerCase()}}
-						a.ar-name {{option._servidor.nombre.toLowerCase()}}
-						.ar-date {{option.inicio.dia}} de {{option.inicio.mes}}, {{option.inicio.anio}}
-						.ar-clear
-					div.ar-option-bottom
-						.ar-from-to
-							.ar-from {{option.origen}} 
-							| .....
-							.ar-to {{option.destinos}}
-						.ar-long-text-line {{option.evento.nombre}}
-					div(class="ar-view")
-			
-			.backbtn(ng-click="navigateTo('welcome_panel','backward')" ng-mouseover="" ng-mouseleave="")
+		include ./app_views/navigation_panel.jade
 
-			.ar-clear
-			.ar-sponsors
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-imco(href="http://imco.org.mx/" target="_blank") 
-			
-		#travel_panel.ar-panel(class="ar-panel {{travel_panel_class}}" ng-cloak)
-			.ar-wrapper.w7
-				.ar-top-info
-					.ar-travel-transport
-						div(class="ar-travel-type {{currentTravel.transportClass}}")
-						.ar-travel-title Viaje {{currentTravel.tipo_viaje}} {{currentTravel.pasaje.tipo}}
-					.ar-text-right
-						div(class="ar-travel-cost") {{currentTravel.totalCost}}
-						div(class="ar-currency") {{currentTravel.gastos.moneda}}
-				div.ar-from-to {{currentTravel.origen}} <span></span> {{currentTravel.destinos}}
-				div.ar-date {{currentTravel.inicio.dia}}° <span>de</span> {{currentTravel.inicio.mes}} <span class="ar-frmto"></span> {{currentTravel.fin.dia}}° <span>de</span> {{currentTravel.fin.mes}}, {{currentTravel.inicio.anio}} <span>({{currentTravel.dias}})</span>
-				div.ar-gdetails
-					div(class="ar-hotel") {{currentTravel.hotel.nombre}}
-					div(class="ar-airline") {{currentTravel.pasaje.linea_origen}}
+		include ./app_views/traveller_panel.jade
+		
+		include ./app_views/travel_panel.jade
 
-				div.ar-person
-					div(class="ar-person-photo {{currentTravel._servidor.tipo_rep.charAt(0).toLowerCase()}}")
-					//- a(href="{{document.URL+'servidor/'+currentTravel._servidor._id}}").ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
-					a.ar-name {{currentTravel._servidor.nombre.toLowerCase()}}
-					span {{currentTravel._servidor.puesto.toLowerCase()}} - {{institutions[currentTravel._servidor._institucion].nombre}}
+		//-AYUDA DE HUGO! COLOCARLO EN LUGAR APROPIADO!
+		//- #map_panel(class="ar-panel {{map_panel_class}}")
+			.ar-tp-bger-shrinker
+				.ar-wrapper.w7
+					.ar-the-hint Comparación de <b>viajes</b>
+					div(ng-controller="MapController as map")
+						leaflet.leaflet-map(center="center", layers="layers", defaults="defaults", markers="markers")
 				
-				div.ar-stuff
-					h6 Motivo
-					p {{currentTravel.motivo}}
-					h6 Resultado
-					p.ar-pbigger {{currentTravel.resultado}}
-					br
-					h6 Evento
-					p {{currentTravel.evento.nombre}}
+		include ./app_views/search_panel.jade
 
-				.ar-clear
-				div.ar-stuff-maybe-someone-will-ever-read
-					h7 Instituciones que patrocinan el viaje
-					.ar-clear
-					.ar-institution
-						h6 {{currentTravel._institucion_hospedaje.nombre}}
-						p {{currentTravel._institucion_hospedaje.descripcion}}
-							br
-							a(href="http://{{currentTravel._institucion_hospedaje.sitio}}") {{currentTravel._institucion_hospedaje.sitio}}
-					.ar-institution(ng-show="currentTravel._institucion_hospedaje.nombre != currentTravel._institucion_pasaje.nombre")
-						h6 {{currentTravel._institucion_pasaje.nombre}}
-						p {{currentTravel._institucion_pasaje.descripcion}}
-							br
-							a(href="http://{{currentTravel._institucion_pasaje.sitio}}") {{currentTravel._institucion_pasaje.sitio}}
+		#compviaj_panel.compare_panel.ar-panel(class="ar-panel {{compviaj_panel_class}}" ng-cloak)
+			.ar-tp-bger-shrinker
+				.ar-wrapper.w7
+					.ar-the-hint Comparación de <b>viajes</b>
+					.backbtn(ng-click="compviaj_panel_class='out'")
+					section.ar-vwrap
+						h1 comparación de viajes próximamente!
 
-				.ar-clear
+		#compserv_panel.compare_panel.ar-panel(class="ar-panel {{compserv_panel_class}}" ng-cloak)
+			.ar-tp-bger-shrinker
+				.ar-wrapper.w7
+					.ar-the-hint Comparación de <b>servidores públicos</b>
+					.backbtn(ng-click="compserv_panel_class='out'")
+					section.ar-vwrap.ar-theimportant-title
+						h5 Comparar Servidores
 
-				#pdf.ar-actions.col-sm-3.col-xs-6(ng-click="pdf()")
-					.ar-borderer 
-						span Descargar en formato PDF
-				a#twitter.ar-actions.col-sm-3.col-xs-6(target="_blank" href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
-					.ar-borderer 
-						span Compartir en Twitter
-				a#facebook.ar-actions.col-sm-3.col-xs-6(target="_blank" href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}") 
-					.ar-borderer 
-						span Mostrar en Facebook
-				#email.ar-actions.col-sm-3.col-xs-6(ng-click="email()")
-					.ar-borderer 
-						span Evíenme esto por correo
+					section.ar-vwrap
+						.col-xs-12.col-sm-6
+							.ar-90r
+								canvas#compserv_bar
+						.col-xs-12.col-sm-6
+							.ar-90r
+								canvas#compserv_donut
+								p.ar-center Presupuesto total
+					section.ar-vwrap
+						table
+							thead
+								tr 
+									th(style="width:10px;")
+									th Servidor público
+									th Puesto
+									th Viajes
+									th Presupuesto total
+							tbody
+								tr(ng-repeat="s in compareList.servidores")
+									td.ar-color-tag(style="background-color:{{s.color}};")
+									td.ar-cap {{s.nombre.toLowerCase()}}
+									td.ar-cap.ar-max {{s.puesto.toLowerCase()}}
+									td {{s.nviajes}}
+									td.ar-imp $ {{s.spent_so_far_mxn_lt}}
+						//- .ar-resptable
+							.ar-row(ng-repeat="s in compareList.servidores")
+								.ar-col 
+									.ar-person-photo
+								.ar-col
+									p {{s.nombre}}
+								.ar-col
+									p {{s.puesto}}
+								.ar-col
+									p {{s.nviajes}}
+								.ar-col
+									p $ {{s.spent_so_far_mxn_lt}}
+		
+		//- kind of modal
+		#peekCompare(ng-class="{in:pkc}").ar-compare-peek
+			.ar-close-nonstd(ng-click="pkc=false")
+			h6.ar-center Elementos para comparar
+			.col-xs-12.col-sm-6.ar-center
+				div Servidores públicos 
+					span ({{compareList.servidores.length}})
+				.ar-pre-complist-cont
+					.ar-row(ng-repeat="s in compareList.servidores")
+						{{s.nombre}}
+				button.btn.btn-primary(ng-click="compserv_panel()") Comparar
+			.col-xs-12.col-sm-6.ar-center.ar-peek-divider
+				div Viajes
+					span(ng-show="compareList.viajes.length") ({{compareList.viajes.length}})
+				.ar-pre-complist-cont
+					.ar-row(ng-repeat="s in compareList.viajes").ar-ellipsable
+						{{s.evento.nombre}}
+				button.btn.btn-primary(ng-click="compviaj_panel()") Comparar
 
-				.ar-spacer
-			.backbtn(ng-click="navigateTo('welcome_panel','backward')")
-			
-		#chart_panel(class="ar-panel {{chart_panel_class}}")
-			.ar-wrapper
-				h3 Viajes por mes
-				p  Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nihil, minus.	
-			.ar-graph
-				canvas(id="yearlongchart" width="1000" height="400")
-			.ar-hashtag 
-				a(href="http://twitter.com/share?url=&text=La%20nueva%20app%20para%20visualizar%20viajes%20de%20funcionarios%20publicos%20Viajes%20Transparentes%20&hashtags=IFAI,ViajesTransparentes,transparencia") #ViajesTransparentes
-				.ar-wrapper
-					p Próximamente más gráficas
-			.backbtn(ng-click="navigateTo('welcome_panel','backward')")
+		//- Follow modal
+		div(class="ar-modal-window {{followModal}}")
+			.ar-modal-bg
+			.ar-modal-body
+				.ar-modal-closebtn(ng-click="followModal='out'")
+				h6 Suscribirse
+				p.ar-subtile Recibirás un correo electrónico cada vez que se reporte un nuevo viaje de este servidor público 
+				form.ar-subcription.login-form.form.ar-form(ng-submit="followTraveller()")
+					.form-group
+						input(class="form-control" type="email" ng-model="loggedUser.userData.email" placeholder="Correo electrónico")
+						label.login-field-icon.fui-mail
+						button(ng-click="followTraveller()" type="button" class="btn btn-block btn-lg btn-primary") Seguir a este servidor
 
-		#welcome_panel(class="ar-panel {{welcome_panel_class}}")
-			.ar-wrapper2
-				h4 Te damos la bienvenida a
-				.ar-logo
-				h1.ar-lg-ti Viajes Transparentes
-				p El Instituto Federal de Acceso a la Información (IFAI) pone a tu disposición toda la información sobre viajes de funcionarios públicos, nacionales e internacionales, desde costos hasta resultados, por favor explora los datos y comparte la información que deses
+		//- Login modal
+		div(class="ar-modal-window {{loginModal}}")
+			.ar-modal-bg
+			.ar-modal-body
+				.ar-modal-closebtn(ng-click="loginModalCallback('canceled');loginModal='out'")
+				p.ar-subtile Para hacer una pregunta debes 
+				h6 Inicar sesión
+				.ar-loginbtn.ar-fblogin(ng-click="loginModalCallback('facebook')") Facebook
+				.ar-loginbtn.ar-gologin(title="Próximamente") Google (próximamente)
+				.ar-ldiv 
+				p.ar-subtile 
+					a Iniciar sesión con correo electrónico
+				p.ar-subtile 
+					a Registrarse correo electrónico
 
-				.ar-badges
-					.col-sm-4
-						#g-anual.ar-badge(ng-click="chartPanel()")
-							.svg
-							p Viajes durante el año
-					.col-sm-4
-						#g-comparar.ar-badge
-							.svg
-							p Comparar viajes
-					.col-sm-4
-						#g-mapa.ar-badge
-							.svg
-							p Estados y países más frecuentados
+		//-alert guy
+		.app-alert(ng-class="{in:alert!=''}") {{alert}}
 
-			p.ar-center o bien
+		//-loader guy
+		#apploader(ng-show="false")
 
-			.ar-welcome-options
-				button(ng-click="searchPanel()" type="button" class="ar-search btn btn-block btn-lg btn-primary") Buscar 
-					span(class="glyphicon glyphicon-search")
-
-			.ar-wrapper
-				p Últimos datos publicados
-				ul.ar-travels
-					each travel in data
-						li(id="#{travel._id}" ng-click="view('#{travel._id}')")
-							div(class="ar-view")
-							if travel.pasaje.tipo=='Aéreo'
-								div(class="ar-travel-type ar-transport-air" title="Transporte aréreo")
-							else if travel.pasaje.tipo=='Terrestre'
-								div(class="ar-travel-type ar-transport-land" title="Transporte terrestre")
-							else if travel.pasaje.tipo=='Marítimo'
-								div(class="ar-travel-type ar-transport-sea" title="Transporte marítimo")
-							else
-								div(class="ar-travel-type ar-transport-unk" title="Transporte desconocido")
-							div.ar-travel-cost #{_.str.numberFormat(travel.gastos.viaticos+travel.gastos.pasaje+travel.gastos.hospedaje,2)}
-							div.ar-star-err
-								if travel.gastos.hospedaje==null || travel.gastos.pasaje==null || travel.gastos.viaticos==null
-									a(href="#nota")  *
-							div.ar-currency=travel.gastos.moneda
-							- var day = 24*60*60*1000;							
-							- var days = Math.round(Math.abs((travel.comision.fin - travel.comision.inicio)/(day))) + "";
-							if days != "NaN" && days != "0"
-								.ar-time #{days} Días
-							else
-								.ar-time **
-
-							div.ar-name #{travel._servidor.nombre.toLowerCase()}
-							//- div #{travel._destinos[0].ciudad}
-							- var destinos = []; for(var i=travel._destinos.length-1;i>=0;i--) destinos.push( travel._destinos[i].ciudad+','+travel._destinos[i].pais );
-							div.ar-from-to #{travel._origen.ciudad},#{travel._origen.pais} <span></span> #{destinos.join('; ')}
-				
-				.col-sm-12.col-xs-12
-					h6 Recibe los datos en tu correo
-					p Cada vez que se de de alta un nuevo viaje recibirás un correo electrónico con todos los datos
-
-					form.ar-subcription.login-form.form.ar-form(ng-submit="createTravel()")
-						.form-group
-							input(class="form-control {{subscribed}}" type="email" ng-model="subscriptor" placeholder="Correo electrónico")
-							label.login-field-icon.fui-mail(class="{{subscribed}}")
-							button(ng-click="subscribe()" type="button" class="btn btn-block btn-lg btn-primary {{subscribed}}") {{subscribed}}
-								span(class="fui-check")
-
-				p#nota * Algunos datos están incompletos
-				p#nota Esta es una muestra representativa de los datos.
-			.ar-clear
-			.ar-sponsors
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-ifai(href="http://www.ifai.org.mx" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-codeando(href="http://codeandomexico.org/" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-socialtic(href="http://socialtic.org/" target="_blank") 
-				.col-sm-3.col-xs-6.ar-sponsor
-					a.ar-imco(href="http://imco.org.mx/" target="_blank") 			
-			.ar-credits
-				div.ar-left
-					a(href="/rest") 
-						span.fui-list-small-thumbnails 
-						| REST
-				div.ar-left
-					a(href="") 
-						span.fui-github
-						|  Fuente
-				.ar-right Hecho por 
-					a(href="http://twitter.com/AixAimee" target="_blank") @aixaimee 
-					| y 
-					a(href="http://twitter.com/Dantaex" target="_blank") @dantaex 
-					| en 
-					a(href="http://aerostato.mx" target="_blank") aerostato.mx
-
+	script(src='/js/jspdf.min.js')
+	script(src='/js/flowcontrol.js')
 	script(src='/js/angular.min.js')
-	script(src='/js/underscore.js')
-	//- script(src='/js/jspdf.js')
-	script(src='/js/chart.js')
 	script(src='/js/app.js')
+	script(src='/js/jquery.min.js')
+	script(src='/js/collapse.js')
+	script(src='/js/transition.js')
+	script(src='/js/dropdown.js')
+	script(src='/js/underscore.js')
+	script(src='/js/chart.js')
+	script(src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js")
+	script(src="/js/angular-leaflet-directive.min.js")
 	if initialData
+		if counts[4].length
+			script.
+				initialData 		= !{JSON.stringify(initialData)};
+				section = '#{section}';
+				META = !{counts[4]};
+		else 
+			script.
+				initialData 		= !{JSON.stringify(initialData)};
+				section = '#{section}';
+				META = {};
+	else if counts[4].length
 		script.
-			initialData = !{JSON.stringify(initialData)};
+			initialData = null;
 			section = '#{section}';
+			META = !{counts[4]};
 	else
 		script.
 			initialData = null;
 			section = '#{section}';
+			META = {};
+	script.
+		function commaSeparateNumber(val){while (/(\d+)(\d{3})/.test(val.toString())){ val = val.toString().replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,");} return val; }
+		$({sha: 0 }).animate({sha: '#{counts[2]}' }, {duration: 1700,easing:'swing',step: function() {$('.ar-howmanyuntilnow').text(commaSeparateNumber(Math.round(this.sha)));}});
+		$({hmt: 0 }).animate({hmt: '#{counts[1]}' }, {duration: 1700,easing:'swing',step: function() {$('.ar-howmanytravel').text(commaSeparateNumber(Math.round(this.hmt)));}});				
+		$({gt: (META.grand_total - (META.grand_total*0.10)) }).animate({gt: META.grand_total}, {duration: 1700,easing:'swing',step: function() {$('.ar-howmuchuntilnow').text('$ '+commaSeparateNumber(Math.round(this.gt)));}});
+		$('.nav a').on('click', function(){$(".navbar-toggle").click()});

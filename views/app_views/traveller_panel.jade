@@ -1,0 +1,110 @@
+#traveller_panel.ar-panel(class="{{traveller_panel_class}}" ng-cloak)
+	.ar-tp-bger-shrinker
+		.ar-wrapper.w7
+			.ar-the-hint Perfil de servidor público
+			section.ar-vwrap.ar-theimportant-title.ar-person
+				div(class="ar-person-photo {{currentTraveller.tipo_rep.charAt(0).toLowerCase()}}")
+				.ar-person-name
+					a.ar-name {{currentTraveller.nombre.toLowerCase()}}
+					span Puesto: {{currentTraveller.puesto.toLowerCase()}}
+					span Institución: {{currentTraveller._institucion.nombre}}
+					.ar-tac
+						.btn-group
+							button#ignorePDFP1.btn.btn-primary(ng-click="compareList.add(currentTraveller)") Comparar
+							button#ignorePDFP2.btn.btn-primary(ng-show="!loggedUser.follows[currentTraveller._id]" ng-click="followTravellerAttempt(currentTraveller._id)") Seguir
+						span(ng-show="loggedUser.follows[currentTraveller._id]") [Siguiendo]
+
+			section.ar-fancy-buttons#ignorePDF2
+				.ar-fancy-button.ar-hideon450 Compartir
+				a.ar-fancy-button.ar-twitter( title="Compartir en twitter" target="_blank" ng-href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+				a.ar-fancy-button.ar-facebook( title="Compartir en facebook" target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}")
+				.ar-fancy-button.ar-pdf( title="Descargar en PDF" ng-click="pdf('traveller_panel')")
+
+
+			section.ar-vwrap
+				.col-sm-3.col-xs-12.ar-textcenter
+					span Ranking de presupuesto
+					h5 {{currentTraveller.money_ranking}}							
+					//- p 
+						a ver ranking
+				.col-sm-3.col-xs-12.ar-textcenter
+					span Ranking de viajes
+					h5 {{currentTraveller.travel_ranking}}
+					//- p 
+						a ver ranking
+				.col-sm-3.col-xs-12.ar-textcenter
+					span(ng-if="currentTraveller._viajes.length==1") Viaje realizado
+					span(ng-if="currentTraveller._viajes.length!=1") Viajes realizados
+					h5 {{currentTraveller._viajes.length}}
+				.col-sm-3.col-xs-12.ar-textcenter
+					span Presupuesto hasta ahora
+					h5 {{currentTraveller.totalSpent}}
+			.ar-clear
+
+			section.ar-vwrap
+				.col-sm-6.col-xs-12
+					h6 Historial
+					canvas#travellerTimeline.ar-90r
+				.col-sm-6.col-xs-12
+					h6 Actividad
+					canvas#tripsAverage.ar-90r
+					p 
+						small Viajes de este servidor contra viajes del servidor promedio
+
+			section.ar-vwrap
+				.ar-wrapper
+					span Detalle de Viajes
+				ul.ar-options-list
+					//- viajes
+					li.ar-info-item(ng-repeat="travel in currentTraveller._viajes")
+						.ar-info-wrapper
+							div.ar-event-name-imp
+								div.ar-thetitle(title="{{travel.evento.nombre}}") {{travel.evento.nombre}}
+								.ar-resplinks
+									button.btn-primary.btn(ng-click="travelPanel(travel._id)") Examinar viaje
+									button.btn-primary.btn(ng-click="compareList.add(travel)") Comparar viaje
+							div.ar-option-upper
+								div.ar-money {{travel.totalCost}} <span>{{travel.gastos.moneda}}</span>
+								div.ar-transport(class="{{travel.transportClass}}") {{travel.pasaje.linea_origen}}
+							div.ar-option-middler
+								.ar-date {{travel.inicio.dia}} de {{travel.inicio.mes}}, {{travel.inicio.anio}}
+								.ar-clear
+							div.ar-option-bottom
+								.ar-from-to De {{cities[travel._origen].ciudad}} a {{travel.destinos}}
+								.ar-long-text-line Consecutivo : {{travel.consecutivo}}     Oficio : {{travel.oficio}}
+							
+							.ar-questions 
+								h6 Preguntas y comentarios
+								div.ar-question(ng-repeat="q in travel.questions")
+									.ar-question-profpic(style="background-image: url({{q.from.profpic}})")
+									.ar-question-body
+										.ar-question-from {{q.from.name}}
+											span.ar-bullet -
+											span {{q.on}}
+										p.ar-question-text {{q.text}}
+										p.ar-question-answer {{q.answer}}
+
+								div.ar-question.ar-newquestion(ng-class="{on:nq.input}")
+									.ar-question-profpic(style="background-image:url({{loggedUser.userData.profpic}})")
+									.ar-question-body
+										.ar-question-from {{loggedUser.userData.name}}
+											span.ar-bullet -
+											span {{today}}
+										p.ar-question-text {{nq.input}}
+								
+								p.ar-qencourage Haz una pregunta sobre este viaje
+
+								form.ar-question-form.ar-newquestionform.ar-subcription(ng-submit="questionSubmitAttempt(nq.input,travel._id,currentTraveller._id)")
+									input.form-control(type="text" placeholder="Quisiera preguntar" ng-model="nq.input" ng-disabled="nq.disabled")
+									//- input.form-control.btn.btn-primary(type="submit" value="{{questionButtonTitle}}")
+						.ar-info-buttons
+							div(class="ar-view" ng-click="travelPanel(travel._id)" title="click para ver más")
+							div(class="ar-addtocompare" ng-click="compareList.add(travel)" title="Seleccionar para comparar")
+			
+			section.ar-fancy-buttons.ar-nombt#ignorePDFP2
+				.ar-fancy-button.ar-hideon450 Compartir
+				a.ar-fancy-button.ar-twitter( title="Compartir en twitter" target="_blank" ng-href="http://twitter.com/share?url={{currentURL}}&text=Viajes%20Transparentes%20&hashtags=IFAI,transparencia")
+				a.ar-fancy-button.ar-facebook( title="Compartir en facebook" target="_blank" ng-href="https://www.facebook.com/sharer/sharer.php?u={{currentURL}}")
+				.ar-fancy-button.ar-pdf( title="Descargar en PDF" ng-click="pdf('travel_panel')")
+
+		.backbtn(ng-click="navigateTo('welcome_panel','backward')")

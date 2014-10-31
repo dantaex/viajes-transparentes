@@ -1,0 +1,282 @@
+#peekCompare.in
+	bottom 0
+#peekCompare
+	h6
+		width 100%
+	position fixed
+	bottom -250%
+	-webkit-transition: bottom .25s ease-out;
+	-moz-transition: bottom .25s ease-out;
+	-ms-transition: bottom .25s ease-out;
+	-o-transition: bottom .25s ease-out;
+	transition: bottom .25s ease-out;
+	background-color #fff
+	box-shadow 0px 0px 3px rgba(150,150,150,0.5);
+	width 100%
+	z-index 4
+	padding 10px
+	.ar-close-nonstd
+		standard-background()
+		background-image url(../img/closef.svg)
+		width 20px
+		height 20px
+		position absolute
+		right: 20px;
+		top: 20px;
+		cursor pointer
+	.ar-pre-complist-cont
+		height 100px
+		overflow-y scroll
+		margin 10px auto
+		.ar-row
+			text-transform capitalize
+			font-size 0.7em
+			border 0px
+#peekCompare .ar-pre-complist-cont .ar-row
+	max-width 200px
+	margin 0 auto
+#search_panel
+	section.ar-vwrap.ar-of
+		overflow visible
+	.ar-thetravel,
+	.ar-thetraveller		
+		box-shadow 0px 0px 3px rgba(150,150,150,0.5);
+	.ar-search-bar
+		width 90%
+		max-width 90%
+		margin 0 auto
+		input,
+		button
+			border 1px solid main-color
+	.ar-thetravel 
+		.ar-person 
+			min-height 50px
+			.ar-thename
+				font-size 0.65em
+				text-indent 15px
+	.no-photo .ar-thephoto
+		min-height 170px
+		background #00a5b4
+		width 20px
+	.ar-thephoto
+		height 170px
+	.ar-thetraveller .ar-thecontent
+		min-height 170px
+		height 170px
+		
+
+.ar-thesearchresults
+	padding 20px 0px
+#search_panel .ar-thetravel,
+.ar-thetravel
+	background-color #fff
+	.ar-theactions
+		width 100%
+		height 50px
+		overflow auto
+		button
+			width 50%
+			height 100%
+			float left
+			standard-background()
+			background-size 30px
+			border-bottom 0px
+		button:last-child
+			border-right 0px
+		button:first-child
+			border-left 0px
+
+	.ar-long-text-line
+		background-color #eee
+		color #777
+		padding 3px
+		text-indent 5px
+		font-size 0.6em
+	.ar-thetraveltitle
+		background-color main-color
+		color #fff
+		padding 10px
+		padding-right 20px
+	.ar-thecontent
+		padding 10px
+	.ar-person
+		overflow auto
+		border-top 1px solid #dfdfdf
+		border-bottom 1px solid #dfdfdf
+		div
+			float left
+		.ar-person-photo
+			height 50px
+			width 50px
+			border-radius 0px
+		.ar-thename
+			text-indent 7px
+			font-size 0.9em
+			color #777
+	.ar-thecontent
+		p
+			font-size 0.79em
+			color #777
+			background-repeat no-repeat
+			margin-bottom 3px
+		p.ar-idata.ar-transport
+			text-indent 20px
+			background-size 15px
+			background-position left center
+
+.ar-thetravellercontainer
+	padding 15px
+.ar-thetraveller.no-photo
+	.ar-thephoto
+		height 10px
+		background #00a5b4
+.ar-thetraveller
+	cursor pointer
+	background-color #fff
+	position relative
+	.ar-thecontent
+		text-align left
+		*
+			display block
+	.ar-thename
+		float none
+		line-height 1.2
+		font-size 1em
+		color #777
+		font-weight 600
+	p
+		line-height 1
+		font-size 0.65em
+		text-transform capitalize
+		color #888
+		margin-bottom 0px
+		margin-top 5px
+	span.ar-theposition
+		font-style italic
+		font-size 0.7em
+		color #777
+		font-weight 300
+	.ar-idata
+		color #00a5b4
+		display block
+	.ar-idata.ar-theinst
+		font-size 0.7em
+		
+	.ar-theactions:hover
+		opacity 1
+	.ar-theactions
+		position absolute
+		top 0px
+		left 0px
+		height 100%
+		width 100%
+		opacity 0
+		-webkit-transition opacity .25s ease
+		-moz-transition opacity .25s ease
+		-ms-transition opacity .25s ease
+		-o-transition opacity .25s ease
+		transition opacity .25s ease
+		div:hover
+			opacity 0.9
+		div
+			opacity 0.3
+			background-color #444
+			height 50%
+			width 100%
+			position static
+			standard-background()
+			background-size 45px			
+		.ar-view,
+		.ar-view:hover
+			background-image url(../img/inspect_white.svg)
+		.ar-addtocompare,
+		.ar-addtocompare:hover			
+			background-image url(../img/add_white.svg)
+	.ar-thephoto
+		background-position center bottom
+		background-size cover
+		border-radius 0px
+		background-color #555
+
+@media(max-width:768px)
+	#peekCompare.in
+		display block
+	#peekCompare,
+	#peekCompare.out
+		display none
+	#peekCompare
+		bottom 0px
+		top 0px
+		height 100%
+		z-index 12
+		overflow-y scroll
+	#peekCompare .ar-close-nonstd
+		position fixed
+		top 10px
+		right 10px
+	#search_panel .no-photo .ar-thephoto
+		display none
+	#search_panel
+		.ar-search-bar
+			width 100%
+			max-width 100%
+	.ar-logo
+		margin-top 55px
+	p.ar-thephrase
+		margin-top 0px
+	.ar-thetraveller .ar-thecontent
+		padding 10px
+	.ar-thephrase-container
+		padding-left 0px
+	.ar-shrink70
+		width 100%
+		max-width 100%
+	p.ar-graphtitle
+		margin-top 35px
+	.ar-thetraveller
+		.ar-theactions:hover
+			opacity 1
+		.ar-theactions
+			opacity 1
+			display block
+			position static
+			height 40px
+			div
+				background-color main-color
+				background-size 20px
+				width 50%
+				height 100%
+				opacity 1
+				float left
+		.ar-thephoto
+			width 100%
+			height 100px
+			background-position center top
+			background-size contain
+	.ar-thetraveller.no-photo
+		.ar-thephoto
+			display none
+
+@media(min-width:768px)
+	#peekCompare
+		padding-left 100px
+	.ar-thetraveller.no-photo
+		.ar-thephoto
+			width 20px
+			height 190px
+		.ar-thecontent
+			margin-left 21px
+		p
+			margin-top 15px
+
+	.ar-thetraveller
+		.ar-thephoto
+			width 80px
+			height 190px
+			float left
+		.ar-thecontent
+			margin-left 81px
+			padding 10px 0
+			padding-left 10px
+			height 190px
+			overflow-y scroll
