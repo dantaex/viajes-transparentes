@@ -1,11 +1,27 @@
-Sección para agregar la licencia. Recuerda agregar el LICENSE.txt al repositorio.
 Viajes Transparentes
 ============
 
 Viajes Transparentes es una web app de código abierto hecha para difundir y comunicar información de transparencia gubernamental, en especial sobre viajes de funcionarios públicos
 Hecha para el [RetoViajesTransparentes](http://ifai.codeandomexico.org)
 
+#### Mejoras:
+
+* Comparador de Servidores
+* Gráficas responsivas
+* Tablas responsivas
+* Interfaz mejorada y fácil de acceder
+* Servicios REST ampliados
+* Esquemas de base de datos ampliados
+* Jobs
+* Descarga de PDF con un click
+* Se puede "seguir" a servidores públicos
+* Preguntas abiertas a servidores públicos sobre sus viajes mediante login con facebook
+* "¿Cuánto costaron viajes al mismo destino?" implementado
+* Vistas en archivos separados de Jade
+
+
 ####¿Que tiene de bueno esta app?
+
 
 * Es única, no esta hecha con plantillas ni scaffolds.
 
@@ -58,10 +74,7 @@ Todo lo mencionado anteriormente, y de forma más específica:
 
 * Gulp tasks 
 * Minificar CSS, JS
-* One click PDF download
-* Seguir a un servidor público
 * HTML5 storage
-* Búsqueda por rango de fechas
 * Conectar con foursquare
 
 
@@ -98,14 +111,29 @@ package.json
     cd viajes-transparentes && npm install
 
 ##Screenshots
-![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/snapshot.png "Viajes Transparentes")
+-
+Home
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/screenshot1.png "Viajes Transparentes")
+
+-
+Búsqueda rápida
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/screenshot2.png "Viajes Transparentes")
+
+-
+Perfil de viajero (servidor)
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/screenshot3.png "Viajes Transparentes")
+
+-
+Preguntas abiertas
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/screenshot4.png "Viajes Transparentes")
+
+-
+Comparación de servidores públicos
+![alt text](https://raw.githubusercontent.com/dantaex/viajes-transparentes/master/screenshot5.png "Viajes Transparentes")
 
 ##Demo
-http://demovt.herokuapp.com/
+http://viajestransparentesv2.herokuapp.com/
 
-##Video
-Una disculpa por la calidad de la producción :P
-http://youtu.be/UKtoO38v6HI
 
 ##Carta 
 https://www.dropbox.com/s/offjcrzkab23b3w/cartaprotestadecirverdadretoviajestransparentes.pdf?dl=0
