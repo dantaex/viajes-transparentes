@@ -7,6 +7,7 @@ Hecha para el [RetoViajesTransparentes](http://ifai.codeandomexico.org)
 #### Mejoras:
 
 * Comparador de Servidores
+* Comparador de Viajes
 * Gráficas responsivas
 * Tablas responsivas
 * Interfaz mejorada y fácil de acceder
