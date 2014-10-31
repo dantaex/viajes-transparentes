@@ -9,11 +9,6 @@
 var db = require('./models'),
 	fc = require('./lib/flowcontrol');
 
-//similar trips AGAIN, don't know WTF happened hiar
-
-
-
-/*
 //not really a job but an update
 db.viajes.find({})
 	.select('gastos')
@@ -37,7 +32,7 @@ db.viajes.find({})
 				console.log(todos.length);
 			});
 	});
-*/
+
 
 //EN QUE SE GASTA MAS?
 /*
@@ -51,7 +46,7 @@ db.viajes.find({})
 	113167.07
 	24059.64	
 */
-/*
+
 db.meta.findOne({},function (err,metadoc) {
 	if(metadoc){
 		var viaticos = 0,
@@ -88,8 +83,6 @@ db.meta.findOne({},function (err,metadoc) {
 			});
 	}
 });
-*/
-/*
 
 //AVERAGE TRIPS
 db.meta.findOne({},function(err,doc){
@@ -114,11 +107,8 @@ db.meta.findOne({},function(err,doc){
 	}
 });
 
-*/
-
 
 //TOTAL SPENT (take this to model hook) for each traveller
-/*
 db.servidores.find({})
 	.select('_viajes nombre')
 	.populate('_viajes')
@@ -155,4 +145,3 @@ db.servidores.find({})
 				console.log(resultados.length+' servidores modificados ');
 			});
 	});
-*/
